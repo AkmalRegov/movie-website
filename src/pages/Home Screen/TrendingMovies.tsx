@@ -19,6 +19,7 @@ export default function TrendingMovies() {
   return (
     <>
       <div>Trending Movies</div>
+      <h1>I want to show trending movies here.</h1>
     </>
   );
 }
