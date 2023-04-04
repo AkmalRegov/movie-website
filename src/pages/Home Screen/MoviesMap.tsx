@@ -9,7 +9,8 @@ const MoviesMap: React.FC<{
   movies: movieData[];
   sectionCount: number;
   setSectionCount: React.Dispatch<React.SetStateAction<number>>;
-}> = ({ movies, sectionCount, setSectionCount }) => {
+  maxSectionCount?: number;
+}> = ({ movies, sectionCount, setSectionCount, maxSectionCount }) => {
   function handlePrevious() {
     if (sectionCount === 1) return;
     setSectionCount(() => {
@@ -18,7 +19,8 @@ const MoviesMap: React.FC<{
   }
 
   function handleNext() {
-    if (sectionCount === 5) return;
+    if (sectionCount === (maxSectionCount !== undefined ? maxSectionCount : 5))
+      return;
     setSectionCount(() => {
       return sectionCount + 1;
     });
@@ -34,6 +36,10 @@ const MoviesMap: React.FC<{
       parseInt(parts[2])
     );
     var res = mydate.toDateString().split(" ");
+    var unknownDate = res.filter((ele) => {
+      if (ele === "Invalid") return true;
+    });
+    if (unknownDate.length > 0) return "";
     var resString = `${res[1]} ${res[2]}, ${res[3]}`;
     return resString;
   }
@@ -55,7 +61,6 @@ const MoviesMap: React.FC<{
         {movies
           .slice((sectionCount - 1) * 4, sectionCount * 4)
           .map((data, index) => {
-            console.log(`index is: ${index}`);
             return (
               <div
                 key={index}
@@ -63,6 +68,8 @@ const MoviesMap: React.FC<{
                   display: "flex",
                   flexDirection: "column",
                   textAlign: "center",
+                  wordWrap: "break-word",
+                  width: "155px",
                 }}
               >
                 <img
