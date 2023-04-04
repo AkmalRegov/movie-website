@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
+import MoviesMap from "./MoviesMap";
 
-type apiResponse = {
+export type apiResponse = {
   page: string;
   results: movieData[];
   total_page: number;
   total_results: number;
 };
 
-type movieData = {
+export type movieData = {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -22,77 +23,6 @@ type movieData = {
   video: boolean;
   vote_average: number;
   vote_count: number;
-};
-
-const MoviesMap: React.FC<{
-  movies: movieData[];
-  sectionCount: number;
-  setSectionCount: React.Dispatch<React.SetStateAction<number>>;
-}> = ({ movies, sectionCount, setSectionCount }) => {
-  function handlePrevious() {
-    if (sectionCount === 1) return;
-    setSectionCount(() => {
-      return sectionCount - 1;
-    });
-  }
-
-  function handleNext() {
-    if (sectionCount === 5) return;
-    setSectionCount(() => {
-      return sectionCount + 1;
-    });
-  }
-
-  return (
-    <>
-      <div
-        style={{
-          marginLeft: "1rem",
-          display: "flex",
-          gap: "1rem",
-        }}
-      >
-        {movies
-          .slice((sectionCount - 1) * 4, sectionCount * 4)
-          .map((data, index) => {
-            console.log(`index is: ${index}`);
-            return (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  textAlign: "center",
-                }}
-              >
-                <img
-                  src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
-                  alt={`A movie poster for the movie titled: ${data.title}`}
-                  loading="lazy"
-                  width={155}
-                  height={225}
-                />
-                <strong style={{ width: "155px" }}>Title: {data.title}</strong>
-                <p style={{ margin: 0 }}>{data.release_date}</p>
-                <p style={{ margin: 0 }}>
-                  User score is {Math.round(data.vote_average * 10)}
-                </p>
-              </div>
-            );
-          })}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          marginTop: "40px",
-        }}
-      >
-        <button onClick={handlePrevious}>Previous</button>
-        <button onClick={handleNext}>Next</button>
-      </div>
-    </>
-  );
 };
 
 const TrendingMovies: React.FC = () => {
@@ -129,9 +59,36 @@ const TrendingMovies: React.FC = () => {
         }}
       >
         <p>Trending Movies</p>
-        <h1 style={{ margin: 0, marginBottom: "20px" }}>
-          I want to show trending movies here.
-        </h1>
+        <div style={{ marginBottom: "20px", textAlign: "center" }}>
+          <form style={{ display: "flex" }}>
+            <input
+              placeholder="Search movies"
+              style={{
+                display: "flex",
+                width: "600px",
+                height: "40px",
+                borderRadius: "20px",
+                textIndent: "6px",
+                fontSize: "16px",
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                borderRadius: "20px",
+                height: "45px",
+                position: "relative",
+                right: 60,
+                backgroundColor: "fuchsia",
+              }}
+            >
+              <p style={{ margin: 0, padding: 0, color: "white" }}>Search</p>
+            </button>
+          </form>
+          <h1 style={{ margin: 0, marginTop: "20px" }}>
+            I want to show trending movies here.
+          </h1>
+        </div>
         {trendingMovies.length !== 0 && (
           <MoviesMap
             movies={trendingMovies}
