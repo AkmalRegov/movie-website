@@ -75,7 +75,7 @@ const SearchBar: React.FC<{
   );
 };
 
-const TrendingMovies: React.FC = () => {
+export const TrendingMovies: React.FC = () => {
   const [trendingMovies, setTrendingMovies] = useState<movieData[]>([]);
   const [searchedMovies, setSearchedMovies] = useState<movieData[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -216,5 +216,3 @@ const TrendingMovies: React.FC = () => {
     </>
   );
 };
-
-export default TrendingMovies;

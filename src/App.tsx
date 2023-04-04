@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import logo from "./logo.svg";
 // import "./App.css";
-import TrendingMovies from "./pages/Home Screen/TrendingMovies";
+import { TrendingMovies } from "./pages/Home Screen/TrendingMovies";
 
 function App() {
   return (
