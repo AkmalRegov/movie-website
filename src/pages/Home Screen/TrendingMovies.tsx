@@ -111,8 +111,8 @@ export const TrendingMovies: React.FC = () => {
     else setSubmitSearch(false);
     fetch(
       encodeURI(
-        `${apiURL}search/movie?api_key=${myV3APIKey}&language=en-US&query=${searchText}&page=${currentPage}&include_adult=false`
-      )
+        `${apiURL}search/movie?api_key=${myV3APIKey}&language=en-US&query=${searchText}&page=${currentPage}&include_adult=false`,
+      ),
     )
       .then((res) => res.json())
       .then((data: apiResponse) => {
@@ -128,6 +128,12 @@ export const TrendingMovies: React.FC = () => {
         console.log(`max section count is: ${maxSearchedSectionCount}`);
         setTotalPageForMovieSearched(data.total_pages);
         console.log(`searchedMovies length is: ${searchedMovies.length}`);
+        // setTimeout(() => {
+        //   window.scrollTo({
+        //     top: document.documentElement.scrollHeight - 760,
+        //     behavior: "smooth",
+        //   });
+        // });
       })
       .catch((err) => {
         console.log(err.message);
@@ -156,10 +162,7 @@ export const TrendingMovies: React.FC = () => {
             setSectionCount={setSectionCount}
           />
         )}
-        <SearchBar
-          setSubmitSearch={setSubmitSearch}
-          setSearchText={setSearchText}
-        />
+        <SearchBar setSubmitSearch={setSubmitSearch} setSearchText={setSearchText} />
         {searchedMovies.length !== 0 && (
           <SearchedMovies
             searchedMovies={searchedMovies}

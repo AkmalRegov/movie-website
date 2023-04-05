@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { movieData } from "./TrendingMovies";
 import MoviesMap from "./MoviesMap";
 
@@ -41,6 +41,17 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
     setSubmitSearch(true);
   }
 
+  useEffect(() => {
+    if (searchedMovies.length != 0) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.documentElement.scrollHeight - 760,
+          behavior: "smooth",
+        });
+      }, 100);
+    }
+  }, []);
+
   return (
     <>
       <h2
@@ -62,7 +73,7 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
       <div
         style={{
           display: "flex",
-          marginTop: "4rem",
+          marginTop: "2rem",
           justifyContent: "space-between",
           gap: "2rem",
         }}

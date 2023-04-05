@@ -136,11 +136,6 @@ const MoviesMap: React.FC<{
             justifyContent: "center",
           }}
         >
-          {/* <BsDot key={1} size={30} style={{ color: "fuchsia" }} />
-          <BsDot size={30} />
-          <BsDot size={30} />
-          <BsDot size={30} />
-          <BsDot size={30} /> */}
           <BsDotMap sectionCount={sectionCount} maxSectionCount={maxSectionCount} />
         </div>
       </SMainDiv>
