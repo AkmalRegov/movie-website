@@ -1,9 +1,13 @@
 import React from "react";
 import { movieData } from "./TrendingMovies";
-import {
-  BsChevronLeft as LeftWideArrow,
-  BsChevronRight as RightWideArrow,
-} from "react-icons/bs";
+import { BsChevronLeft as LeftWideArrow, BsChevronRight as RightWideArrow } from "react-icons/bs";
+import styled from "styled-components";
+
+// const SArrowIcon = styled.div`
+//   cursor: pointer,
+//   user-select: none,
+//   margin-top: 6rem
+// `;
 
 const MoviesMap: React.FC<{
   movies: movieData[];
@@ -19,8 +23,7 @@ const MoviesMap: React.FC<{
   }
 
   function handleNext() {
-    if (sectionCount === (maxSectionCount !== undefined ? maxSectionCount : 5))
-      return;
+    if (sectionCount === (maxSectionCount !== undefined ? maxSectionCount : 5)) return;
     setSectionCount(() => {
       return sectionCount + 1;
     });
@@ -30,11 +33,7 @@ const MoviesMap: React.FC<{
     var parts = dateString.split("-") as string[];
     // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
     // January - 0, February - 1, etc.
-    var mydate = new Date(
-      parseInt(parts[0]),
-      parseInt(parts[1]) - 1,
-      parseInt(parts[2])
-    );
+    var mydate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
     var res = mydate.toDateString().split(" ");
     var unknownDate = res.filter((ele) => {
       if (ele === "Invalid") return true;
@@ -58,34 +57,30 @@ const MoviesMap: React.FC<{
           style={{ marginTop: "6rem", cursor: "pointer", userSelect: "none" }}
           onClick={handlePrevious}
         />
-        {movies
-          .slice((sectionCount - 1) * 4, sectionCount * 4)
-          .map((data, index) => {
-            return (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  textAlign: "center",
-                  wordWrap: "break-word",
-                  width: "155px",
-                }}
-              >
-                <img
-                  src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
-                  alt={`A movie poster for the movie titled: ${data.title}`}
-                  loading="lazy"
-                  width={155}
-                  height={225}
-                />
-                <strong style={{ width: "155px" }}>{data.title}</strong>
-                <p style={{ margin: 0, marginTop: "10px" }}>
-                  {parseDate(data.release_date)}
-                </p>
-              </div>
-            );
-          })}
+        {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
+          return (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                textAlign: "center",
+                wordWrap: "break-word",
+                width: "155px",
+              }}
+            >
+              <img
+                src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
+                alt={`A movie poster for the movie titled: ${data.title}`}
+                loading="lazy"
+                width={155}
+                height={225}
+              />
+              <strong style={{ width: "155px" }}>{data.title}</strong>
+              <p style={{ margin: 0, marginTop: "10px" }}>{parseDate(data.release_date)}</p>
+            </div>
+          );
+        })}
         <RightWideArrow
           size={40}
           style={{ marginTop: "6rem", cursor: "pointer", userSelect: "none" }}
