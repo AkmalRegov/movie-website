@@ -1,6 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  redirect,
+} from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -17,6 +21,16 @@ const router = createBrowserRouter([
     path: ROUTES.moviePage,
     element: <PAGES.MoviesDetails />,
     errorElement: <PAGES.ErrorPage />,
+    loader: ({ params }) => {
+      const onlyDigitsRegex = /^\d+$/;
+      if (!onlyDigitsRegex.test(params.movieId as string)) {
+        throw new Response("Not Found", {
+          status: 404,
+          statusText: `MovieId '${params.movieId}' not found!`,
+        });
+      }
+      return null;
+    },
   },
   {
     path: ROUTES.watchlist,
