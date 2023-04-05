@@ -6,6 +6,7 @@ import {
   BsDot,
 } from "react-icons/bs";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const SMainDiv = styled.div`
   display: flex;
@@ -51,6 +52,16 @@ const SBsDotMapDiv = styled.div`
   justify-content: center;
 `;
 
+const SMovieLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  &:hover {
+    color: blue;
+  }
+`;
+
 const BsDotMap: React.FC<{ sectionCount: number; maxSectionCount?: number }> = ({
   sectionCount,
   maxSectionCount,
@@ -64,13 +75,11 @@ const BsDotMap: React.FC<{ sectionCount: number; maxSectionCount?: number }> = (
     <>
       {bsDotIndex.map((val) => {
         return (
-          <>
-            <BsDot
-              key={val}
-              size={sectionCount === val ? 50 : 30}
-              style={{ color: sectionCount === val ? "fuchsia" : "black" }}
-            />
-          </>
+          <BsDot
+            key={val}
+            size={sectionCount === val ? 50 : 30}
+            style={{ color: sectionCount === val ? "fuchsia" : "black" }}
+          />
         );
       })}
     </>
@@ -120,14 +129,16 @@ const MoviesMap: React.FC<{
             {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
               return (
                 <SMovieCardDiv key={index}>
-                  <img
-                    src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
-                    alt={`A movie poster for the movie titled: ${data.title}`}
-                    loading="lazy"
-                    width={155}
-                    height={225}
-                  />
-                  <SMovieTitle>{data.title}</SMovieTitle>
+                  <SMovieLink to={`movie/${data.id}`}>
+                    <img
+                      src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
+                      alt={`A movie poster for the movie titled: ${data.title}`}
+                      loading="lazy"
+                      width={155}
+                      height={225}
+                    />
+                    <SMovieTitle>{data.title}</SMovieTitle>
+                  </SMovieLink>
                   <SMovieReleaseDate>{parseDate(data.release_date)}</SMovieReleaseDate>
                 </SMovieCardDiv>
               );

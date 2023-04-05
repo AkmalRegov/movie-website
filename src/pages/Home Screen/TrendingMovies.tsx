@@ -128,12 +128,6 @@ export const TrendingMovies: React.FC = () => {
         console.log(`max section count is: ${maxSearchedSectionCount}`);
         setTotalPageForMovieSearched(data.total_pages);
         console.log(`searchedMovies length is: ${searchedMovies.length}`);
-        // setTimeout(() => {
-        //   window.scrollTo({
-        //     top: document.documentElement.scrollHeight - 760,
-        //     behavior: "smooth",
-        //   });
-        // });
       })
       .catch((err) => {
         console.log(err.message);
