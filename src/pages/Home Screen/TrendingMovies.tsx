@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDebounce } from "../../customHooks/useDebounce";
 import MoviesMap from "./MoviesMap";
+import SearchedMovies from "./SearchedMovies";
 
 export type apiResponse = {
   page: string;
@@ -133,24 +134,6 @@ export const TrendingMovies: React.FC = () => {
       });
   }, [submitSearch, setSubmitSearch]);
 
-  function handlePrevious() {
-    if (currentPage === 1) return;
-    setCurrentPage(() => {
-      return currentPage - 1;
-    });
-    setSearchedSectionCount(1);
-    setSubmitSearch(true);
-  }
-
-  function handleNext() {
-    if (currentPage === totalPageForMovieSearched) return;
-    setCurrentPage(() => {
-      return currentPage + 1;
-    });
-    setSearchedSectionCount(1);
-    setSubmitSearch(true);
-  }
-
   return (
     <>
       <div
@@ -178,39 +161,16 @@ export const TrendingMovies: React.FC = () => {
           setSearchText={setSearchText}
         />
         {searchedMovies.length !== 0 && (
-          <>
-            <h2
-              style={{
-                display: "flex",
-                margin: 0,
-                marginBottom: "20px",
-                marginTop: "20px",
-              }}
-            >
-              Searched movies
-            </h2>
-            <MoviesMap
-              movies={searchedMovies}
-              sectionCount={searchedSectionCount}
-              setSectionCount={setSearchedSectionCount}
-              maxSectionCount={maxSearchedSectionCount}
-            />
-            <div
-              style={{
-                display: "flex",
-                marginTop: "4rem",
-                justifyContent: "space-between",
-                gap: "2rem",
-              }}
-            >
-              <button onClick={handlePrevious}>Previous Page</button>
-              <p>
-                {currentPage}/{totalPageForMovieSearched}
-              </p>
-              <button onClick={handleNext}>Next Page</button>
-            </div>
-            <div style={{ marginTop: "8rem" }}></div>
-          </>
+          <SearchedMovies
+            searchedMovies={searchedMovies}
+            searchedSectionCount={searchedSectionCount}
+            setSearchedSectionCount={setSearchedSectionCount}
+            maxSearchedSectionCount={maxSearchedSectionCount}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPageForMovieSearched={totalPageForMovieSearched}
+            setSubmitSearch={setSubmitSearch}
+          />
         )}
       </div>
     </>
