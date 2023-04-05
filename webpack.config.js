@@ -1,4 +1,8 @@
+//1) publicPath explanation: https://stackoverflow.com/questions/37962559/using-webpack-with-react-router-bundle-js-not-found
+//2) How to use react router with webpack, cannot GET route: https://www.robinwieruch.de/webpack-react-router/
+
 const path = require("path");
+const { SourceMapDevToolPlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 module.exports = {
@@ -7,7 +11,14 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js",
+    publicPath: "/", //Alternative option if using HTML Webpack plugin
   },
+  devServer: {
+    open: true,
+    historyApiFallback: true, //to enable react-router with webpack!
+    port: 3000,
+  },
+  devtool: "source-map", //required to load [file].map
   module: {
     rules: [
       {
@@ -46,6 +57,10 @@ module.exports = {
       systemvars: true, // load all the predefined 'process.env' variables which will trump anything local per dotenv specs.
       silent: true, // hide any errors
       defaults: false, // load '.env.defaults' as the default values if empty.
+    }),
+    //used in conjuction with devtool
+    new SourceMapDevToolPlugin({
+      filename: "[file].map",
     }),
   ],
 };
