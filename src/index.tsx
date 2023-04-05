@@ -16,6 +16,7 @@ const router = createBrowserRouter([
   {
     path: ROUTES.moviePage,
     element: <PAGES.MoviesDetails />,
+    errorElement: <PAGES.ErrorPage />,
   },
   {
     path: ROUTES.watchlist,
