@@ -45,6 +45,32 @@ const SMovieReleaseDate = styled.p`
   margin-top: 10px;
 `;
 
+const BsDotMap: React.FC<{ sectionCount: number; maxSectionCount?: number }> = ({
+  sectionCount,
+  maxSectionCount,
+}) => {
+  var bsDotIndex = [];
+  var count = maxSectionCount ?? 5;
+  for (let index = 0; index < count; index++) {
+    bsDotIndex.push(index + 1);
+  }
+  return (
+    <>
+      {bsDotIndex.map((val) => {
+        return (
+          <>
+            <BsDot
+              key={val}
+              size={sectionCount === val ? 50 : 30}
+              style={{ color: sectionCount === val ? "fuchsia" : "black" }}
+            />
+          </>
+        );
+      })}
+    </>
+  );
+};
+
 const MoviesMap: React.FC<{
   movies: movieData[];
   sectionCount: number;
@@ -82,31 +108,40 @@ const MoviesMap: React.FC<{
   return (
     <>
       <SMainDiv>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", height: "380px", gap: "0.5rem", marginTop: "2rem" }}>
           <SLeftWideArrow size={40} onClick={handlePrevious} />
-          {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
-            return (
-              <SMovieCardDiv key={index}>
-                <img
-                  src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
-                  alt={`A movie poster for the movie titled: ${data.title}`}
-                  loading="lazy"
-                  width={155}
-                  height={225}
-                />
-                <SMovieTitle>{data.title}</SMovieTitle>
-                <SMovieReleaseDate>{parseDate(data.release_date)}</SMovieReleaseDate>
-              </SMovieCardDiv>
-            );
-          })}
+          <div style={{ display: "flex", gap: "1.5rem" }}>
+            {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
+              return (
+                <SMovieCardDiv key={index}>
+                  <img
+                    src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
+                    alt={`A movie poster for the movie titled: ${data.title}`}
+                    loading="lazy"
+                    width={155}
+                    height={225}
+                  />
+                  <SMovieTitle>{data.title}</SMovieTitle>
+                  <SMovieReleaseDate>{parseDate(data.release_date)}</SMovieReleaseDate>
+                </SMovieCardDiv>
+              );
+            })}
+          </div>
           <SRightWideArrow size={40} onClick={handleNext} />
         </div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <BsDot size={20} />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {/* <BsDot key={1} size={30} style={{ color: "fuchsia" }} />
           <BsDot size={30} />
-          <BsDot size={40} style={{ color: "fuchsia" }} />
           <BsDot size={30} />
-          <BsDot size={20} />
+          <BsDot size={30} />
+          <BsDot size={30} /> */}
+          <BsDotMap sectionCount={sectionCount} maxSectionCount={maxSectionCount} />
         </div>
       </SMainDiv>
     </>
