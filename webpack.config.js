@@ -14,7 +14,6 @@ module.exports = {
     publicPath: "/", //Alternative option if using HTML Webpack plugin
   },
   devServer: {
-    open: true,
     historyApiFallback: true, //to enable react-router with webpack!
     port: 3000,
   },
