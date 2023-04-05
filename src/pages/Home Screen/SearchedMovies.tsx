@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { movieData } from "./TrendingMovies";
 import MoviesMap from "./MoviesMap";
 
@@ -23,6 +23,7 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
   totalPageForMovieSearched,
   setSubmitSearch,
 }) => {
+  const searchedMoviesH2Section = useRef() as React.MutableRefObject<HTMLHeadingElement>;
   function handlePrevious() {
     if (currentPage === 1) return;
     setCurrentPage(() => {
@@ -45,7 +46,7 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
     if (searchedMovies.length != 0) {
       setTimeout(() => {
         window.scrollTo({
-          top: document.documentElement.scrollHeight - 760,
+          top: searchedMoviesH2Section.current.offsetTop,
           behavior: "smooth",
         });
       }, 100);
@@ -61,6 +62,7 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
           marginBottom: "20px",
           marginTop: "20px",
         }}
+        ref={searchedMoviesH2Section}
       >
         Searched movies
       </h2>

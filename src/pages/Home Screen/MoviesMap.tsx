@@ -45,6 +45,12 @@ const SMovieReleaseDate = styled.p`
   margin-top: 10px;
 `;
 
+const SBsDotMapDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const BsDotMap: React.FC<{ sectionCount: number; maxSectionCount?: number }> = ({
   sectionCount,
   maxSectionCount,
@@ -129,15 +135,9 @@ const MoviesMap: React.FC<{
           </div>
           <SRightWideArrow size={40} onClick={handleNext} />
         </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <SBsDotMapDiv>
           <BsDotMap sectionCount={sectionCount} maxSectionCount={maxSectionCount} />
-        </div>
+        </SBsDotMapDiv>
       </SMainDiv>
     </>
   );
