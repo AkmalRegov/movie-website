@@ -1,13 +1,49 @@
 import React from "react";
 import { movieData } from "./TrendingMovies";
-import { BsChevronLeft as LeftWideArrow, BsChevronRight as RightWideArrow } from "react-icons/bs";
+import {
+  BsChevronLeft as LeftWideArrow,
+  BsChevronRight as RightWideArrow,
+  BsDot,
+} from "react-icons/bs";
 import styled from "styled-components";
 
-// const SArrowIcon = styled.div`
-//   cursor: pointer,
-//   user-select: none,
-//   margin-top: 6rem
-// `;
+const SMainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-left: 1rem;
+  border: 1px solid black;
+`;
+
+const SLeftWideArrow = styled(LeftWideArrow)`
+  cursor: pointer;
+  user-select: none;
+  margin-top: 6rem;
+`;
+
+const SRightWideArrow = styled(RightWideArrow)`
+  cursor: pointer;
+  user-select: none;
+  margin-top: 6rem;
+`;
+
+const SMovieCardDiv = styled.div`
+  display: flex;
+  width: "155px";
+  flex-direction: column;
+  text-align: center;
+  word-wrap: break-word;
+`;
+
+const SMovieTitle = styled.strong`
+  margin-top: 8px;
+  width: 155px;
+`;
+
+const SMovieReleaseDate = styled.p`
+  margin: 0;
+  margin-top: 10px;
+`;
 
 const MoviesMap: React.FC<{
   movies: movieData[];
@@ -45,48 +81,34 @@ const MoviesMap: React.FC<{
 
   return (
     <>
-      <div
-        style={{
-          marginLeft: "1rem",
-          display: "flex",
-          gap: "1rem",
-        }}
-      >
-        <LeftWideArrow
-          size={40}
-          style={{ marginTop: "6rem", cursor: "pointer", userSelect: "none" }}
-          onClick={handlePrevious}
-        />
-        {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
-          return (
-            <div
-              key={index}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "center",
-                wordWrap: "break-word",
-                width: "155px",
-              }}
-            >
-              <img
-                src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
-                alt={`A movie poster for the movie titled: ${data.title}`}
-                loading="lazy"
-                width={155}
-                height={225}
-              />
-              <strong style={{ width: "155px" }}>{data.title}</strong>
-              <p style={{ margin: 0, marginTop: "10px" }}>{parseDate(data.release_date)}</p>
-            </div>
-          );
-        })}
-        <RightWideArrow
-          size={40}
-          style={{ marginTop: "6rem", cursor: "pointer", userSelect: "none" }}
-          onClick={handleNext}
-        />
-      </div>
+      <SMainDiv>
+        <div style={{ display: "flex" }}>
+          <SLeftWideArrow size={40} onClick={handlePrevious} />
+          {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
+            return (
+              <SMovieCardDiv key={index}>
+                <img
+                  src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
+                  alt={`A movie poster for the movie titled: ${data.title}`}
+                  loading="lazy"
+                  width={155}
+                  height={225}
+                />
+                <SMovieTitle>{data.title}</SMovieTitle>
+                <SMovieReleaseDate>{parseDate(data.release_date)}</SMovieReleaseDate>
+              </SMovieCardDiv>
+            );
+          })}
+          <SRightWideArrow size={40} onClick={handleNext} />
+        </div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <BsDot size={20} />
+          <BsDot size={30} />
+          <BsDot size={40} style={{ color: "fuchsia" }} />
+          <BsDot size={30} />
+          <BsDot size={20} />
+        </div>
+      </SMainDiv>
     </>
   );
 };
