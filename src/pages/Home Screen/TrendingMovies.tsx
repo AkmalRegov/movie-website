@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDebounce } from "../../customHooks/useDebounce";
 import MoviesMap from "./MoviesMap";
 import SearchedMovies from "./SearchedMovies";
+import SearchBar from "./SearchBar";
+import styled from "styled-components";
 
 export type apiResponse = {
   page: string;
@@ -25,79 +27,6 @@ export type movieData = {
   video: boolean;
   vote_average: number;
   vote_count: number;
-};
-
-const SearchBar: React.FC<{
-  setSubmitSearch: React.Dispatch<React.SetStateAction<boolean>>;
-  setSearchText: React.Dispatch<React.SetStateAction<string>>;
-  searchText: string;
-  submittedSearch: string;
-  setSubmittedSearch: React.Dispatch<React.SetStateAction<string>>;
-  prevSubmittedSearch: string;
-  setPrevSubmittedSearch: React.Dispatch<React.SetStateAction<string>>;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  setSearchedSectionCount: React.Dispatch<React.SetStateAction<number>>;
-}> = ({
-  setSubmitSearch,
-  setSearchText,
-  searchText,
-  setSubmittedSearch,
-  submittedSearch,
-  prevSubmittedSearch,
-  setPrevSubmittedSearch,
-  setCurrentPage,
-  setSearchedSectionCount,
-}) => {
-  return (
-    <>
-      <form
-        style={{
-          display: "flex",
-          paddingLeft: "4rem",
-          marginTop: "3rem",
-        }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSubmittedSearch(searchText);
-          if (prevSubmittedSearch !== submittedSearch) {
-            setCurrentPage(1);
-            setSearchedSectionCount(1);
-            setPrevSubmittedSearch(submittedSearch);
-            console.log(`previous submitted search is: ${prevSubmittedSearch}`);
-          }
-          setSubmitSearch(true);
-        }}
-      >
-        <input
-          placeholder="Search movies"
-          style={{
-            display: "flex",
-            width: "600px",
-            height: "40px",
-            borderRadius: "20px",
-            textIndent: "6px",
-            fontSize: "16px",
-          }}
-          onChange={(e) => {
-            setSearchText(e.currentTarget.value);
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            cursor: "pointer",
-            borderRadius: "20px",
-            height: "45px",
-            position: "relative",
-            right: 60,
-            backgroundColor: "fuchsia",
-          }}
-        >
-          <p style={{ margin: 0, padding: 0, color: "white" }}>Search</p>
-        </button>
-      </form>
-    </>
-  );
 };
 
 export const TrendingMovies: React.FC = () => {

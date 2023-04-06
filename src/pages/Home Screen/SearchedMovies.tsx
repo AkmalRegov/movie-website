@@ -1,6 +1,25 @@
 import React, { useEffect, useRef } from "react";
 import { movieData } from "./TrendingMovies";
 import MoviesMap from "./MoviesMap";
+import styled from "styled-components";
+
+const SH2 = styled.h2`
+  display: flex;
+  margin: 0;
+  margin-bottom: 20px;
+  margin-top: 20px;
+`;
+
+const SDivButtonWrapper = styled.div`
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  margin-top: 2rem;
+`;
+
+const SDivEmptyBox = styled.div`
+  margin-top: 8rem;
+`;
 
 type SearchedMoviesProps = {
   searchedMovies: movieData[];
@@ -55,24 +74,14 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
 
   return (
     <>
-      <h2
-        style={{
-          display: "flex",
-          margin: 0,
-          marginBottom: "20px",
-          marginTop: "20px",
-        }}
-        ref={searchedMoviesH2Section}
-      >
-        Searched movies
-      </h2>
+      <SH2 ref={searchedMoviesH2Section}>Searched movies</SH2>
       <MoviesMap
         movies={searchedMovies}
         sectionCount={searchedSectionCount}
         setSectionCount={setSearchedSectionCount}
         maxSectionCount={maxSearchedSectionCount}
       />
-      <div
+      <SDivButtonWrapper
         style={{
           display: "flex",
           marginTop: "2rem",
@@ -85,8 +94,8 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
           {currentPage}/{totalPageForMovieSearched}
         </p>
         <button onClick={handleNext}>Next Page</button>
-      </div>
-      <div style={{ marginTop: "8rem" }}></div>
+      </SDivButtonWrapper>
+      <SDivEmptyBox style={{ marginTop: "8rem" }}></SDivEmptyBox>
     </>
   );
 };
