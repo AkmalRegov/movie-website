@@ -6,6 +6,23 @@ import SearchBar from "./SearchBar";
 import * as API from "../../restapi";
 import styled from "styled-components";
 
+const SMainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+`;
+
+const SH1WrapperDiv = styled.div`
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
+const SH1 = styled.h1`
+  margin: 0;
+`;
+
 export type apiResponse = {
   page: string;
   results: movieData[];
@@ -86,19 +103,11 @@ export const TrendingMovies: React.FC = () => {
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "1rem",
-        }}
-      >
+      <SMainDiv>
         <p>Trending Movies</p>
-        <div style={{ marginBottom: "20px", textAlign: "center" }}>
-          <h1 style={{ margin: 0 }}>I want to show trending movies here.</h1>
-        </div>
+        <SH1WrapperDiv>
+          <SH1>I want to show trending movies here.</SH1>
+        </SH1WrapperDiv>
         {trendingMovies.length !== 0 && (
           <MoviesMap
             movies={trendingMovies}
@@ -132,7 +141,7 @@ export const TrendingMovies: React.FC = () => {
             setSubmitSearch={setSubmitSearch}
           />
         )}
-      </div>
+      </SMainDiv>
     </>
   );
 };
