@@ -3,6 +3,7 @@ import { useDebounce } from "../../customHooks/useDebounce";
 import MoviesMap from "./MoviesMap";
 import SearchedMovies from "./SearchedMovies";
 import SearchBar from "./SearchBar";
+import * as API from "../../restapi";
 import styled from "styled-components";
 
 export type apiResponse = {
@@ -43,12 +44,10 @@ export const TrendingMovies: React.FC = () => {
   const [searchedSectionCount, setSearchedSectionCount] = useState(1);
   const [maxSearchedSectionCount, setMaxSearchedSectionCount] = useState(1);
   const callOnce = useRef<boolean>(false);
-  const apiURL = process.env.API_V3_URL;
-  const myV3APIKey = process.env.MY_API_KEY;
 
   useEffect(() => {
     if (callOnce.current) return;
-    fetch(encodeURI(`${apiURL}trending/movie/week?api_key=${myV3APIKey}`))
+    API.tmdb_trendingMovies()
       .then((res) => res.json())
       .then((data: apiResponse) => {
         console.log(data);
@@ -64,11 +63,7 @@ export const TrendingMovies: React.FC = () => {
   useEffect(() => {
     if (!submitSearch) return;
     else setSubmitSearch(false);
-    fetch(
-      encodeURI(
-        `${apiURL}search/movie?api_key=${myV3APIKey}&language=en-US&query=${submittedSearch}&page=${currentPage}&include_adult=false`,
-      ),
-    )
+    API.tmdb_searchMovies(submittedSearch, currentPage)
       .then((res) => res.json())
       .then((data: apiResponse) => {
         console.log(data);
