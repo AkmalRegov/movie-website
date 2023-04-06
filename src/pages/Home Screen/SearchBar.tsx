@@ -73,7 +73,7 @@ const SearchBar: React.FC<{
           }}
         />
         <SSubmitButton type="submit">
-          <p style={{ margin: 0, padding: 0, color: "white" }}>Search</p>
+          <SSubmitButtonPara>Search</SSubmitButtonPara>
         </SSubmitButton>
       </SForm>
     </>

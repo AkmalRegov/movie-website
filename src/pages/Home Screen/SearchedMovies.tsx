@@ -10,14 +10,14 @@ const SH2 = styled.h2`
   margin-top: 20px;
 `;
 
-const SDivButtonWrapper = styled.div`
+const SButtonWrapperDiv = styled.div`
   display: flex;
   gap: 2rem;
   justify-content: space-between;
   margin-top: 2rem;
 `;
 
-const SDivEmptyBox = styled.div`
+const SEmptyBoxDiv = styled.div`
   margin-top: 8rem;
 `;
 
@@ -81,7 +81,7 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
         setSectionCount={setSearchedSectionCount}
         maxSectionCount={maxSearchedSectionCount}
       />
-      <SDivButtonWrapper
+      <SButtonWrapperDiv
         style={{
           display: "flex",
           marginTop: "2rem",
@@ -94,8 +94,8 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
           {currentPage}/{totalPageForMovieSearched}
         </p>
         <button onClick={handleNext}>Next Page</button>
-      </SDivButtonWrapper>
-      <SDivEmptyBox style={{ marginTop: "8rem" }}></SDivEmptyBox>
+      </SButtonWrapperDiv>
+      <SEmptyBoxDiv style={{ marginTop: "8rem" }}></SEmptyBoxDiv>
     </>
   );
 };
