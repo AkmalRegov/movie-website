@@ -30,7 +30,24 @@ export type movieData = {
 const SearchBar: React.FC<{
   setSubmitSearch: React.Dispatch<React.SetStateAction<boolean>>;
   setSearchText: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ setSubmitSearch, setSearchText }) => {
+  searchText: string;
+  submittedSearch: string;
+  setSubmittedSearch: React.Dispatch<React.SetStateAction<string>>;
+  prevSubmittedSearch: string;
+  setPrevSubmittedSearch: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setSearchedSectionCount: React.Dispatch<React.SetStateAction<number>>;
+}> = ({
+  setSubmitSearch,
+  setSearchText,
+  searchText,
+  setSubmittedSearch,
+  submittedSearch,
+  prevSubmittedSearch,
+  setPrevSubmittedSearch,
+  setCurrentPage,
+  setSearchedSectionCount,
+}) => {
   return (
     <>
       <form
@@ -41,6 +58,13 @@ const SearchBar: React.FC<{
         }}
         onSubmit={(e) => {
           e.preventDefault();
+          setSubmittedSearch(searchText);
+          if (prevSubmittedSearch !== submittedSearch) {
+            setCurrentPage(1);
+            setSearchedSectionCount(1);
+            setPrevSubmittedSearch(submittedSearch);
+            console.log(`previous submitted search is: ${prevSubmittedSearch}`);
+          }
           setSubmitSearch(true);
         }}
       >
@@ -80,6 +104,8 @@ export const TrendingMovies: React.FC = () => {
   const [trendingMovies, setTrendingMovies] = useState<movieData[]>([]);
   const [searchedMovies, setSearchedMovies] = useState<movieData[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [submittedSearch, setSubmittedSearch] = useState("");
+  const [prevSubmittedSearch, setPrevSubmittedSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPageForMovieSearched, setTotalPageForMovieSearched] = useState(0);
   const [submitSearch, setSubmitSearch] = useState(false);
@@ -111,7 +137,7 @@ export const TrendingMovies: React.FC = () => {
     else setSubmitSearch(false);
     fetch(
       encodeURI(
-        `${apiURL}search/movie?api_key=${myV3APIKey}&language=en-US&query=${searchText}&page=${currentPage}&include_adult=false`,
+        `${apiURL}search/movie?api_key=${myV3APIKey}&language=en-US&query=${submittedSearch}&page=${currentPage}&include_adult=false`,
       ),
     )
       .then((res) => res.json())
@@ -156,7 +182,20 @@ export const TrendingMovies: React.FC = () => {
             setSectionCount={setSectionCount}
           />
         )}
-        <SearchBar setSubmitSearch={setSubmitSearch} setSearchText={setSearchText} />
+        <SearchBar
+          setSubmitSearch={setSubmitSearch}
+          setSearchText={setSearchText}
+          searchText={searchText}
+          setSubmittedSearch={setSubmittedSearch}
+          submittedSearch={submittedSearch}
+          prevSubmittedSearch={prevSubmittedSearch}
+          setPrevSubmittedSearch={setPrevSubmittedSearch}
+          setCurrentPage={setCurrentPage}
+          setSearchedSectionCount={setSearchedSectionCount}
+        />
+        {submitSearch && searchedMovies.length === 0 && (
+          <p>No movies found for '{submittedSearch}'</p>
+        )}
         {searchedMovies.length !== 0 && (
           <SearchedMovies
             searchedMovies={searchedMovies}
