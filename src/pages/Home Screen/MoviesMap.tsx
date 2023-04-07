@@ -7,7 +7,7 @@ import {
 } from "react-icons/bs";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { HomePageContext, HomePageContextProps } from "../../context/HomePage/HomePageContext";
+import { HomePageContext } from "../../context/HomePage/HomePageContext";
 
 const SMainDiv = styled.div`
   display: flex;
@@ -91,17 +91,12 @@ const MoviesMap: React.FC<{
   movies: movieData[];
   sectionType: "trending" | "searched";
   sectionCount: number;
-  setSectionCount: React.Dispatch<React.SetStateAction<number>>;
   maxSectionCount?: number;
-}> = ({ movies, sectionType, sectionCount, setSectionCount, maxSectionCount }) => {
-  const { dispatch: HomePageDispatch, state: HomePageState } = useContext(HomePageContext);
+}> = ({ movies, sectionType, sectionCount, maxSectionCount }) => {
+  const { dispatch: HomePageDispatch } = useContext(HomePageContext);
 
   function handlePrevious() {
     if (sectionCount === 1) return;
-    // setSectionCount(() => {
-    //   return sectionCount - 1;
-    // });
-    // console.log(`HomePageState.searchedMovies length is: ${HomePageState.searchedMovies}`);
     console.log("section count is:", sectionCount);
     switch (sectionType) {
       case "trending":
@@ -119,10 +114,6 @@ const MoviesMap: React.FC<{
 
   function handleNext() {
     if (sectionCount === (maxSectionCount !== undefined ? maxSectionCount : 5)) return;
-    // setSectionCount(() => {
-    //   return sectionCount + 1;
-    // });
-    // console.log(`HomePageState.searchedMovies length is: ${HomePageState.searchedMovies}`);
     console.log("section count is:", sectionCount);
     switch (sectionType) {
       case "trending":

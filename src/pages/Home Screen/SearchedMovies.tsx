@@ -93,7 +93,6 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
         movies={HomePageState.searchedMovies}
         sectionType={"searched"}
         sectionCount={HomePageState.searchedSectionCount}
-        setSectionCount={setSearchedSectionCount}
         maxSectionCount={HomePageState.maxSearchedSectionCount}
       />
       <SButtonWrapperDiv>

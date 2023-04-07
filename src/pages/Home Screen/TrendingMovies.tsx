@@ -50,7 +50,6 @@ export type movieData = {
 
 export const TrendingMovies: React.FC = () => {
   const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
-  const [trendingMovies, setTrendingMovies] = useState<movieData[]>([]);
   const [searchedMovies, setSearchedMovies] = useState<movieData[]>([]);
   const [searchText, setSearchText] = useState("");
   const [submittedSearch, setSubmittedSearch] = useState("");
@@ -78,7 +77,6 @@ export const TrendingMovies: React.FC = () => {
       .then((res) => res.json())
       .then((data: apiResponse) => {
         console.log(data);
-        // setTrendingMovies(data.results);
         HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
       })
       .catch((err) => {
@@ -94,7 +92,7 @@ export const TrendingMovies: React.FC = () => {
       .then((res) => res.json())
       .then((data: apiResponse) => {
         console.log(data);
-        setSearchedMovies(data.results);
+        // setSearchedMovies(data.results);
         HomePageDispatch({
           type: "get searched movies",
           searchedMovies: data.results,
@@ -102,21 +100,21 @@ export const TrendingMovies: React.FC = () => {
           totalPageForMovieSearched: data.total_pages,
         });
         console.log(`HomePageState.searchedMovies length is: ${HomePageState.searchedMovies}`);
-        setMaxSearchedSectionCount(() => {
-          var count = Math.floor(data.results.length / 4);
-          console.log(`count is: ${count}`);
-          var remainder = data.results.length % 4;
-          if (remainder > 0) count += 1;
-          return count;
-        });
-        console.log(`max section count is: ${maxSearchedSectionCount}`);
-        setTotalPageForMovieSearched(data.total_pages);
-        console.log(`searchedMovies length is: ${searchedMovies.length}`);
+        // setMaxSearchedSectionCount(() => {
+        //   var count = Math.floor(data.results.length / 4);
+        //   console.log(`count is: ${count}`);
+        //   var remainder = data.results.length % 4;
+        //   if (remainder > 0) count += 1;
+        //   return count;
+        // });
+        // console.log(`max section count is: ${maxSearchedSectionCount}`);
+        // setTotalPageForMovieSearched(data.total_pages);
+        // console.log(`searchedMovies length is: ${searchedMovies.length}`);
       })
       .catch((err) => {
         console.log(err.message);
       });
-  }, [HomePageState.submitSearch, setSubmitSearch]);
+  }, [HomePageState.submitSearch]);
 
   return (
     <>
@@ -130,7 +128,6 @@ export const TrendingMovies: React.FC = () => {
             movies={HomePageState.trendingMovies}
             sectionType={"trending"}
             sectionCount={HomePageState.sectionCount}
-            setSectionCount={setSectionCount}
           />
         )}
         <SearchBar
