@@ -50,17 +50,7 @@ export type movieData = {
 
 export const TrendingMovies: React.FC = () => {
   const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
-  const [searchedMovies, setSearchedMovies] = useState<movieData[]>([]);
-  const [searchText, setSearchText] = useState("");
-  const [submittedSearch, setSubmittedSearch] = useState("");
-  const [prevSubmittedSearch, setPrevSubmittedSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPageForMovieSearched, setTotalPageForMovieSearched] = useState(0);
-  const [submitSearch, setSubmitSearch] = useState(false);
   // const debouncedSearch = useDebounce(searchText, 2000);
-  const [sectionCount, setSectionCount] = useState(1);
-  const [searchedSectionCount, setSearchedSectionCount] = useState(1);
-  const [maxSearchedSectionCount, setMaxSearchedSectionCount] = useState(1);
   const callOnce = useRef<boolean>(false);
 
   function calcMaxSectionCount(data: movieData[]): number {
