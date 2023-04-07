@@ -130,17 +130,7 @@ export const TrendingMovies: React.FC = () => {
             sectionCount={HomePageState.sectionCount}
           />
         )}
-        <SearchBar
-          setSubmitSearch={setSubmitSearch}
-          setSearchText={setSearchText}
-          searchText={searchText}
-          setSubmittedSearch={setSubmittedSearch}
-          submittedSearch={submittedSearch}
-          prevSubmittedSearch={prevSubmittedSearch}
-          setPrevSubmittedSearch={setPrevSubmittedSearch}
-          setCurrentPage={setCurrentPage}
-          setSearchedSectionCount={setSearchedSectionCount}
-        />
+        <SearchBar />
         {HomePageState.submitSearch && HomePageState.searchedMovies.length === 0 && (
           <p>No movies found for '{HomePageState.submittedSearch}'</p>
         )}
