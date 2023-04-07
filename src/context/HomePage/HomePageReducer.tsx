@@ -36,7 +36,11 @@ export type HomePageActionTypes =
       searchedMovies: movieData[];
       maxSearchedSectionCount: number;
       totalPageForMovieSearched: number;
-    };
+    }
+  | { type: "go to previous trending section"; sectionCount: number }
+  | { type: "go to next trending section"; sectionCount: number }
+  | { type: "go to previous searched section"; sectionCount: number }
+  | { type: "go to next searched section"; sectionCount: number };
 
 export function HomePageReducer(state: HomePageState, action: HomePageActionTypes): HomePageState {
   switch (action.type) {
@@ -49,5 +53,15 @@ export function HomePageReducer(state: HomePageState, action: HomePageActionType
         maxSearchedSectionCount: action.maxSearchedSectionCount,
         totalPageForMovieSearched: action.totalPageForMovieSearched,
       };
+    case "go to previous trending section":
+      return { ...state, sectionCount: action.sectionCount };
+    case "go to next trending section":
+      return { ...state, sectionCount: action.sectionCount };
+    case "go to previous searched section":
+      return { ...state, sectionCount: action.sectionCount };
+    case "go to next searched section":
+      return { ...state, sectionCount: action.sectionCount };
+    default:
+      return state;
   }
 }

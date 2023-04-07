@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { movieData } from "./TrendingMovies";
 import {
   BsChevronLeft as LeftWideArrow,
@@ -7,6 +7,7 @@ import {
 } from "react-icons/bs";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { HomePageContext, HomePageContextProps } from "../../context/HomePage/HomePageContext";
 
 const SMainDiv = styled.div`
   display: flex;
@@ -88,22 +89,49 @@ const BsDotMap: React.FC<{ sectionCount: number; maxSectionCount?: number }> = (
 
 const MoviesMap: React.FC<{
   movies: movieData[];
+  sectionType: "trending" | "searched";
   sectionCount: number;
   setSectionCount: React.Dispatch<React.SetStateAction<number>>;
   maxSectionCount?: number;
-}> = ({ movies, sectionCount, setSectionCount, maxSectionCount }) => {
+}> = ({ movies, sectionType, sectionCount, setSectionCount, maxSectionCount }) => {
+  const { dispatch: HomePageDispatch } = useContext(HomePageContext);
+
   function handlePrevious() {
     if (sectionCount === 1) return;
-    setSectionCount(() => {
-      return sectionCount - 1;
-    });
+    // setSectionCount(() => {
+    //   return sectionCount - 1;
+    // });
+    switch (sectionType) {
+      case "trending":
+        return HomePageDispatch({
+          type: "go to previous trending section",
+          sectionCount: sectionCount - 1,
+        });
+      case "searched":
+        return HomePageDispatch({
+          type: "go to previous searched section",
+          sectionCount: sectionCount - 1,
+        });
+    }
   }
 
   function handleNext() {
     if (sectionCount === (maxSectionCount !== undefined ? maxSectionCount : 5)) return;
-    setSectionCount(() => {
-      return sectionCount + 1;
-    });
+    // setSectionCount(() => {
+    //   return sectionCount + 1;
+    // });
+    switch (sectionType) {
+      case "trending":
+        return HomePageDispatch({
+          type: "go to next trending section",
+          sectionCount: sectionCount + 1,
+        });
+      case "searched":
+        return HomePageDispatch({
+          type: "go to next searched section",
+          sectionCount: sectionCount + 1,
+        });
+    }
   }
 
   function parseDate(dateString: string) {

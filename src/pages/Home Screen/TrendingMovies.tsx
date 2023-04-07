@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useDebounce } from "../../customHooks/useDebounce";
 import MoviesMap from "./MoviesMap";
 import SearchedMovies from "./SearchedMovies";
 import SearchBar from "./SearchBar";
 import * as API from "../../restapi";
 import styled from "styled-components";
+import { HomePageContext } from "../../context/HomePage/HomePageContext";
 
 const SMainDiv = styled.div`
   display: flex;
@@ -48,6 +49,7 @@ export type movieData = {
 };
 
 export const TrendingMovies: React.FC = () => {
+  const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
   const [trendingMovies, setTrendingMovies] = useState<movieData[]>([]);
   const [searchedMovies, setSearchedMovies] = useState<movieData[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -68,8 +70,8 @@ export const TrendingMovies: React.FC = () => {
       .then((res) => res.json())
       .then((data: apiResponse) => {
         console.log(data);
-        setTrendingMovies(data.results);
-        console.log(`trendingMovies length is: ${trendingMovies.length}`);
+        // setTrendingMovies(data.results);
+        HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
       })
       .catch((err) => {
         console.log(err.message);
@@ -108,10 +110,11 @@ export const TrendingMovies: React.FC = () => {
         <SH1WrapperDiv>
           <SH1>I want to show trending movies here.</SH1>
         </SH1WrapperDiv>
-        {trendingMovies.length !== 0 && (
+        {HomePageState.trendingMovies.length !== 0 && (
           <MoviesMap
-            movies={trendingMovies}
-            sectionCount={sectionCount}
+            movies={HomePageState.trendingMovies}
+            sectionType={"trending"}
+            sectionCount={HomePageState.sectionCount}
             setSectionCount={setSectionCount}
           />
         )}
