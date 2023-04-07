@@ -26,7 +26,7 @@ const HomePageProvider: React.FC<HomePageProviderProps> = ({ children }: HomePag
     state: state,
     dispatch: dispatch,
   };
-  return <HomePageContext.Provider value={HomePageStateValue}></HomePageContext.Provider>;
+  return <HomePageContext.Provider value={HomePageStateValue}>{children}</HomePageContext.Provider>;
 };
 
 export default HomePageProvider;
