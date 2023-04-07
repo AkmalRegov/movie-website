@@ -9,7 +9,6 @@ const SForm = styled.form`
 `;
 
 const SInput = styled.input`
-  display: flex;
   width: 600px;
   height: 40px;
   border-radius: 20px;
@@ -19,7 +18,7 @@ const SInput = styled.input`
 
 const SSubmitButton = styled.button`
   position: relative;
-  right: 60;
+  right: 60px;
   cursor: pointer;
   background-color: fuchsia;
   height: 45px;
