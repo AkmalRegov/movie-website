@@ -66,7 +66,6 @@ export const TrendingMovies: React.FC = () => {
     API.tmdb_trendingMovies()
       .then((res) => res.json())
       .then((data: apiResponse) => {
-        console.log(data);
         HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
       })
       .catch((err) => {
@@ -81,7 +80,6 @@ export const TrendingMovies: React.FC = () => {
     API.tmdb_searchMovies(HomePageState.submittedSearch, HomePageState.currentPage)
       .then((res) => res.json())
       .then((data: apiResponse) => {
-        console.log(data);
         HomePageDispatch({
           type: "get searched movies",
           searchedMovies: data.results,
