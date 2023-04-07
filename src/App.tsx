@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import logo from "./logo.svg";
 // import "./App.css";
 import { TrendingMovies } from "./pages/Home Screen/TrendingMovies";
+import HomePageProvider from "./context/HomePage/HomePageProvider";
 
 function App() {
   return (
@@ -10,7 +11,9 @@ function App() {
         <header className="App-header"></header>
       </div>
       <div>
-        <TrendingMovies />
+        <HomePageProvider>
+          <TrendingMovies />
+        </HomePageProvider>
       </div>
     </>
   );
