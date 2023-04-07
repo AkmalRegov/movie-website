@@ -64,6 +64,14 @@ export const TrendingMovies: React.FC = () => {
   const [maxSearchedSectionCount, setMaxSearchedSectionCount] = useState(1);
   const callOnce = useRef<boolean>(false);
 
+  function calcMaxSectionCount(data: movieData[]): number {
+    var count = Math.floor(data.length / 4);
+    console.log(`count is: ${count}`);
+    var remainder = data.length % 4;
+    if (remainder > 0) count += 1;
+    return count;
+  }
+
   useEffect(() => {
     if (callOnce.current) return;
     API.tmdb_trendingMovies()
@@ -80,13 +88,20 @@ export const TrendingMovies: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!submitSearch) return;
-    else setSubmitSearch(false);
-    API.tmdb_searchMovies(submittedSearch, currentPage)
+    if (!HomePageState.submitSearch) return;
+    else HomePageDispatch({ type: "change submitSearch bool", submitSearch: false });
+    API.tmdb_searchMovies(HomePageState.submittedSearch, HomePageState.currentPage)
       .then((res) => res.json())
       .then((data: apiResponse) => {
         console.log(data);
         setSearchedMovies(data.results);
+        HomePageDispatch({
+          type: "get searched movies",
+          searchedMovies: data.results,
+          maxSearchedSectionCount: calcMaxSectionCount(data.results),
+          totalPageForMovieSearched: data.total_pages,
+        });
+        console.log(`HomePageState.searchedMovies length is: ${HomePageState.searchedMovies}`);
         setMaxSearchedSectionCount(() => {
           var count = Math.floor(data.results.length / 4);
           console.log(`count is: ${count}`);
@@ -101,7 +116,7 @@ export const TrendingMovies: React.FC = () => {
       .catch((err) => {
         console.log(err.message);
       });
-  }, [submitSearch, setSubmitSearch]);
+  }, [HomePageState.submitSearch, setSubmitSearch]);
 
   return (
     <>
@@ -129,10 +144,10 @@ export const TrendingMovies: React.FC = () => {
           setCurrentPage={setCurrentPage}
           setSearchedSectionCount={setSearchedSectionCount}
         />
-        {submitSearch && searchedMovies.length === 0 && (
-          <p>No movies found for '{submittedSearch}'</p>
+        {HomePageState.submitSearch && HomePageState.searchedMovies.length === 0 && (
+          <p>No movies found for '{HomePageState.submittedSearch}'</p>
         )}
-        {searchedMovies.length !== 0 && (
+        {HomePageState.searchedMovies.length !== 0 && (
           <SearchedMovies
             searchedMovies={searchedMovies}
             searchedSectionCount={searchedSectionCount}

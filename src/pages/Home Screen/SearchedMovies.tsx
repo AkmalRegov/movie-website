@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import { movieData } from "./TrendingMovies";
 import MoviesMap from "./MoviesMap";
 import styled from "styled-components";
+import { HomePageContext } from "../../context/HomePage/HomePageContext";
 
 const SH2 = styled.h2`
   display: flex;
@@ -42,14 +43,24 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
   totalPageForMovieSearched,
   setSubmitSearch,
 }) => {
+  const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
   const searchedMoviesH2Section = useRef() as React.MutableRefObject<HTMLHeadingElement>;
+  function sectionChangeHandler() {
+    setSearchedSectionCount(1);
+    setSubmitSearch(true);
+    HomePageDispatch({ type: "set searchedSectionCount number", searchedSectionCount: 1 });
+    HomePageDispatch({ type: "change submitSearch bool", submitSearch: true });
+  }
   function handlePrevious() {
     if (currentPage === 1) return;
     setCurrentPage(() => {
       return currentPage - 1;
     });
-    setSearchedSectionCount(1);
-    setSubmitSearch(true);
+    HomePageDispatch({
+      type: "set currentPage number",
+      currentPage: HomePageState.currentPage - 1,
+    });
+    sectionChangeHandler();
   }
 
   function handleNext() {
@@ -57,12 +68,15 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
     setCurrentPage(() => {
       return currentPage + 1;
     });
-    setSearchedSectionCount(1);
-    setSubmitSearch(true);
+    HomePageDispatch({
+      type: "set currentPage number",
+      currentPage: HomePageState.currentPage + 1,
+    });
+    sectionChangeHandler();
   }
 
   useEffect(() => {
-    if (searchedMovies.length != 0) {
+    if (HomePageState.searchedMovies.length != 0) {
       setTimeout(() => {
         window.scrollTo({
           top: searchedMoviesH2Section.current.offsetTop,
@@ -76,26 +90,20 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
     <>
       <SH2 ref={searchedMoviesH2Section}>Searched movies</SH2>
       <MoviesMap
-        movies={searchedMovies}
-        sectionCount={searchedSectionCount}
+        movies={HomePageState.searchedMovies}
+        sectionType={"searched"}
+        sectionCount={HomePageState.searchedSectionCount}
         setSectionCount={setSearchedSectionCount}
-        maxSectionCount={maxSearchedSectionCount}
+        maxSectionCount={HomePageState.maxSearchedSectionCount}
       />
-      <SButtonWrapperDiv
-        style={{
-          display: "flex",
-          marginTop: "2rem",
-          justifyContent: "space-between",
-          gap: "2rem",
-        }}
-      >
+      <SButtonWrapperDiv>
         <button onClick={handlePrevious}>Previous Page</button>
         <p>
-          {currentPage}/{totalPageForMovieSearched}
+          {HomePageState.currentPage}/{HomePageState.totalPageForMovieSearched}
         </p>
         <button onClick={handleNext}>Next Page</button>
       </SButtonWrapperDiv>
-      <SEmptyBoxDiv style={{ marginTop: "8rem" }}></SEmptyBoxDiv>
+      <SEmptyBoxDiv></SEmptyBoxDiv>
     </>
   );
 };

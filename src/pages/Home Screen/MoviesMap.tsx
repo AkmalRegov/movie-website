@@ -94,13 +94,15 @@ const MoviesMap: React.FC<{
   setSectionCount: React.Dispatch<React.SetStateAction<number>>;
   maxSectionCount?: number;
 }> = ({ movies, sectionType, sectionCount, setSectionCount, maxSectionCount }) => {
-  const { dispatch: HomePageDispatch } = useContext(HomePageContext);
+  const { dispatch: HomePageDispatch, state: HomePageState } = useContext(HomePageContext);
 
   function handlePrevious() {
     if (sectionCount === 1) return;
     // setSectionCount(() => {
     //   return sectionCount - 1;
     // });
+    // console.log(`HomePageState.searchedMovies length is: ${HomePageState.searchedMovies}`);
+    console.log("section count is:", sectionCount);
     switch (sectionType) {
       case "trending":
         return HomePageDispatch({
@@ -110,7 +112,7 @@ const MoviesMap: React.FC<{
       case "searched":
         return HomePageDispatch({
           type: "go to previous searched section",
-          sectionCount: sectionCount - 1,
+          searchedSectionCount: sectionCount - 1,
         });
     }
   }
@@ -120,6 +122,8 @@ const MoviesMap: React.FC<{
     // setSectionCount(() => {
     //   return sectionCount + 1;
     // });
+    // console.log(`HomePageState.searchedMovies length is: ${HomePageState.searchedMovies}`);
+    console.log("section count is:", sectionCount);
     switch (sectionType) {
       case "trending":
         return HomePageDispatch({
@@ -129,7 +133,7 @@ const MoviesMap: React.FC<{
       case "searched":
         return HomePageDispatch({
           type: "go to next searched section",
-          sectionCount: sectionCount + 1,
+          searchedSectionCount: sectionCount + 1,
         });
     }
   }

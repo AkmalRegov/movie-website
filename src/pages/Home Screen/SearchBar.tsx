@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { HomePageContext } from "../../context/HomePage/HomePageContext";
 
 const SForm = styled.form`
   display: flex;
@@ -52,24 +53,38 @@ const SearchBar: React.FC<{
   setCurrentPage,
   setSearchedSectionCount,
 }) => {
+  const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
   return (
     <>
       <SForm
         onSubmit={(e) => {
           e.preventDefault();
           setSubmittedSearch(searchText);
-          if (prevSubmittedSearch !== submittedSearch) {
+          HomePageDispatch({
+            type: "set submittedSearch string",
+            submittedSearch: HomePageState.searchText,
+          });
+          if (HomePageState.prevSubmittedSearch !== HomePageState.submittedSearch) {
             setCurrentPage(1);
             setSearchedSectionCount(1);
             setPrevSubmittedSearch(submittedSearch);
+            HomePageDispatch({ type: "set currentPage number", currentPage: 1 });
+            HomePageDispatch({ type: "set searchedSectionCount number", searchedSectionCount: 1 });
+            HomePageDispatch({
+              type: "set prevSubmittedSearch string",
+              prevSubmittedSearch: HomePageState.submittedSearch,
+            });
           }
           setSubmitSearch(true);
+          HomePageDispatch({ type: "change submitSearch bool", submitSearch: true });
         }}
       >
         <SInput
           placeholder="Search movies"
           onChange={(e) => {
             setSearchText(e.currentTarget.value);
+            HomePageDispatch({ type: "set searchText string", searchText: e.currentTarget.value });
+            console.log(`HomePageState.searchText is ${HomePageState.searchText}`);
           }}
         />
         <SSubmitButton type="submit">
