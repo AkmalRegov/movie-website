@@ -97,7 +97,6 @@ const MoviesMap: React.FC<{
 
   function handlePrevious() {
     if (sectionCount === 1) return;
-    console.log("section count is:", sectionCount);
     switch (sectionType) {
       case "trending":
         return HomePageDispatch({
@@ -114,7 +113,6 @@ const MoviesMap: React.FC<{
 
   function handleNext() {
     if (sectionCount === (maxSectionCount !== undefined ? maxSectionCount : 5)) return;
-    console.log("section count is:", sectionCount);
     switch (sectionType) {
       case "trending":
         return HomePageDispatch({

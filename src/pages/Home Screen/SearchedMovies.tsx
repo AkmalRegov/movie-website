@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useContext } from "react";
-import { movieData } from "./TrendingMovies";
 import MoviesMap from "./MoviesMap";
 import styled from "styled-components";
 import { HomePageContext } from "../../context/HomePage/HomePageContext";
@@ -22,40 +21,15 @@ const SEmptyBoxDiv = styled.div`
   margin-top: 8rem;
 `;
 
-type SearchedMoviesProps = {
-  searchedMovies: movieData[];
-  searchedSectionCount: number;
-  setSearchedSectionCount: React.Dispatch<React.SetStateAction<number>>;
-  maxSearchedSectionCount: number;
-  currentPage: number;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  totalPageForMovieSearched: number;
-  setSubmitSearch: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const SearchedMovies: React.FC<SearchedMoviesProps> = ({
-  searchedMovies,
-  searchedSectionCount,
-  setSearchedSectionCount,
-  maxSearchedSectionCount,
-  currentPage,
-  setCurrentPage,
-  totalPageForMovieSearched,
-  setSubmitSearch,
-}) => {
+const SearchedMovies: React.FC = ({}) => {
   const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
   const searchedMoviesH2Section = useRef() as React.MutableRefObject<HTMLHeadingElement>;
   function sectionChangeHandler() {
-    setSearchedSectionCount(1);
-    setSubmitSearch(true);
     HomePageDispatch({ type: "set searchedSectionCount number", searchedSectionCount: 1 });
     HomePageDispatch({ type: "change submitSearch bool", submitSearch: true });
   }
   function handlePrevious() {
-    if (currentPage === 1) return;
-    setCurrentPage(() => {
-      return currentPage - 1;
-    });
+    if (HomePageState.currentPage === 1) return;
     HomePageDispatch({
       type: "set currentPage number",
       currentPage: HomePageState.currentPage - 1,
@@ -64,10 +38,7 @@ const SearchedMovies: React.FC<SearchedMoviesProps> = ({
   }
 
   function handleNext() {
-    if (currentPage === totalPageForMovieSearched) return;
-    setCurrentPage(() => {
-      return currentPage + 1;
-    });
+    if (HomePageState.currentPage === HomePageState.totalPageForMovieSearched) return;
     HomePageDispatch({
       type: "set currentPage number",
       currentPage: HomePageState.currentPage + 1,

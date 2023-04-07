@@ -92,24 +92,12 @@ export const TrendingMovies: React.FC = () => {
       .then((res) => res.json())
       .then((data: apiResponse) => {
         console.log(data);
-        // setSearchedMovies(data.results);
         HomePageDispatch({
           type: "get searched movies",
           searchedMovies: data.results,
           maxSearchedSectionCount: calcMaxSectionCount(data.results),
           totalPageForMovieSearched: data.total_pages,
         });
-        console.log(`HomePageState.searchedMovies length is: ${HomePageState.searchedMovies}`);
-        // setMaxSearchedSectionCount(() => {
-        //   var count = Math.floor(data.results.length / 4);
-        //   console.log(`count is: ${count}`);
-        //   var remainder = data.results.length % 4;
-        //   if (remainder > 0) count += 1;
-        //   return count;
-        // });
-        // console.log(`max section count is: ${maxSearchedSectionCount}`);
-        // setTotalPageForMovieSearched(data.total_pages);
-        // console.log(`searchedMovies length is: ${searchedMovies.length}`);
       })
       .catch((err) => {
         console.log(err.message);
@@ -134,18 +122,7 @@ export const TrendingMovies: React.FC = () => {
         {HomePageState.submitSearch && HomePageState.searchedMovies.length === 0 && (
           <p>No movies found for '{HomePageState.submittedSearch}'</p>
         )}
-        {HomePageState.searchedMovies.length !== 0 && (
-          <SearchedMovies
-            searchedMovies={searchedMovies}
-            searchedSectionCount={searchedSectionCount}
-            setSearchedSectionCount={setSearchedSectionCount}
-            maxSearchedSectionCount={maxSearchedSectionCount}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPageForMovieSearched={totalPageForMovieSearched}
-            setSubmitSearch={setSubmitSearch}
-          />
-        )}
+        {HomePageState.searchedMovies.length !== 0 && <SearchedMovies />}
       </SMainDiv>
     </>
   );
