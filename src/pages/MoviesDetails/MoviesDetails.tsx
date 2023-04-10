@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, redirect } from "react-router-dom";
 
 //route params always give strings
@@ -9,6 +9,11 @@ type RouteParams = {
 
 export const MoviesDetails: React.FC = () => {
   const { movieId } = useParams<RouteParams>(); //cannot use interface for useParams generic
+
+  useEffect(() => {
+    document.querySelector("title")!.innerHTML = `MovieDetails ${movieId}`;
+  }, []);
+
   return (
     <>
       <div>MoviesDetails {movieId}</div>

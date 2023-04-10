@@ -67,6 +67,7 @@ export const TrendingMovies: React.FC = () => {
       .then((res) => res.json())
       .then((data: apiResponse) => {
         HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
+        console.log(data.results);
       })
       .catch((err) => {
         console.log(err.message);
