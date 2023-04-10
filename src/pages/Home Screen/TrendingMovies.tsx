@@ -6,6 +6,7 @@ import SearchBar from "./SearchBar";
 import * as API from "../../restapi";
 import styled from "styled-components";
 import { HomePageContext } from "../../context/HomePage/HomePageContext";
+import { useLoaderData } from "react-router-dom";
 
 const SMainDiv = styled.div`
   display: flex;
@@ -48,8 +49,13 @@ export type movieData = {
   vote_count: number;
 };
 
+type RouteLoaderData = {
+  data: apiResponse;
+};
+
 export const TrendingMovies: React.FC = () => {
   const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
+  const { data } = useLoaderData() as RouteLoaderData;
   // const debouncedSearch = useDebounce(searchText, 2000);
   const callOnce = useRef<boolean>(false);
 
@@ -63,15 +69,7 @@ export const TrendingMovies: React.FC = () => {
 
   useEffect(() => {
     if (callOnce.current) return;
-    API.tmdb_trendingMovies()
-      .then((res) => res.json())
-      .then((data: apiResponse) => {
-        HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
-        console.log(data.results);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
     callOnce.current = true;
   }, []);
 

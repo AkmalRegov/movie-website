@@ -1,32 +1,44 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider, redirect } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, redirect, defer, Params } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as ROUTES from "./routes";
 import * as PAGES from "./pages";
+import * as API from "./restapi";
+
+async function loaderTrendingMovies() {
+  const data = await API.tmdb_trendingMovies().then((res) => res.json());
+  return defer({ data });
+}
+
+async function loaderSearchOneMovie(params: Params<string>) {
+  const onlyDigitsRegex = /^\d+$/;
+  if (!onlyDigitsRegex.test(params.movieId as string)) {
+    throw new Response("Not Found", {
+      status: 404,
+      statusText: `MovieId '${params.movieId}' not found!`,
+    });
+  }
+  const data = await API.tmdb_searchOneMovie(parseInt(params.movieId as string)).then((res) =>
+    res.json(),
+  );
+  return defer({ data });
+}
 
 const router = createBrowserRouter([
   {
     path: ROUTES.home,
     element: <App />,
     errorElement: <PAGES.ErrorPage />,
+    loader: loaderTrendingMovies,
   },
   {
     path: ROUTES.moviePage,
     element: <PAGES.MoviesDetails />,
     errorElement: <PAGES.ErrorPage />,
-    loader: ({ params }) => {
-      const onlyDigitsRegex = /^\d+$/;
-      if (!onlyDigitsRegex.test(params.movieId as string)) {
-        throw new Response("Not Found", {
-          status: 404,
-          statusText: `MovieId '${params.movieId}' not found!`,
-        });
-      }
-      return null;
-    },
+    loader: ({ params }) => loaderSearchOneMovie(params),
   },
   {
     path: ROUTES.watchlist,
