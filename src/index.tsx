@@ -21,10 +21,15 @@ async function loaderSearchOneMovie(params: Params<string>) {
       statusText: `MovieId '${params.movieId}' not found!`,
     });
   }
-  const data = await API.tmdb_searchOneMovie(parseInt(params.movieId as string)).then((res) =>
-    res.json(),
-  );
-  return defer({ data });
+  const fetchedOneMovieData = await API.tmdb_searchOneMovie(
+    parseInt(params.movieId as string),
+  ).then((res) => res.json());
+
+  const fetchedMovieReleaseDatesData = await API.tmdb_movieReleaseDatesData(
+    parseInt(params.movieId as string),
+  ).then((res) => res.json());
+
+  return defer({ fetchedOneMovieData, fetchedMovieReleaseDatesData });
 }
 
 const router = createBrowserRouter([
