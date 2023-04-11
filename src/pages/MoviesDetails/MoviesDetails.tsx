@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, redirect, useLoaderData } from "react-router-dom";
 import * as API from "../../restapi";
+import { GoPrimitiveDot } from "react-icons/go";
 import styled from "styled-components";
 
 //route params always give strings
@@ -64,7 +65,7 @@ export type oneMovieData = {
   vote_count: number;
 };
 
-type movieReleaseDates = {
+export type movieReleaseDates = {
   id: number;
   results: [
     {
@@ -102,6 +103,46 @@ const SMoviePosterImage = styled.img`
   border-radius: 10px;
 `;
 
+const SMovieTitleReleaseYearWrapperDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  height: fit-content;
+  align-items: center;
+`;
+
+const SPosterRightSideContentDiv = styled.div`
+  border: 1px solid whitesmoke;
+  margin-left: 3rem;
+  height: 440px;
+  width: 100vw;
+  margin-right: 20px;
+`;
+
+const SGenreP = styled.a`
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    filter: brightness(0.3);
+  }
+`;
+
+const MovieTitleReleaseYearContent: React.FC<{ movieData: oneMovieData }> = ({ movieData }) => {
+  return (
+    <>
+      <SMovieTitleReleaseYearWrapperDiv>
+        <h2 style={{ color: "white", fontSize: "32px", margin: "0" }}>{movieData?.title}</h2>
+        <h2 style={{ fontSize: "32px", textIndent: "10px", color: "gray", margin: "0" }}>
+          {" "}
+          ({movieData?.release_date.split("-")[0]})
+        </h2>
+      </SMovieTitleReleaseYearWrapperDiv>
+    </>
+  );
+};
+
 const MovieCertificationP: React.FC<{ movieUSCertification: string }> = ({
   movieUSCertification,
 }) => {
@@ -110,7 +151,6 @@ const MovieCertificationP: React.FC<{ movieUSCertification: string }> = ({
       {movieUSCertification && (
         <p
           style={{
-            margin: "0",
             fontSize: "18px",
             fontWeight: "600",
             color: "gray",
@@ -125,6 +165,20 @@ const MovieCertificationP: React.FC<{ movieUSCertification: string }> = ({
   );
 };
 
+const MovieRuntimeP: React.FC<{ runtime: number }> = ({ runtime }) => {
+  function parseMovieRuntime(runtime: number) {
+    var hours = Math.floor(runtime / 60);
+    var mins = runtime % 60;
+    return `${hours}h ${mins}min`;
+  }
+  return (
+    <>
+      <GoPrimitiveDot style={{ marginTop: "1px", color: "whitesmoke" }} size={12} />
+      <p style={{ color: "whitesmoke" }}>{parseMovieRuntime(runtime as number)}</p>
+    </>
+  );
+};
+
 const MovieReleaseDateP: React.FC<{ movieData: oneMovieData }> = ({ movieData }) => {
   function parseDate(dateString: string) {
     var parts = dateString.split("-") as string[];
@@ -135,9 +189,10 @@ const MovieReleaseDateP: React.FC<{ movieData: oneMovieData }> = ({ movieData })
   return (
     <>
       {movieData?.release_date && (
-        <p style={{ margin: "0", color: "whitesmoke" }}>
-          {parseDate(movieData?.release_date as string)}
-        </p>
+        <>
+          <p style={{ color: "whitesmoke" }}>{parseDate(movieData?.release_date as string)}</p>
+          <GoPrimitiveDot style={{ marginTop: "1px", color: "whitesmoke" }} size={12} />
+        </>
       )}
     </>
   );
@@ -171,6 +226,20 @@ export const MoviesDetails: React.FC = () => {
   const [movieUSCertification, setMovieUSCertification] = useState("");
   const callOnce = useRef<boolean>(false);
 
+  function parseGenreURL(genreId: number, genreName: string) {
+    return encodeURI(
+      `https://www.themoviedb.org/genre/${genreId}-${genreName
+        .toLowerCase()
+        .replace(" ", "-")}/movie`,
+    );
+  }
+
+  function parseMovieRuntime(runtime: number) {
+    var hours = Math.floor(runtime / 60);
+    var mins = runtime % 60;
+    return `${hours}h ${mins}min`;
+  }
+
   useEffect(() => {
     if (callOnce.current) return;
     document.querySelector("title")!.innerHTML = `MovieDetails ${movieId}`;
@@ -197,37 +266,12 @@ export const MoviesDetails: React.FC = () => {
               {" "}
               <BgMovie movieData={movieData as oneMovieData}>
                 <SMoviePosterImage
-                  src={`https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movieData?.poster_path}`}
+                  src={`https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movieData.poster_path}`}
                   alt={`A poster for the movie ${movieData?.title}`}
                 />
-                <div
-                  style={{
-                    border: "1px solid whitesmoke",
-                    marginLeft: "3rem",
-                    height: "440px",
-                    width: "100vw",
-                    marginRight: "20px",
-                  }}
-                >
+                <SPosterRightSideContentDiv>
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        width: "fit-content",
-                        height: "fit-content",
-                      }}
-                    >
-                      <h2 style={{ color: "white", fontSize: "32px", margin: "0" }}>
-                        {movieData?.title}
-                      </h2>
-                      <h2
-                        style={{ fontSize: "32px", textIndent: "10px", color: "gray", margin: "0" }}
-                      >
-                        {" "}
-                        ({movieData?.release_date.split("-")[0]})
-                      </h2>
-                    </div>
+                    <MovieTitleReleaseYearContent movieData={movieData} />
                     <div
                       style={{
                         display: "flex",
@@ -239,9 +283,21 @@ export const MoviesDetails: React.FC = () => {
                     >
                       <MovieCertificationP movieUSCertification={movieUSCertification} />
                       <MovieReleaseDateP movieData={movieData} />
+                      {movieData.genres.map((ele, index) => (
+                        <SGenreP
+                          key={index}
+                          style={{ color: "white" }}
+                          target="_blank"
+                          href={parseGenreURL(ele.id, ele.name)}
+                        >
+                          {ele.name}
+                          {index !== movieData.genres.length - 1 ? "," : ""}
+                        </SGenreP>
+                      ))}
+                      <MovieRuntimeP runtime={movieData.runtime as number} />
                     </div>
                   </div>
-                </div>
+                </SPosterRightSideContentDiv>
               </BgMovie>
             </>
           )}
