@@ -3,6 +3,7 @@ import { useParams, redirect, useLoaderData } from "react-router-dom";
 import * as API from "../../restapi";
 import { GoPrimitiveDot } from "react-icons/go";
 import styled from "styled-components";
+import { DynamicRatings } from "../../component";
 
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
@@ -173,8 +174,12 @@ const MovieRuntimeP: React.FC<{ runtime: number }> = ({ runtime }) => {
   }
   return (
     <>
-      <GoPrimitiveDot style={{ marginTop: "1px", color: "whitesmoke" }} size={12} />
-      <p style={{ color: "whitesmoke" }}>{parseMovieRuntime(runtime as number)}</p>
+      {runtime && (
+        <>
+          <GoPrimitiveDot style={{ marginTop: "1px", color: "whitesmoke" }} size={12} />
+          <p style={{ color: "whitesmoke" }}>{parseMovieRuntime(runtime as number)}</p>
+        </>
+      )}
     </>
   );
 };
@@ -213,7 +218,7 @@ const BgMovie: React.FC<{ movieData: oneMovieData; children: React.ReactNode }> 
           {children}
         </SBackdropDiv>
       ) : (
-        <div>Loading</div>
+        <div style={{ backgroundColor: "blue" }}>{children}</div>
       )}
     </>
   );
@@ -232,12 +237,6 @@ export const MoviesDetails: React.FC = () => {
         .toLowerCase()
         .replace(" ", "-")}/movie`,
     );
-  }
-
-  function parseMovieRuntime(runtime: number) {
-    var hours = Math.floor(runtime / 60);
-    var mins = runtime % 60;
-    return `${hours}h ${mins}min`;
   }
 
   useEffect(() => {
@@ -295,6 +294,9 @@ export const MoviesDetails: React.FC = () => {
                         </SGenreP>
                       ))}
                       <MovieRuntimeP runtime={movieData.runtime as number} />
+                    </div>
+                    <div>
+                      <DynamicRatings />
                     </div>
                   </div>
                 </SPosterRightSideContentDiv>
