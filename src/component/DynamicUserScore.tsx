@@ -1,4 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
+
+const SCircleWrapperSvg = styled.svg`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  transform: rotate(-90deg);
+`;
+
+const SBaseCircle = styled.circle`
+  fill: transparent;
+  stroke-width: ${(props) => props.strokeWidth};
+  stroke: #ddd;
+`;
+
+const SProgressIndicatorCircle = styled.circle`
+  fill: transparent;
+  stroke-width: ${(props) => props.strokeWidth};
+  stroke: #07c;
+  stroke-dasharray: ${(props) => props.strokeDasharray};
+  stroke-dashoffset: ${(props) => props.strokeDashoffset};
+`;
 
 export const DynamicUserScore: React.FC<{
   size: number;
@@ -38,26 +59,22 @@ export const DynamicUserScore: React.FC<{
   return (
     <>
       <div>
-        <svg style={{ width: size, height: size }}>
-          <circle
+        <SCircleWrapperSvg width={size} height={size}>
+          <SBaseCircle
             cx={circleCenter}
             cy={circleCenter}
             r={circleRadius}
-            fill="transparent"
             strokeWidth={strokeWidth}
-            stroke="#ddd"
           />
-          <circle
+          <SProgressIndicatorCircle
             cx={circleCenter}
             cy={circleCenter}
             r={circleRadius}
-            fill="transparent"
             strokeWidth={strokeWidth}
-            stroke="#07c"
             strokeDasharray={progress ? `${circleDashArray}px` : ""}
             strokeDashoffset={progress ? `${circleDashOffset}px` : ""}
           />
-        </svg>
+        </SCircleWrapperSvg>
       </div>
     </>
   );

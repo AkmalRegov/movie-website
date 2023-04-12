@@ -296,7 +296,7 @@ export const MoviesDetails: React.FC = () => {
                       <MovieRuntimeP runtime={movieData.runtime as number} />
                     </div>
                     <div>
-                      <DynamicUserScore size={100} strokeWidth={10} progress={10} />
+                      <DynamicUserScore size={100} strokeWidth={10} progress={50} />
                     </div>
                   </div>
                 </SPosterRightSideContentDiv>
