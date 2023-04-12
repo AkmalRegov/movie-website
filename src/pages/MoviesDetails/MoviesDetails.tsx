@@ -3,7 +3,7 @@ import { useParams, redirect, useLoaderData } from "react-router-dom";
 import * as API from "../../restapi";
 import { GoPrimitiveDot } from "react-icons/go";
 import styled from "styled-components";
-import { DynamicRatings } from "../../component";
+import { DynamicRatings, DynamicUserScore } from "../../component";
 
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
@@ -296,7 +296,7 @@ export const MoviesDetails: React.FC = () => {
                       <MovieRuntimeP runtime={movieData.runtime as number} />
                     </div>
                     <div>
-                      <DynamicRatings />
+                      <DynamicUserScore size={100} strokeWidth={10} progress={10} />
                     </div>
                   </div>
                 </SPosterRightSideContentDiv>
