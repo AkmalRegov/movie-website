@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, redirect, useLoaderData } from "react-router-dom";
 import * as API from "../../restapi";
-import { FaList } from "react-icons/fa";
+import { IoListCircleSharp, IoHeartCircle } from "react-icons/io5";
+import { BsFillBookmarkPlusFill } from "react-icons/bs";
+import { MdStars } from "react-icons/md";
 import styled from "styled-components";
 import MovieTitleReleaseYearContent from "./MovieTitleReleaseYearContent";
 import MovieCertificationP from "./MovieCertificationP";
@@ -9,6 +11,7 @@ import MovieRuntimeP from "./MovieRuntimeP";
 import MovieReleaseDateP from "./MovieReleaseDateP";
 import BgMovie from "./BgMovie";
 import UserScoreFC from "./UserScoreFC";
+import IconDiv from "./IconDiv";
 
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
@@ -186,8 +189,13 @@ export const MoviesDetails: React.FC = () => {
                       ))}
                       <MovieRuntimeP runtime={movieData.runtime as number} />
                     </div>
-                    <div style={{ marginTop: "20px" }}>
-                      <UserScoreFC movieData={movieData} />
+                    <IconDiv movieData={movieData} />
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                      <em style={{ color: "gray", fontWeight: 500 }}>{movieData.tagline}</em>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                        <h3 style={{ fontSize: "20px", color: "white" }}>Overview</h3>
+                        <p style={{ color: "white" }}>{movieData.overview}</p>
+                      </div>
                     </div>
                   </div>
                 </SPosterRightSideContentDiv>
