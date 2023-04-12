@@ -12,8 +12,9 @@ code {
     monospace;
 }
 
-p {
-  margin: 0
+p, h2, h1, h3 {
+  margin: 0;
+  width: fit-content;
 }
 
 button {

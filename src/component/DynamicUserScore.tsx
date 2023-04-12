@@ -25,7 +25,8 @@ export const DynamicUserScore: React.FC<{
   size: number;
   strokeWidth: number;
   progress?: number;
-}> = ({ size, strokeWidth, progress }) => {
+  children?: React.ReactNode;
+}> = ({ size, strokeWidth, progress, children }) => {
   const [circleCenter, setCircleCenter] = useState(0);
   const [circleRadius, setCircleRadius] = useState(0);
   const [circleDashArray, setCircleDashArray] = useState(0);
@@ -42,6 +43,7 @@ export const DynamicUserScore: React.FC<{
     setCircleCenter(center);
     setCircleRadius(radius);
     if (progress === undefined) return;
+    console.log(`progress is: ${progress}`);
     var arcLengthForDashArray = 2 * 3.14 * radius;
     var arcOffsetForDashOffset = arcLengthForDashArray * ((100 - progress) / 100);
     console.log(arcLengthForDashArray);
@@ -58,7 +60,7 @@ export const DynamicUserScore: React.FC<{
 
   return (
     <>
-      <div>
+      <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
         <SCircleWrapperSvg width={size} height={size}>
           <SBaseCircle
             cx={circleCenter}
@@ -75,6 +77,7 @@ export const DynamicUserScore: React.FC<{
             strokeDashoffset={progress ? `${circleDashOffset}px` : ""}
           />
         </SCircleWrapperSvg>
+        {children}
       </div>
     </>
   );

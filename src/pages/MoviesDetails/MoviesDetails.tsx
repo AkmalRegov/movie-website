@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, redirect, useLoaderData } from "react-router-dom";
 import * as API from "../../restapi";
-import { GoPrimitiveDot } from "react-icons/go";
+import { FaList } from "react-icons/fa";
 import styled from "styled-components";
-import { DynamicRatings, DynamicUserScore } from "../../component";
+import MovieTitleReleaseYearContent from "./MovieTitleReleaseYearContent";
+import MovieCertificationP from "./MovieCertificationP";
+import MovieRuntimeP from "./MovieRuntimeP";
+import MovieReleaseDateP from "./MovieReleaseDateP";
+import BgMovie from "./BgMovie";
+import UserScoreFC from "./UserScoreFC";
 
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
@@ -84,32 +89,12 @@ export type movieReleaseDates = {
   ];
 };
 
-const SBackdropDiv = styled.div`
-  display: flex;
-  align-items: center;
-  height: inherit;
-  width: inherit;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: ${(props) =>
-    props.style?.backgroundImage &&
-    `linear-gradient(to right, rgba(31.5, 31.5, 52.5, 1) calc((50vw - 170px) - 340px), rgba(31.5, 31.5, 52.5, 0.84) 50%, rgba(31.5, 31.5, 52.5, 0.84) 100%),url(https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces${props.style.backgroundImage})`};
-`;
-
 const SMoviePosterImage = styled.img`
   object-fit: cover;
   width: auto;
   height: 440px;
   margin-left: 20px;
   border-radius: 10px;
-`;
-
-const SMovieTitleReleaseYearWrapperDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: fit-content;
-  height: fit-content;
-  align-items: center;
 `;
 
 const SPosterRightSideContentDiv = styled.div`
@@ -129,100 +114,6 @@ const SGenreP = styled.a`
     filter: brightness(0.3);
   }
 `;
-
-const MovieTitleReleaseYearContent: React.FC<{ movieData: oneMovieData }> = ({ movieData }) => {
-  return (
-    <>
-      <SMovieTitleReleaseYearWrapperDiv>
-        <h2 style={{ color: "white", fontSize: "32px", margin: "0" }}>{movieData?.title}</h2>
-        <h2 style={{ fontSize: "32px", textIndent: "10px", color: "gray", margin: "0" }}>
-          {" "}
-          ({movieData?.release_date.split("-")[0]})
-        </h2>
-      </SMovieTitleReleaseYearWrapperDiv>
-    </>
-  );
-};
-
-const MovieCertificationP: React.FC<{ movieUSCertification: string }> = ({
-  movieUSCertification,
-}) => {
-  return (
-    <>
-      {movieUSCertification && (
-        <p
-          style={{
-            fontSize: "18px",
-            fontWeight: "600",
-            color: "gray",
-            border: "1px solid gray",
-            width: "fit-content",
-          }}
-        >
-          {movieUSCertification}
-        </p>
-      )}
-    </>
-  );
-};
-
-const MovieRuntimeP: React.FC<{ runtime: number }> = ({ runtime }) => {
-  function parseMovieRuntime(runtime: number) {
-    var hours = Math.floor(runtime / 60);
-    var mins = runtime % 60;
-    return `${hours}h ${mins}min`;
-  }
-  return (
-    <>
-      {runtime && (
-        <>
-          <GoPrimitiveDot style={{ marginTop: "1px", color: "whitesmoke" }} size={12} />
-          <p style={{ color: "whitesmoke" }}>{parseMovieRuntime(runtime as number)}</p>
-        </>
-      )}
-    </>
-  );
-};
-
-const MovieReleaseDateP: React.FC<{ movieData: oneMovieData }> = ({ movieData }) => {
-  function parseDate(dateString: string) {
-    var parts = dateString.split("-") as string[];
-    var resString = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    return resString;
-  }
-
-  return (
-    <>
-      {movieData?.release_date && (
-        <>
-          <p style={{ color: "whitesmoke" }}>{parseDate(movieData?.release_date as string)}</p>
-          <GoPrimitiveDot style={{ marginTop: "1px", color: "whitesmoke" }} size={12} />
-        </>
-      )}
-    </>
-  );
-};
-
-const BgMovie: React.FC<{ movieData: oneMovieData; children: React.ReactNode }> = ({
-  movieData,
-  children,
-}) => {
-  return (
-    <>
-      {movieData?.backdrop_path ? (
-        <SBackdropDiv
-          style={{
-            backgroundImage: movieData?.backdrop_path,
-          }}
-        >
-          {children}
-        </SBackdropDiv>
-      ) : (
-        <div style={{ backgroundColor: "blue" }}>{children}</div>
-      )}
-    </>
-  );
-};
 
 export const MoviesDetails: React.FC = () => {
   const { movieId } = useParams<RouteParams>(); //cannot use interface for useParams generic
@@ -295,8 +186,8 @@ export const MoviesDetails: React.FC = () => {
                       ))}
                       <MovieRuntimeP runtime={movieData.runtime as number} />
                     </div>
-                    <div>
-                      <DynamicUserScore size={100} strokeWidth={10} progress={50} />
+                    <div style={{ marginTop: "20px" }}>
+                      <UserScoreFC movieData={movieData} />
                     </div>
                   </div>
                 </SPosterRightSideContentDiv>

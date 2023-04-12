@@ -35,6 +35,7 @@ const SMovieCardDiv = styled.div`
   flex-direction: column;
   text-align: center;
   word-wrap: break-word;
+  align-items: center;
 `;
 
 const SMovieTitle = styled.strong`
