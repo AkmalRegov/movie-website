@@ -17,6 +17,10 @@ p, h2, h1, h3 {
   width: fit-content;
 }
 
+p, em, strong {
+  color: white;
+}
+
 button {
   cursor: pointer;
 }

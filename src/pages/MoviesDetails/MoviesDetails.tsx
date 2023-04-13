@@ -22,6 +22,7 @@ type RouteParams = {
 type RouteLoaderData = {
   fetchedOneMovieData: oneMovieData;
   fetchedMovieReleaseDatesData: movieReleaseDates;
+  fetchedMovieCastCrew: movieCastCrewType;
 };
 
 export type oneMovieData = {
@@ -92,6 +93,41 @@ export type movieReleaseDates = {
   ];
 };
 
+interface castInterface {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  order: number;
+}
+
+interface crewInterface {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  credit_id: string;
+  department: string;
+  job: string;
+}
+
+export type movieCastCrewType = {
+  id: number;
+  cast: castInterface[];
+  crew: crewInterface[];
+};
+
 const SMoviePosterImage = styled.img`
   object-fit: cover;
   width: auto;
@@ -120,8 +156,10 @@ const SGenreP = styled.a`
 
 export const MoviesDetails: React.FC = () => {
   const { movieId } = useParams<RouteParams>(); //cannot use interface for useParams generic
-  const { fetchedOneMovieData, fetchedMovieReleaseDatesData } = useLoaderData() as RouteLoaderData;
+  const { fetchedOneMovieData, fetchedMovieReleaseDatesData, fetchedMovieCastCrew } =
+    useLoaderData() as RouteLoaderData;
   const [movieData, setMovieData] = useState<oneMovieData>();
+  const [top5Crew, setTop5Crew] = useState<crewInterface[]>();
   const [movieUSCertification, setMovieUSCertification] = useState("");
   const callOnce = useRef<boolean>(false);
 
@@ -133,9 +171,7 @@ export const MoviesDetails: React.FC = () => {
     );
   }
 
-  useEffect(() => {
-    if (callOnce.current) return;
-    document.querySelector("title")!.innerHTML = `MovieDetails ${movieId}`;
+  function handleRouteLoaderData() {
     console.log("fetchedOneMovieData is: ", fetchedOneMovieData);
     setMovieData(fetchedOneMovieData);
     console.log(
@@ -147,6 +183,29 @@ export const MoviesDetails: React.FC = () => {
       fetchedMovieReleaseDatesData.results.find((ele) => ele.iso_3166_1 === "US")?.release_dates[0]
         .certification as string,
     );
+    console.log("fetchedMovieCastCrew is: ", fetchedMovieCastCrew);
+    setTop5Crew(() => {
+      var sorted = fetchedMovieCastCrew.crew.sort((a, b) => b.popularity - a.popularity);
+      var res = [];
+      var unwantedDepartment = ["Crew", "Camera"];
+      for (var x = 0; x < 5 && sorted.length > x; x++) {
+        res.push(sorted[x]);
+        var filtered = sorted.filter(
+          (ele) =>
+            ele.id !== sorted[x].id &&
+            unwantedDepartment.every((val) => val != ele.known_for_department),
+        );
+        sorted = filtered.sort((a, b) => b.popularity - a.popularity);
+      }
+      console.log("top 5 crew based on popularity is: ", res);
+      return res;
+    });
+  }
+
+  useEffect(() => {
+    if (callOnce.current) return;
+    document.querySelector("title")!.innerHTML = `MovieDetails ${movieId}`;
+    handleRouteLoaderData();
     callOnce.current = true;
   }, []);
   return (
@@ -195,6 +254,22 @@ export const MoviesDetails: React.FC = () => {
                       <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                         <h3 style={{ fontSize: "20px", color: "white" }}>Overview</h3>
                         <p style={{ color: "white" }}>{movieData.overview}</p>
+                      </div>
+                      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+                        {top5Crew &&
+                          top5Crew.map((item, index) => {
+                            return (
+                              <>
+                                <div
+                                  key={index}
+                                  style={{ display: "flex", flexDirection: "column" }}
+                                >
+                                  <strong>{item.name}</strong>
+                                  <em>{item.known_for_department}</em>
+                                </div>
+                              </>
+                            );
+                          })}
                       </div>
                     </div>
                   </div>
