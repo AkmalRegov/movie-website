@@ -26,6 +26,7 @@ const SOuterWhiteCircleSpan = styled.span`
   background-color: white;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   width: 38px;
   height: 38px;
   border: 1px solid white;
@@ -37,13 +38,13 @@ const SInnerBlackCircleSpan = styled.span`
   background-color: black;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border: 1px solid white;
   border-radius: 50%;
 `;
 
-const IconStyle = { backgroundColor: "white", borderRadius: "100%" };
+const IconStyle = { backgroundColor: "white", borderRadius: "100%", cursor: "pointer" };
 
 const IconDiv: React.FC<{ movieData: oneMovieData }> = ({ movieData }) => {
   return (
