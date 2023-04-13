@@ -39,11 +39,13 @@ const SMovieCardDiv = styled.div`
 `;
 
 const SMovieTitle = styled.strong`
+  color: black;
   margin-top: 8px;
   width: 155px;
 `;
 
 const SMovieReleaseDate = styled.p`
+  color: black;
   margin: 0;
   margin-top: 10px;
 `;

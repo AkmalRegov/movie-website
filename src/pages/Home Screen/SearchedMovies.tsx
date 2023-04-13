@@ -68,7 +68,7 @@ const SearchedMovies: React.FC = ({}) => {
       />
       <SButtonWrapperDiv>
         <button onClick={handlePrevious}>Previous Page</button>
-        <p>
+        <p style={{ color: "black" }}>
           {HomePageState.currentPage}/{HomePageState.totalPageForMovieSearched}
         </p>
         <button onClick={handleNext}>Next Page</button>
