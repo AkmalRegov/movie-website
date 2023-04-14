@@ -6,18 +6,18 @@ export const tmdb_movieReleaseDatesData = async (movieId: number): Promise<Respo
 
 export type movieReleaseDates = {
   id: number;
-  results: [
-    {
-      iso_3166_1: string;
-      release_dates: [
-        {
-          certification: string;
-          iso_639_1: string;
-          release_date: string;
-          type: number;
-          note: string;
-        },
-      ];
-    },
-  ];
+  results: moviesResult[];
 };
+
+interface moviesResult {
+  iso_3166_1: string;
+  release_dates: release_date[];
+}
+
+interface release_date {
+  certification: string;
+  iso_639_1: string;
+  release_date: string;
+  type: number;
+  note: string;
+}
