@@ -33,7 +33,16 @@ async function loaderSearchOneMovie(params: Params<string>) {
     parseInt(params.movieId as string),
   ).then((res) => res.json());
 
-  return defer({ fetchedOneMovieData, fetchedMovieReleaseDatesData, fetchedMovieCastCrew });
+  const fetchedMovieReviews = await API.GET_MOVIE_REVIEWS.tmdb_getMovieReviews(
+    parseInt(params.movieId as string),
+  ).then((res) => res.json());
+
+  return defer({
+    fetchedOneMovieData,
+    fetchedMovieReleaseDatesData,
+    fetchedMovieCastCrew,
+    fetchedMovieReviews,
+  });
 }
 
 const router = createBrowserRouter([

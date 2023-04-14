@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, redirect, useLoaderData } from "react-router-dom";
+import { useParams, useLoaderData } from "react-router-dom";
 import * as API from "../../restapi";
 import styled from "styled-components";
 import MovieTitleReleaseYearContent from "./MovieTitleReleaseYearContent";
@@ -8,6 +8,7 @@ import MovieRuntimeP from "./MovieRuntimeP";
 import MovieReleaseDateP from "./MovieReleaseDateP";
 import BgMovie from "./BgMovie";
 import IconDiv from "./IconDiv";
+import MovieReviewSection from "./MovieReviewCard";
 
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
@@ -16,6 +17,7 @@ type oneMovieData = API.SEARCH_ONE_MOVIE.oneMovieData;
 type movieReleaseDates = API.MOVIE_CERTIFICATION.movieReleaseDates;
 type movieCastCrewType = API.GET_MOVIE_CAST_CREW.movieCastCrewType;
 type crewInterface = API.GET_MOVIE_CAST_CREW.crewInterface;
+type movieReview = API.GET_MOVIE_REVIEWS.movieReview;
 
 type RouteParams = {
   movieId: string;
@@ -25,6 +27,7 @@ type RouteLoaderData = {
   fetchedOneMovieData: oneMovieData;
   fetchedMovieReleaseDatesData: movieReleaseDates;
   fetchedMovieCastCrew: movieCastCrewType;
+  fetchedMovieReviews: movieReview;
 };
 
 const SMoviePosterImage = styled.img`
@@ -58,8 +61,12 @@ const SCrewA = styled(SGenreA)``;
 
 export const MoviesDetails: React.FC = () => {
   const { movieId } = useParams<RouteParams>(); //cannot use interface for useParams generic
-  const { fetchedOneMovieData, fetchedMovieReleaseDatesData, fetchedMovieCastCrew } =
-    useLoaderData() as RouteLoaderData;
+  const {
+    fetchedOneMovieData,
+    fetchedMovieReleaseDatesData,
+    fetchedMovieCastCrew,
+    fetchedMovieReviews,
+  } = useLoaderData() as RouteLoaderData;
   const [movieData, setMovieData] = useState<oneMovieData>();
   const [top5Crew, setTop5Crew] = useState<crewInterface[]>();
   const [movieUSCertification, setMovieUSCertification] = useState("");
@@ -102,6 +109,7 @@ export const MoviesDetails: React.FC = () => {
       console.log("top 5 crew based on popularity is: ", res);
       return res;
     });
+    console.log("fetchedMovieReviews is: ", fetchedMovieReviews);
   }
 
   useEffect(() => {
@@ -169,23 +177,18 @@ export const MoviesDetails: React.FC = () => {
                         {top5Crew &&
                           top5Crew.map((item, index) => {
                             return (
-                              <>
-                                <div
-                                  key={index}
-                                  style={{ display: "flex", flexDirection: "column" }}
+                              <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+                                <SCrewA
+                                  style={{ textDecoration: "none" }}
+                                  href={`https://www.themoviedb.org/person/${item.id}-${item.name
+                                    .replace(" ", "-")
+                                    .toLowerCase()}`}
+                                  target="_blank"
                                 >
-                                  <SCrewA
-                                    style={{ textDecoration: "none" }}
-                                    href={`https://www.themoviedb.org/person/${item.id}-${item.name
-                                      .replace(" ", "-")
-                                      .toLowerCase()}`}
-                                    target="_blank"
-                                  >
-                                    <strong>{item.name}</strong>
-                                  </SCrewA>
-                                  <em>{item.known_for_department}</em>
-                                </div>
-                              </>
+                                  <strong>{item.name}</strong>
+                                </SCrewA>
+                                <em>{item.known_for_department}</em>
+                              </div>
                             );
                           })}
                       </div>
@@ -197,6 +200,7 @@ export const MoviesDetails: React.FC = () => {
           )}
         </div>
       </section>
+      <MovieReviewSection fetchedMovieReviews={fetchedMovieReviews} />
     </>
   );
 };
