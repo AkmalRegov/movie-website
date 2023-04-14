@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { oneMovieData } from "./MoviesDetails";
+import { SEARCH_ONE_MOVIE } from "../../restapi";
 
 const SMovieTitleReleaseYearWrapperDiv = styled.div`
   display: flex;
@@ -10,7 +10,9 @@ const SMovieTitleReleaseYearWrapperDiv = styled.div`
   align-items: center;
 `;
 
-const MovieTitleReleaseYearContent: React.FC<{ movieData: oneMovieData }> = ({ movieData }) => {
+const MovieTitleReleaseYearContent: React.FC<{ movieData: SEARCH_ONE_MOVIE.oneMovieData }> = ({
+  movieData,
+}) => {
   return (
     <>
       <SMovieTitleReleaseYearWrapperDiv>

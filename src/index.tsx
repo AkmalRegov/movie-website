@@ -9,7 +9,7 @@ import * as PAGES from "./pages";
 import * as API from "./restapi";
 
 async function loaderTrendingMovies() {
-  const data = await API.tmdb_trendingMovies().then((res) => res.json());
+  const data = await API.TRENDING_MOVIES.tmdb_trendingMovies().then((res) => res.json());
   return defer({ data });
 }
 
@@ -21,15 +21,15 @@ async function loaderSearchOneMovie(params: Params<string>) {
       statusText: `MovieId '${params.movieId}' not found!`,
     });
   }
-  const fetchedOneMovieData = await API.tmdb_searchOneMovie(
+  const fetchedOneMovieData = await API.SEARCH_ONE_MOVIE.tmdb_searchOneMovie(
     parseInt(params.movieId as string),
   ).then((res) => res.json());
 
-  const fetchedMovieReleaseDatesData = await API.tmdb_movieReleaseDatesData(
+  const fetchedMovieReleaseDatesData = await API.MOVIE_CERTIFICATION.tmdb_movieReleaseDatesData(
     parseInt(params.movieId as string),
   ).then((res) => res.json());
 
-  const fetchedMovieCastCrew = await API.tmdb_getMovieCastCrew(
+  const fetchedMovieCastCrew = await API.GET_MOVIE_CAST_CREW.tmdb_getMovieCastCrew(
     parseInt(params.movieId as string),
   ).then((res) => res.json());
 

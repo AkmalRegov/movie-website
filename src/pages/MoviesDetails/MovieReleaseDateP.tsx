@@ -1,8 +1,10 @@
 import React from "react";
 import { GoPrimitiveDot } from "react-icons/go";
-import { oneMovieData } from "./MoviesDetails";
+import { SEARCH_ONE_MOVIE } from "../../restapi";
 
-const MovieReleaseDateP: React.FC<{ movieData: oneMovieData }> = ({ movieData }) => {
+const MovieReleaseDateP: React.FC<{ movieData: SEARCH_ONE_MOVIE.oneMovieData }> = ({
+  movieData,
+}) => {
   function parseDate(dateString: string) {
     var parts = dateString.split("-") as string[];
     var resString = `${parts[2]}/${parts[1]}/${parts[0]}`;

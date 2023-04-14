@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { movieData } from "./TrendingMovies";
 import {
   BsChevronLeft as LeftWideArrow,
   BsChevronRight as RightWideArrow,
@@ -8,6 +7,7 @@ import {
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { HomePageContext } from "../../context/HomePage/HomePageContext";
+import { SEARCH_MOVIES } from "../../restapi";
 
 const SMainDiv = styled.div`
   display: flex;
@@ -65,6 +65,9 @@ const SMovieLink = styled(Link)`
     color: blue;
   }
 `;
+
+//Simplifications
+type movieData = SEARCH_MOVIES.movieData;
 
 const BsDotMap: React.FC<{ sectionCount: number; maxSectionCount?: number }> = ({
   sectionCount,

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { useDebounce } from "../../customHooks/useDebounce";
+// import { useDebounce } from "../../customHooks/useDebounce";
 import MoviesMap from "./MoviesMap";
 import SearchedMovies from "./SearchedMovies";
 import SearchBar from "./SearchBar";
-import * as API from "../../restapi";
+import { SEARCH_MOVIES } from "../../restapi";
 import styled from "styled-components";
 import { HomePageContext } from "../../context/HomePage/HomePageContext";
 import { useLoaderData } from "react-router-dom";
@@ -25,29 +25,10 @@ const SH1 = styled.h1`
   margin: 0;
 `;
 
-export type apiResponse = {
-  page: string;
-  results: movieData[];
-  total_pages: number;
-  total_results: number;
-};
-
-export type movieData = {
-  adult: boolean;
-  backdrop_path: string;
-  genre_ids: number[];
-  id: number;
-  media_type: string;
-  original_language: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-};
+//Simplifications
+type apiResponse = SEARCH_MOVIES.apiResponse;
+type movieData = SEARCH_MOVIES.movieData;
+const { tmdb_searchMovies } = SEARCH_MOVIES;
 
 type RouteLoaderData = {
   data: apiResponse;
@@ -76,7 +57,7 @@ export const TrendingMovies: React.FC = () => {
   useEffect(() => {
     if (!HomePageState.submitSearch) return;
     else HomePageDispatch({ type: "change submitSearch bool", submitSearch: false });
-    API.tmdb_searchMovies(HomePageState.submittedSearch, HomePageState.currentPage)
+    tmdb_searchMovies(HomePageState.submittedSearch, HomePageState.currentPage)
       .then((res) => res.json())
       .then((data: apiResponse) => {
         HomePageDispatch({

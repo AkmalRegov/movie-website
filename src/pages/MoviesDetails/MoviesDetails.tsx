@@ -1,20 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, redirect, useLoaderData } from "react-router-dom";
 import * as API from "../../restapi";
-import { IoListCircleSharp, IoHeartCircle } from "react-icons/io5";
-import { BsFillBookmarkPlusFill } from "react-icons/bs";
-import { MdStars } from "react-icons/md";
 import styled from "styled-components";
 import MovieTitleReleaseYearContent from "./MovieTitleReleaseYearContent";
 import MovieCertificationP from "./MovieCertificationP";
 import MovieRuntimeP from "./MovieRuntimeP";
 import MovieReleaseDateP from "./MovieReleaseDateP";
 import BgMovie from "./BgMovie";
-import UserScoreFC from "./UserScoreFC";
 import IconDiv from "./IconDiv";
 
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
+
+type oneMovieData = API.SEARCH_ONE_MOVIE.oneMovieData;
+type movieReleaseDates = API.MOVIE_CERTIFICATION.movieReleaseDates;
+type movieCastCrewType = API.GET_MOVIE_CAST_CREW.movieCastCrewType;
+type crewInterface = API.GET_MOVIE_CAST_CREW.crewInterface;
+
 type RouteParams = {
   movieId: string;
 };
@@ -23,109 +25,6 @@ type RouteLoaderData = {
   fetchedOneMovieData: oneMovieData;
   fetchedMovieReleaseDatesData: movieReleaseDates;
   fetchedMovieCastCrew: movieCastCrewType;
-};
-
-export type oneMovieData = {
-  adult: boolean;
-  backdrop_path: string | null;
-  belongs_to_collection: object | null;
-  budget: number;
-  genres: [
-    {
-      id: number;
-      name: string;
-    },
-  ];
-  homepage: string | null;
-  id: number;
-  imdb_id: string | null;
-  original_language: string;
-  original_title: string;
-  overview: string | null;
-  popularity: number;
-  poster_path: string | null;
-  production_companies: [
-    {
-      name: string;
-      id: number;
-      logo_path: string | null;
-      origin_country: string;
-    },
-  ];
-  production_countries: [
-    {
-      iso_3166_1: string;
-      name: string;
-    },
-  ];
-  release_date: string;
-  revenue: number;
-  runtime: number | null;
-  spoken_languages: [
-    {
-      iso_638_1: string;
-      name: string;
-    },
-  ];
-  status: string;
-  tagline: string | null;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-};
-
-export type movieReleaseDates = {
-  id: number;
-  results: [
-    {
-      iso_3166_1: string;
-      release_dates: [
-        {
-          certification: string;
-          iso_639_1: string;
-          release_date: string;
-          type: number;
-          note: string;
-        },
-      ];
-    },
-  ];
-};
-
-interface castInterface {
-  adult: boolean;
-  gender: number;
-  id: number;
-  known_for_department: string;
-  name: string;
-  original_name: string;
-  popularity: number;
-  profile_path: string | null;
-  cast_id: number;
-  character: string;
-  credit_id: string;
-  order: number;
-}
-
-interface crewInterface {
-  adult: boolean;
-  gender: number;
-  id: number;
-  known_for_department: string;
-  name: string;
-  original_name: string;
-  popularity: number;
-  profile_path: string | null;
-  credit_id: string;
-  department: string;
-  job: string;
-}
-
-export type movieCastCrewType = {
-  id: number;
-  cast: castInterface[];
-  crew: crewInterface[];
 };
 
 const SMoviePosterImage = styled.img`
@@ -139,12 +38,13 @@ const SMoviePosterImage = styled.img`
 const SPosterRightSideContentDiv = styled.div`
   border: 1px solid whitesmoke;
   margin-left: 3rem;
-  height: 440px;
+  min-height: 440px;
+  max-height: fit-content;
   width: 100vw;
   margin-right: 20px;
 `;
 
-const SGenreP = styled.a`
+const SGenreA = styled.a`
   color: white;
   cursor: pointer;
   text-decoration: none;
@@ -153,6 +53,8 @@ const SGenreP = styled.a`
     filter: brightness(0.3);
   }
 `;
+
+const SCrewA = styled(SGenreA)``;
 
 export const MoviesDetails: React.FC = () => {
   const { movieId } = useParams<RouteParams>(); //cannot use interface for useParams generic
@@ -187,13 +89,13 @@ export const MoviesDetails: React.FC = () => {
     setTop5Crew(() => {
       var sorted = fetchedMovieCastCrew.crew.sort((a, b) => b.popularity - a.popularity);
       var res = [];
-      var unwantedDepartment = ["Crew", "Camera"];
+      var unwantedDepartment = ["Crew", "Camera", "Acting"];
       for (var x = 0; x < 5 && sorted.length > x; x++) {
         res.push(sorted[x]);
         var filtered = sorted.filter(
           (ele) =>
             ele.id !== sorted[x].id &&
-            unwantedDepartment.every((val) => val != ele.known_for_department),
+            unwantedDepartment.every((val) => val !== ele.known_for_department),
         );
         sorted = filtered.sort((a, b) => b.popularity - a.popularity);
       }
@@ -211,7 +113,15 @@ export const MoviesDetails: React.FC = () => {
   return (
     <>
       <div style={{ textAlign: "center", margin: "20px 0" }}>MoviesDetails {movieId}</div>
-      <section style={{ display: "flex" }}>
+      <section
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "flex-start",
+          alignContent: "center",
+          boxSizing: "border-box",
+        }}
+      >
         <div style={{ width: "100vw", height: "500px", border: "1px solid black" }}>
           {movieData && (
             <>
@@ -236,7 +146,7 @@ export const MoviesDetails: React.FC = () => {
                       <MovieCertificationP movieUSCertification={movieUSCertification} />
                       <MovieReleaseDateP movieData={movieData} />
                       {movieData.genres.map((ele, index) => (
-                        <SGenreP
+                        <SGenreA
                           key={index}
                           style={{ color: "white" }}
                           target="_blank"
@@ -244,7 +154,7 @@ export const MoviesDetails: React.FC = () => {
                         >
                           {ele.name}
                           {index !== movieData.genres.length - 1 ? "," : ""}
-                        </SGenreP>
+                        </SGenreA>
                       ))}
                       <MovieRuntimeP runtime={movieData.runtime as number} />
                     </div>
@@ -264,7 +174,15 @@ export const MoviesDetails: React.FC = () => {
                                   key={index}
                                   style={{ display: "flex", flexDirection: "column" }}
                                 >
-                                  <strong>{item.name}</strong>
+                                  <SCrewA
+                                    style={{ textDecoration: "none" }}
+                                    href={`https://www.themoviedb.org/person/${item.id}-${item.name
+                                      .replace(" ", "-")
+                                      .toLowerCase()}`}
+                                    target="_blank"
+                                  >
+                                    <strong>{item.name}</strong>
+                                  </SCrewA>
                                   <em>{item.known_for_department}</em>
                                 </div>
                               </>

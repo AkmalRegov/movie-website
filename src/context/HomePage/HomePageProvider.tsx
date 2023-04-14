@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import { HomePageContext, HomePageContextProps } from "./HomePageContext";
-import { HomePageReducer, HomePageState } from "./homePageReducer";
+import { HomePageReducer, HomePageState } from "./HomePageReducer";
 
 export const initialHomePageState: HomePageState = {
   trendingMovies: [],

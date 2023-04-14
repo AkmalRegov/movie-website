@@ -1,5 +1,5 @@
 import React from "react";
-import { oneMovieData } from "./MoviesDetails";
+import { SEARCH_ONE_MOVIE } from "../../restapi";
 import UserScoreFC from "./UserScoreFC";
 import { IoHeartCircle, IoListCircleSharp } from "react-icons/io5";
 import { BsFillBookmarkFill } from "react-icons/bs";
@@ -46,7 +46,7 @@ const SInnerBlackCircleSpan = styled.span`
 
 const IconStyle = { backgroundColor: "white", borderRadius: "100%", cursor: "pointer" };
 
-const IconDiv: React.FC<{ movieData: oneMovieData }> = ({ movieData }) => {
+const IconDiv: React.FC<{ movieData: SEARCH_ONE_MOVIE.oneMovieData }> = ({ movieData }) => {
   return (
     <>
       <SWrapperDiv>

@@ -11,7 +11,7 @@ const MovieCertificationP: React.FC<{ movieUSCertification: string }> = ({
             fontSize: "18px",
             fontWeight: "600",
             color: "gray",
-            border: "1px solid gray",
+            border: "2px solid gray",
             width: "fit-content",
           }}
         >

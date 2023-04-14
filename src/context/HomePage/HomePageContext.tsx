@@ -1,5 +1,5 @@
 import React from "react";
-import { HomePageActionTypes, HomePageState } from "./homePageReducer";
+import { HomePageActionTypes, HomePageState } from "./HomePageReducer";
 
 export interface HomePageContextProps {
   state: HomePageState;
