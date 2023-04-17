@@ -177,7 +177,13 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
                   </div>
                   <div style={{ display: "flex", gap: "0.2rem" }}>
                     <p style={{ color: "gray" }}>Written by</p>
-                    <p style={{ color: "black", fontWeight: 400 }}> {item.author}</p>
+                    <a
+                      href={`https://www.themoviedb.org/u/${item.author_details.username}`}
+                      style={{ color: "black", fontWeight: 400, textDecoration: "none" }}
+                    >
+                      {" "}
+                      {item.author}
+                    </a>
                     <p style={{ color: "gray" }}>on {parseDate(item.created_at)}</p>
                   </div>
                 </div>

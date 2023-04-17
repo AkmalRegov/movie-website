@@ -38,10 +38,14 @@ const SMovieCardDiv = styled.div`
   align-items: center;
 `;
 
-const SMovieTitle = styled.strong`
+const SMovieTitleStrong = styled.strong`
   color: black;
   margin-top: 8px;
   width: 155px;
+
+  &:hover {
+    color: blue;
+  }
 `;
 
 const SMovieReleaseDate = styled.p`
@@ -164,7 +168,7 @@ const MoviesMap: React.FC<{
                       width={155}
                       height={225}
                     />
-                    <SMovieTitle>{data.title}</SMovieTitle>
+                    <SMovieTitleStrong>{data.title}</SMovieTitleStrong>
                   </SMovieLink>
                   <SMovieReleaseDate>{parseDate(data.release_date)}</SMovieReleaseDate>
                 </SMovieCardDiv>
