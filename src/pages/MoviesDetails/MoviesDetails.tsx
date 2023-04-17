@@ -39,7 +39,6 @@ const SMoviePosterImage = styled.img`
 `;
 
 const SPosterRightSideContentDiv = styled.div`
-  border: 1px solid whitesmoke;
   margin-left: 3rem;
   min-height: 440px;
   max-height: fit-content;
