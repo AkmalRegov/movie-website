@@ -2,6 +2,7 @@ import React from "react";
 import { GET_MOVIE_REVIEWS } from "../../restapi";
 import { AiFillStar } from "react-icons/ai";
 import styled from "styled-components";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 const SInitialAvatarCircleSpan = styled.span`
   display: flex;
@@ -30,6 +31,8 @@ const SReviewUrlStrong = styled.strong`
   }
 `;
 
+const blackText = "color: black";
+
 const InitialAvatarCircleSpan: React.FC<{ username: string }> = ({ username }) => {
   return (
     <a
@@ -41,6 +44,18 @@ const InitialAvatarCircleSpan: React.FC<{ username: string }> = ({ username }) =
     </a>
   );
 };
+
+const SReviewContentDiv = styled.div`
+  display: inline-block;
+  padding-left: 96px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  max-height: 200px;
+`;
 
 const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieReview }> = ({
   fetchedMovieReviews,
@@ -64,22 +79,36 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
       ? `${avatar_path?.replace("/", "")}?s=128`
       : `https://image.tmdb.org/t/p/w64_and_h64_face${avatar_path}`;
   }
+  const markdownParser = (text: string) => {
+    const toHTML = text
+      .replace(/^### (.*$)/gim, "<h3>$1</h3>") // h3 tag
+      .replace(/^## (.*$)/gim, "<h2>$1</h2>") // h2 tag
+      .replace(/^# (.*$)/gim, "<h1>$1</h1>") // h1 tag
+      .replace(/\*\*(.*)\*\*/gim, "<strong>$1</strong>") // bold text
+      .replace(/\*(.*)\*/gim, "<em>$1</em>"); // italic text
+    return toHTML.trim(); // using trim method to remove whitespace
+  };
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", width: "99vw" }}>
       {fetchedMovieReviews.results.map((item, index) => {
         // console.log("username is: ", item.author_details.username);
         return (
           <div
+            key={index}
+            className="fullReviewBox"
             style={{
               display: "flex",
+              flexDirection: "column",
               width: "94vw",
-              height: "20rem",
+              height: "fit-content",
+              maxHeight: "20rem",
+              paddingBottom: "4px",
               border: "1px solid black",
               borderRadius: "12px",
               boxShadow: "5px 10px #888",
             }}
           >
-            <div style={{ display: "flex", gap: "1rem" }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
               <div
                 style={{
                   display: "flex",
@@ -131,7 +160,7 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
                           backgroundColor: "black",
                           alignItems: "center",
                           justifyContent: "center",
-                          gap: "0.2rem",
+                          gap: "0.3rem",
                           width: "50px",
                           padding: "2px",
                           borderRadius: "8px",
@@ -146,14 +175,37 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
                       </div>
                     )}
                   </div>
-                  <div>
-                    <p style={{ color: "gray", display: "flex", gap: "0.2rem" }}>
-                      Written by<p style={{ color: "black", fontWeight: 400 }}> {item.author}</p> on{" "}
-                      {parseDate(item.created_at)}
-                    </p>
+                  <div style={{ display: "flex", gap: "0.2rem" }}>
+                    <p style={{ color: "gray" }}>Written by</p>
+                    <p style={{ color: "black", fontWeight: 400 }}> {item.author}</p>
+                    <p style={{ color: "gray" }}>on {parseDate(item.created_at)}</p>
                   </div>
                 </div>
               </div>
+              <SReviewContentDiv className="reviewContentBox">
+                <ReactMarkdown
+                  components={{
+                    p: ({ node, ...props }) => (
+                      <p
+                        style={{
+                          color: "black",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "pre-wrap",
+                        }}
+                        {...props}
+                      />
+                    ),
+                    strong: ({ node, ...props }) => (
+                      <strong style={{ color: "black" }} {...props} />
+                    ),
+                    em: ({ node, ...props }) => <em style={{ color: "black" }} {...props} />,
+                  }}
+                >
+                  {item.content}
+                </ReactMarkdown>
+                {/* {item.content && markdownParser(item.content)} */}
+              </SReviewContentDiv>
             </div>
           </div>
         );
