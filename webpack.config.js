@@ -2,7 +2,7 @@
 //2) How to use react router with webpack, cannot GET route: https://www.robinwieruch.de/webpack-react-router/
 
 const path = require("path");
-const { SourceMapDevToolPlugin } = require("webpack");
+const { SourceMapDevToolPlugin, ProvidePlugin } = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 module.exports = {
@@ -21,6 +21,12 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
+      {
         test: /\.(ts|js)x?$/,
         exclude: /node_modules/,
         use: {
@@ -36,17 +42,37 @@ module.exports = {
         exclude: /node_modules/,
         use: ["file-loader?name=[name].[ext]"], // ?name=[name].[ext] is only necessary to preserve the original file name
       },
+      {
+        test: /\.node$/,
+        loader: "node-loader",
+      },
     ],
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
+    fallback: {
+      https: require.resolve("https-browserify"),
+      http: require.resolve("stream-http"),
+      url: require.resolve("url/"),
+      buffer: require.resolve("buffer/"),
+      util: require.resolve("util/"),
+    },
   },
   target: "web",
+  node: {
+    __dirname: false,
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       favicon: "./public/favicon.ico",
       chunks: ["app"],
+    }),
+    new ProvidePlugin({
+      process: "process/browser",
+    }),
+    new ProvidePlugin({
+      Buffer: ["buffer", "Buffer"],
     }),
     new Dotenv({
       // path: './src/config/config', // load this now instead of the ones in '.env'
