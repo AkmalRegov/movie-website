@@ -54,12 +54,12 @@ export const TrendingMovies: React.FC = () => {
     var sth = CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4();
     sth.then((data: CREATE_REQUEST_TOKEN.apiResponse) => {
       console.log("data from node request here is: ", data);
-      window
-        .open(
-          `https://www.themoviedb.org/auth/access?request_token=${data.request_token}`,
-          "_blank",
-        )
-        ?.focus();
+      // window
+      //   .open(
+      //     `https://www.themoviedb.org/auth/access?request_token=${data.request_token}`,
+      //     "_blank",
+      //   )
+      //   ?.focus();
     });
     callOnce.current = true;
   }, []);

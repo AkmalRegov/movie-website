@@ -59,6 +59,11 @@ const router = createBrowserRouter([
     loader: ({ params }) => loaderSearchOneMovie(params),
   },
   {
+    path: ROUTES.userAuthenticated,
+    element: <PAGES.UserAuthentication />,
+    errorElement: <PAGES.ErrorPage />,
+  },
+  {
     path: ROUTES.watchlist,
     // element: <PAGES.TodoList />,
   },
