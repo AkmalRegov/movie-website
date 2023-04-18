@@ -54,7 +54,7 @@ const SReviewContentDiv = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
-  max-height: 200px;
+  max-height: 194px;
 `;
 
 const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieReview }> = ({
