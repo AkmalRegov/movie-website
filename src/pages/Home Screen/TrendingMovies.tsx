@@ -6,7 +6,8 @@ import SearchBar from "./SearchBar";
 import { CREATE_REQUEST_TOKEN, SEARCH_MOVIES } from "../../restapi";
 import styled from "styled-components";
 import { HomePageContext } from "../../context/HomePage/HomePageContext";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { UserAccessContext } from "../../context/UserAccess/UserAccessContext";
 
 const SMainDiv = styled.div`
   display: flex;
@@ -36,9 +37,11 @@ type RouteLoaderData = {
 
 export const TrendingMovies: React.FC = () => {
   const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
+  const { state: userAccess, dispatch: userAccessDispatch } = useContext(UserAccessContext);
   const { data } = useLoaderData() as RouteLoaderData;
   // const debouncedSearch = useDebounce(searchText, 2000);
   const callOnce = useRef<boolean>(false);
+  const navigate = useNavigate();
 
   function calcMaxSectionCount(data: movieData[]): number {
     var count = Math.floor(data.length / 4);
@@ -51,16 +54,20 @@ export const TrendingMovies: React.FC = () => {
   useEffect(() => {
     if (callOnce.current) return;
     HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
-    var sth = CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4();
-    sth.then((data: CREATE_REQUEST_TOKEN.apiResponse) => {
-      console.log("data from node request here is: ", data);
-      // window
-      //   .open(
-      //     `https://www.themoviedb.org/auth/access?request_token=${data.request_token}`,
-      //     "_blank",
-      //   )
-      //   ?.focus();
-    });
+    var uniqueString = crypto.randomUUID();
+    userAccessDispatch({ type: "initialize uniqueKey", uniqueKey: uniqueString });
+    CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4(uniqueString).then(
+      (data: CREATE_REQUEST_TOKEN.apiResponse) => {
+        console.log("data from node request here is: ", data);
+        userAccessDispatch({ type: "initialize requestToken", requestToken: data.request_token });
+        window
+          .open(
+            `https://www.themoviedb.org/auth/access?request_token=${data.request_token}`,
+            "_blank",
+          )
+          ?.focus();
+      },
+    );
     callOnce.current = true;
   }, []);
 
@@ -88,6 +95,12 @@ export const TrendingMovies: React.FC = () => {
         <p>Trending Movies</p>
         <SH1WrapperDiv>
           <SH1>I want to show trending movies here.</SH1>
+          {userAccess.requestToken !== "" && (
+            <Link to={`/user_authentication/${userAccess.uniqueKey}`}>
+              <button>Go to user authentication</button>
+            </Link>
+          )}
+          {/* <p style={{ color: "black" }}>uniqueKey of userAccess is: {userAccess.uniqueKey}</p> */}
         </SH1WrapperDiv>
         {HomePageState.trendingMovies.length !== 0 && (
           <MoviesMap

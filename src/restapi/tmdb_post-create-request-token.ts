@@ -6,7 +6,7 @@ export type apiResponse = {
   request_token: string;
 };
 
-export const tmdb_postCreateRequestTokenV4 = async (): Promise<apiResponse> => {
+export const tmdb_postCreateRequestTokenV4 = async (uniqueString: string): Promise<apiResponse> => {
   return new Promise((parentResolve, parentReject) => {
     var options = {
       method: "POST",
@@ -38,10 +38,15 @@ export const tmdb_postCreateRequestTokenV4 = async (): Promise<apiResponse> => {
 
     //redirect_to is where you redirect the users after they approve the request_token
     //so, what you should do is to redirect_to a successfully approved page, then set context and session provider
-    req.write(JSON.stringify({ redirect_to: "http://localhost:3000/movie/76600" }), async (err) => {
-      if (err) console.log("error exists, so not approved?");
-      else console.log("no error exists, so is it really approved?");
-    });
+    // req.write(
+    //   JSON.stringify({
+    //     redirect_to: `http://localhost:3000/user_authentication/${uniqueString}`,
+    //   }),
+    //   async (err) => {
+    //     if (err) console.log("error exists, so not approved?");
+    //     else console.log("no error exists, so is it really approved?");
+    //   },
+    // );
     req.end();
   });
 };

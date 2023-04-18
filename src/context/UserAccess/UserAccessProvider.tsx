@@ -5,6 +5,7 @@ import { UserAccessReducer, UserAccessState } from "./UserAccessReducer";
 export const initializeUserAccessState: UserAccessState = {
   requestToken: "",
   requestTokenApproved: false,
+  uniqueKey: "",
   accessToken: "",
 };
 
