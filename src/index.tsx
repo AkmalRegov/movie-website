@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import * as ROUTES from "./routes";
 import * as PAGES from "./pages";
 import * as API from "./restapi";
+import UserAccessProvider from "./context/UserAccess/UserAccessProvider";
 
 async function loaderTrendingMovies() {
   const data = await API.TRENDING_MOVIES.tmdb_trendingMovies().then((res) => res.json());
@@ -70,10 +71,13 @@ const router = createBrowserRouter([
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+//<UserAccessProvider> as parent, works...
 root.render(
   <React.StrictMode>
     {/* <App /> */}
-    <RouterProvider router={router} />
+    <UserAccessProvider>
+      <RouterProvider router={router} />
+    </UserAccessProvider>
   </React.StrictMode>,
 );
 

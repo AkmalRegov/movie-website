@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams, useLoaderData } from "react-router-dom";
 import * as API from "../../restapi";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import MovieReleaseDateP from "./MovieReleaseDateP";
 import BgMovie from "./BgMovie";
 import IconDiv from "./IconDiv";
 import MovieReviewSection from "./MovieReviewCard";
+import { UserAccessContext } from "../../context/UserAccess/UserAccessContext";
 
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
@@ -70,6 +71,7 @@ export const MoviesDetails: React.FC = () => {
   const [top5Crew, setTop5Crew] = useState<crewInterface[]>();
   const [movieUSCertification, setMovieUSCertification] = useState("");
   const callOnce = useRef<boolean>(false);
+  const { state: userAccess } = useContext(UserAccessContext);
 
   function parseGenreURL(genreId: number, genreName: string) {
     return encodeURI(
@@ -106,6 +108,7 @@ export const MoviesDetails: React.FC = () => {
         sorted = filtered.sort((a, b) => b.popularity - a.popularity);
       }
       console.log("top 5 crew based on popularity is: ", res);
+      console.log("userAccess.requestTokenApproved is: ", userAccess.requestTokenApproved);
       return res;
     });
     console.log("fetchedMovieReviews is: ", fetchedMovieReviews);
