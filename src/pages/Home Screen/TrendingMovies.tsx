@@ -51,11 +51,7 @@ export const TrendingMovies: React.FC = () => {
     return count;
   }
 
-  useEffect(() => {
-    if (callOnce.current) return;
-    HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
-    var uniqueString = crypto.randomUUID();
-    userAccessDispatch({ type: "initialize uniqueKey", uniqueKey: uniqueString });
+  function handleCreateRequestTokenV4(uniqueString: string) {
     CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4(uniqueString).then(
       (data: CREATE_REQUEST_TOKEN.apiResponse) => {
         console.log("data from node request here is: ", data);
@@ -68,6 +64,16 @@ export const TrendingMovies: React.FC = () => {
           ?.focus();
       },
     );
+  }
+
+  function handleCreateUserAccessToken(uniqueString: string) {}
+
+  useEffect(() => {
+    if (callOnce.current) return;
+    HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
+    var uniqueString = crypto.randomUUID();
+    userAccessDispatch({ type: "initialize uniqueKey", uniqueKey: uniqueString });
+    handleCreateRequestTokenV4(uniqueString);
     callOnce.current = true;
   }, []);
 
@@ -96,11 +102,15 @@ export const TrendingMovies: React.FC = () => {
         <SH1WrapperDiv>
           <SH1>I want to show trending movies here.</SH1>
           {userAccess.requestToken !== "" && (
-            <Link to={`/user_authentication/${userAccess.uniqueKey}`}>
-              <button>Go to user authentication</button>
-            </Link>
+            <div>
+              <p style={{ color: "black" }}>
+                If you have approved the request token, click here to get authenticated.
+              </p>
+              <Link to={`/user_authentication/${userAccess.uniqueKey}`}>
+                <button>Get authenticated</button>
+              </Link>
+            </div>
           )}
-          {/* <p style={{ color: "black" }}>uniqueKey of userAccess is: {userAccess.uniqueKey}</p> */}
         </SH1WrapperDiv>
         {HomePageState.trendingMovies.length !== 0 && (
           <MoviesMap

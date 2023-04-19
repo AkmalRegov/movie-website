@@ -36,8 +36,8 @@ export const tmdb_postCreateRequestTokenV4 = async (uniqueString: string): Promi
       parentReject(e.message);
     });
 
-    //redirect_to is where you redirect the users after they approve the request_token
-    //so, what you should do is to redirect_to a successfully approved page, then set context and session provider
+    // redirect_to is where you redirect the users after they approve the request_token
+    // so, what you should do is to redirect_to a successfully approved page, then set context and session provider
     // req.write(
     //   JSON.stringify({
     //     redirect_to: `http://localhost:3000/user_authentication/${uniqueString}`,
