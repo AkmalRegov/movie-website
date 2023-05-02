@@ -86,14 +86,21 @@ export const TrendingMovies: React.FC = () => {
       });
       return data;
     });
+    var accountDetailsArgs = {} as CREATE_SESSION_WITH_ACCESS_TOKEN.apiResponse;
     if (sth) {
       console.log("sth is:\n", sth);
-      CREATE_SESSION_WITH_ACCESS_TOKEN.tmdb_createSessionWithAccessToken(
+      accountDetailsArgs = await CREATE_SESSION_WITH_ACCESS_TOKEN.tmdb_createSessionWithAccessToken(
         userAccess.uniqueKey,
         sth.access_token,
       ).then((data) => {
         console.log("session data is: ", data);
         userAccessDispatch({ type: "set session from tmdb", sessionString: data.session_id });
+        return data;
+      });
+    }
+    if (accountDetailsArgs) {
+      GET_ACCOUNT_DETAILS.tmdb_getAccountDetails(accountDetailsArgs.session_id).then((data) => {
+        console.log("account details retrieved are:\n", data);
       });
     }
   }
