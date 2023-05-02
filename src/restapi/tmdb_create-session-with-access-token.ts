@@ -3,7 +3,8 @@ import * as http from "https";
 import { Buffer } from "buffer";
 
 export type apiResponse = {
-  request_token: string;
+  success: boolean;
+  session_id: string;
 };
 
 export const tmdb_createSessionWithAccessToken = async (

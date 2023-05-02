@@ -8,6 +8,7 @@ import {
   SEARCH_MOVIES,
   CREATE_ACCESS_TOKEN,
   CREATE_SESSION_WITH_ACCESS_TOKEN,
+  GET_ACCOUNT_DETAILS,
 } from "../../restapi";
 import styled from "styled-components";
 import { HomePageContext } from "../../context/HomePage/HomePageContext";
@@ -57,7 +58,7 @@ export const TrendingMovies: React.FC = () => {
   }
 
   async function handleCreateRequestTokenV4(uniqueString: string) {
-    var sth = await CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4(uniqueString).then(
+    CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4(uniqueString).then(
       (data: CREATE_REQUEST_TOKEN.apiResponse) => {
         console.log("data from node request here is: ", data);
         userAccessDispatch({ type: "initialize requestToken", requestToken: data.request_token });
@@ -70,9 +71,6 @@ export const TrendingMovies: React.FC = () => {
         return data;
       },
     );
-    if (sth) {
-      console.log("sth data for request token is:\n", sth);
-    }
   }
 
   async function handleCreateUserAccessTokenV4(uniqueString: string, request_token: string) {
@@ -95,6 +93,7 @@ export const TrendingMovies: React.FC = () => {
         sth.access_token,
       ).then((data) => {
         console.log("session data is: ", data);
+        userAccessDispatch({ type: "set session from tmdb", sessionString: data.session_id });
       });
     }
   }
@@ -169,7 +168,9 @@ export const TrendingMovies: React.FC = () => {
             ) : (
               <>
                 <p style={{ color: "black" }}>
-                  You have been authenticated and your access token is: {userAccess.accessToken}
+                  You have been authenticated and your access token is: {userAccess.accessToken}{" "}
+                  <br />
+                  and your sessionId is: {userAccess.sessionString}
                 </p>
               </>
             ))}
