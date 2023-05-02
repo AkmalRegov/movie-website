@@ -2,19 +2,20 @@ import { myV4TokenKey } from "./index";
 import * as http from "https";
 import { Buffer } from "buffer";
 
-//Is it possible to just create request token, access token and session in just one go?
-
 export type apiResponse = {
-  request_token: string;
+  access_token: string;
 };
 
-export const tmdb_postCreateRequestTokenV4 = async (uniqueString: string): Promise<apiResponse> => {
+export const tmdb_postCreateAccessTokenV4 = async (
+  uniqueString: string,
+  request_token: string,
+): Promise<apiResponse> => {
   return new Promise((parentResolve, parentReject) => {
     var options = {
       method: "POST",
       hostname: "api.themoviedb.org",
       port: null,
-      path: "/4/auth/request_token",
+      path: "/4/auth/access_token",
       headers: {
         "content-type": "application/json;charset=utf-8",
         authorization: `Bearer ${myV4TokenKey}`,
@@ -38,17 +39,15 @@ export const tmdb_postCreateRequestTokenV4 = async (uniqueString: string): Promi
       parentReject(e.message);
     });
 
-    // redirect_to is where you redirect the users after they approve the request_token
-    // so, what you should do is to redirect_to a successfully approved page, then set context and session provider
-    // req.write(
-    //   JSON.stringify({
-    //     redirect_to: `http://localhost:3000/user_authentication/${uniqueString}`,
-    //   }),
-    //   async (err) => {
-    //     if (err) console.log("error exists, so not approved?");
-    //     else console.log("no error exists, so is it really approved?");
-    //   },
-    // );
+    req.write(
+      JSON.stringify({
+        request_token: `${request_token}`,
+      }),
+      async (err) => {
+        if (err) console.log("error exists, so not approved?");
+        else console.log("no error exists, so is it really approved?");
+      },
+    );
     req.end();
   });
 };

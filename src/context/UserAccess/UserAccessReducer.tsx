@@ -3,6 +3,7 @@ export type UserAccessState = {
   requestTokenApproved: boolean;
   uniqueKey: string;
   accessToken: string;
+  sessionString: string;
 };
 
 export type UserAccessActionTypes =
@@ -15,7 +16,9 @@ export type UserAccessActionTypes =
       requestTokenApproved: false;
     }
   | { type: "set true for requestTokenApproved"; requestTokenApproved: true }
-  | { type: "initialize accessToken"; accessToken: string };
+  | { type: "initialize accessToken"; accessToken: string }
+  | { type: "set session from tmdb"; sessionString: string }
+  | { type: "delete current session"; sessionString: "" };
 
 export function UserAccessReducer(
   state: UserAccessState,
@@ -37,6 +40,10 @@ export function UserAccessReducer(
       return { ...state, requestTokenApproved: action.requestTokenApproved };
     case "initialize accessToken":
       return { ...state, accessToken: action.accessToken };
+    case "set session from tmdb":
+      return { ...state, sessionString: action.sessionString };
+    case "delete current session":
+      return { ...state, sessionString: action.sessionString };
     default:
       return state;
   }

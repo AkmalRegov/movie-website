@@ -7,6 +7,7 @@ export const initializeUserAccessState: UserAccessState = {
   requestTokenApproved: false,
   uniqueKey: "",
   accessToken: "",
+  sessionString: "",
 };
 
 export interface UserAccessProviderProps {

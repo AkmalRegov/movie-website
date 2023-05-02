@@ -160,7 +160,7 @@ const MoviesMap: React.FC<{
             {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
               return (
                 <SMovieCardDiv key={index}>
-                  <SMovieLink to={`movie/${data.id}`} target="_blank">
+                  <SMovieLink to={`movie/${data.id}`}>
                     <img
                       src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
                       alt={`A movie poster for the movie titled: ${data.title}`}
