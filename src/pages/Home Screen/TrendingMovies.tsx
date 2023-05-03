@@ -74,7 +74,10 @@ export const TrendingMovies: React.FC = () => {
   }
 
   async function handleCreateUserAccessTokenV4(uniqueString: string, request_token: string) {
-    var sth = await CREATE_ACCESS_TOKEN.tmdb_postCreateAccessTokenV4(
+    var accessTokenResponseWithData = {} as CREATE_ACCESS_TOKEN.apiResponse;
+    var accountDetailsArgs = {} as CREATE_SESSION_WITH_ACCESS_TOKEN.apiResponse;
+
+    accessTokenResponseWithData = await CREATE_ACCESS_TOKEN.tmdb_postCreateAccessTokenV4(
       uniqueString,
       request_token,
     ).then((data: CREATE_ACCESS_TOKEN.apiResponse) => {
@@ -86,18 +89,19 @@ export const TrendingMovies: React.FC = () => {
       });
       return data;
     });
-    var accountDetailsArgs = {} as CREATE_SESSION_WITH_ACCESS_TOKEN.apiResponse;
-    if (sth) {
-      console.log("sth is:\n", sth);
+
+    if (accessTokenResponseWithData) {
+      console.log("accessTokenResponseWithData is:\n", accessTokenResponseWithData);
       accountDetailsArgs = await CREATE_SESSION_WITH_ACCESS_TOKEN.tmdb_createSessionWithAccessToken(
         userAccess.uniqueKey,
-        sth.access_token,
+        accessTokenResponseWithData.access_token,
       ).then((data) => {
         console.log("session data is: ", data);
         userAccessDispatch({ type: "set session from tmdb", sessionString: data.session_id });
         return data;
       });
     }
+
     if (accountDetailsArgs) {
       GET_ACCOUNT_DETAILS.tmdb_getAccountDetails(accountDetailsArgs.session_id).then((data) => {
         console.log("account details retrieved are:\n", data);
