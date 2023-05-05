@@ -8,6 +8,7 @@ import * as ROUTES from "./routes";
 import * as PAGES from "./pages";
 import * as API from "./restapi";
 import UserAccessProvider from "./context/UserAccess/UserAccessProvider";
+import HomeScreen from "./pages/HomeScreen/HomeScreen";
 
 async function loaderTrendingMovies() {
   const data = await API.TRENDING_MOVIES.tmdb_trendingMovies().then((res) => res.json());
@@ -51,18 +52,24 @@ const router = createBrowserRouter([
     path: ROUTES.home,
     element: <App />,
     errorElement: <PAGES.ErrorPage />,
-    loader: loaderTrendingMovies,
-  },
-  {
-    path: ROUTES.moviePage,
-    element: <PAGES.MoviesDetails />,
-    errorElement: <PAGES.ErrorPage />,
-    loader: ({ params }) => loaderSearchOneMovie(params),
-  },
-  {
-    path: ROUTES.userAuthenticated,
-    element: <PAGES.UserAuthentication />,
-    errorElement: <PAGES.ErrorPage />,
+    children: [
+      {
+        path: ROUTES.home,
+        element: <HomeScreen />,
+        loader: loaderTrendingMovies,
+      },
+      {
+        path: ROUTES.moviePage,
+        element: <PAGES.MoviesDetails />,
+        errorElement: <PAGES.ErrorPage />,
+        loader: ({ params }) => loaderSearchOneMovie(params),
+      },
+      {
+        path: ROUTES.userAuthenticated,
+        element: <PAGES.UserAuthentication />,
+        errorElement: <PAGES.ErrorPage />,
+      },
+    ],
   },
   {
     path: ROUTES.watchlist,

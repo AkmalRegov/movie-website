@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
-import logo from "./logo.svg";
+import React from "react";
 // import "./App.css";
-import { TrendingMovies } from "./pages/Home Screen/TrendingMovies";
-import HomePageProvider from "./context/HomePage/HomePageProvider";
+import { Navbar } from "./component/Navbar";
+import { Outlet } from "react-router-dom";
+import UserAccessProvider from "./context/UserAccess/UserAccessProvider";
 
 function App() {
   return (
@@ -10,11 +10,10 @@ function App() {
       <div className="App">
         <header className="App-header"></header>
       </div>
-      <div>
-        <HomePageProvider>
-          <TrendingMovies />
-        </HomePageProvider>
-      </div>
+      <Navbar />
+      <UserAccessProvider>
+        <Outlet />
+      </UserAccessProvider>
     </>
   );
 }

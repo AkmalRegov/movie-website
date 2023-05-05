@@ -57,67 +57,67 @@ export const TrendingMovies: React.FC = () => {
     return count;
   }
 
-  async function handleCreateRequestTokenV4(uniqueString: string) {
-    CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4(uniqueString).then(
-      (data: CREATE_REQUEST_TOKEN.apiResponse) => {
-        console.log("data from node request here is: ", data);
-        userAccessDispatch({ type: "initialize requestToken", requestToken: data.request_token });
-        window
-          .open(
-            `https://www.themoviedb.org/auth/access?request_token=${data.request_token}`,
-            "_blank",
-          )
-          ?.focus();
-        return data;
-      },
-    );
-  }
+  // async function handleCreateRequestTokenV4(uniqueString: string) {
+  //   CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4(uniqueString).then(
+  //     (data: CREATE_REQUEST_TOKEN.apiResponse) => {
+  //       console.log("data from node request here is: ", data);
+  //       userAccessDispatch({ type: "initialize requestToken", requestToken: data.request_token });
+  //       window
+  //         .open(
+  //           `https://www.themoviedb.org/auth/access?request_token=${data.request_token}`,
+  //           "_blank",
+  //         )
+  //         ?.focus();
+  //       return data;
+  //     },
+  //   );
+  // }
 
-  async function handleCreateUserAccessTokenV4(uniqueString: string, request_token: string) {
-    var accessTokenResponseWithData = {} as CREATE_ACCESS_TOKEN.apiResponse;
-    var accountDetailsArgs = {} as CREATE_SESSION_WITH_ACCESS_TOKEN.apiResponse;
+  // async function handleCreateUserAccessTokenV4(uniqueString: string, request_token: string) {
+  //   var accessTokenResponseWithData = {} as CREATE_ACCESS_TOKEN.apiResponse;
+  //   var accountDetailsArgs = {} as CREATE_SESSION_WITH_ACCESS_TOKEN.apiResponse;
 
-    accessTokenResponseWithData = await CREATE_ACCESS_TOKEN.tmdb_postCreateAccessTokenV4(
-      uniqueString,
-      request_token,
-    ).then((data: CREATE_ACCESS_TOKEN.apiResponse) => {
-      console.log("data is: ", data);
-      userAccessDispatch({ type: "initialize accessToken", accessToken: data.access_token });
-      userAccessDispatch({
-        type: "set true for requestTokenApproved",
-        requestTokenApproved: true,
-      });
-      return data;
-    });
+  //   accessTokenResponseWithData = await CREATE_ACCESS_TOKEN.tmdb_postCreateAccessTokenV4(
+  //     uniqueString,
+  //     request_token,
+  //   ).then((data: CREATE_ACCESS_TOKEN.apiResponse) => {
+  //     console.log("data is: ", data);
+  //     userAccessDispatch({ type: "initialize accessToken", accessToken: data.access_token });
+  //     userAccessDispatch({
+  //       type: "set true for requestTokenApproved",
+  //       requestTokenApproved: true,
+  //     });
+  //     return data;
+  //   });
 
-    if (accessTokenResponseWithData) {
-      console.log("accessTokenResponseWithData is:\n", accessTokenResponseWithData);
-      accountDetailsArgs = await CREATE_SESSION_WITH_ACCESS_TOKEN.tmdb_createSessionWithAccessToken(
-        userAccess.uniqueKey,
-        accessTokenResponseWithData.access_token,
-      ).then((data) => {
-        console.log("session data is: ", data);
-        userAccessDispatch({ type: "set session from tmdb", sessionString: data.session_id });
-        return data;
-      });
-    }
+  //   if (accessTokenResponseWithData) {
+  //     console.log("accessTokenResponseWithData is:\n", accessTokenResponseWithData);
+  //     accountDetailsArgs = await CREATE_SESSION_WITH_ACCESS_TOKEN.tmdb_createSessionWithAccessToken(
+  //       userAccess.uniqueKey,
+  //       accessTokenResponseWithData.access_token,
+  //     ).then((data) => {
+  //       console.log("session data is: ", data);
+  //       userAccessDispatch({ type: "set session from tmdb", sessionString: data.session_id });
+  //       return data;
+  //     });
+  //   }
 
-    if (accountDetailsArgs) {
-      GET_ACCOUNT_DETAILS.tmdb_getAccountDetails(accountDetailsArgs.session_id).then((data) => {
-        console.log("account details retrieved are:\n", data);
-      });
-    }
-  }
+  //   if (accountDetailsArgs) {
+  //     GET_ACCOUNT_DETAILS.tmdb_getAccountDetails(accountDetailsArgs.session_id).then((data) => {
+  //       console.log("account details retrieved are:\n", data);
+  //     });
+  //   }
+  // }
 
   useEffect(() => {
     if (callOnce.current) return;
     HomePageDispatch({ type: "get trending movies", trendingMovies: data.results });
     //Create request token, access token and session here
-    if (userAccess.requestTokenApproved === false) {
-      var uniqueString = crypto.randomUUID();
-      userAccessDispatch({ type: "initialize uniqueKey", uniqueKey: uniqueString });
-      handleCreateRequestTokenV4(uniqueString);
-    }
+    // if (userAccess.requestTokenApproved === false) {
+    //   var uniqueString = crypto.randomUUID();
+    //   userAccessDispatch({ type: "initialize uniqueKey", uniqueKey: uniqueString });
+    //   handleCreateRequestTokenV4(uniqueString);
+    // }
     callOnce.current = true;
   }, []);
 
@@ -145,7 +145,7 @@ export const TrendingMovies: React.FC = () => {
         <p style={{ color: "black" }}>Trending Movies</p>
         <SH1>I want to show trending movies here.</SH1>
         <SH1WrapperDiv>
-          {userAccess.requestToken !== "" &&
+          {/* {userAccess.requestToken !== "" &&
             (userAccess.accessToken === "" ? (
               <>
                 <p style={{ color: "black" }}>
@@ -184,7 +184,7 @@ export const TrendingMovies: React.FC = () => {
                   and your sessionId is: {userAccess.sessionString}
                 </p>
               </>
-            ))}
+            ))} */}
         </SH1WrapperDiv>
         {HomePageState.trendingMovies.length !== 0 && (
           <MoviesMap

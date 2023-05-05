@@ -33,7 +33,7 @@ const SReviewUrlStrong = styled.strong`
 
 const blackText = "color: black";
 
-const InitialAvatarCircleSpan: React.FC<{ username: string }> = ({ username }) => {
+export const InitialAvatarCircleSpan: React.FC<{ username: string }> = ({ username }) => {
   return (
     <a
       href={`https://www.themoviedb.org/u/${username}`}
