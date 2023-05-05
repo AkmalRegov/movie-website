@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 // import { SiStyledcomponents as StyledComponentsLogo } from "react-icons/si";
 import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { UserAccessContext } from "../context/UserAccess/UserAccessContext";
+import LoginAccountDiv from "./LoginAccountDiv";
 // import StyledComponentsPng from "../../src/nav-logo.png";
 
 const SNavbarDiv = styled.div`
@@ -49,6 +51,7 @@ const SLoginDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 `;
 
 const SLoginButton = styled.button`
@@ -62,11 +65,12 @@ const SLoginButton = styled.button`
   margin-bottom: 0.5rem;
 `;
 
-export const Navbar: React.FC<{
+const Navbar: React.FC<{
   menu?: string;
   menuRoute?: string;
 }> = ({ menu, menuRoute }) => {
   const navigate = useNavigate();
+  //   const { state: userAccessState, dispatch: userAccessDispatch } = useContext(UserAccessContext);
   return (
     <>
       <div style={{ border: "1px solid black" }}>
@@ -80,9 +84,7 @@ export const Navbar: React.FC<{
               />
             </div>
           </LogoDiv> */}
-          <SLoginDiv>
-            <SLoginButton>Login</SLoginButton>
-          </SLoginDiv>
+          <LoginAccountDiv />
           <SMenubarDiv>
             <SClickableMenubarDiv
               onClick={() => {
@@ -101,3 +103,5 @@ export const Navbar: React.FC<{
     </>
   );
 };
+
+export default Navbar;

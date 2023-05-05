@@ -1,6 +1,6 @@
 import React from "react";
 // import "./App.css";
-import { Navbar } from "./component/Navbar";
+import Navbar from "./component/Navbar";
 import { Outlet } from "react-router-dom";
 import UserAccessProvider from "./context/UserAccess/UserAccessProvider";
 
