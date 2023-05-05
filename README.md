@@ -22,3 +22,7 @@ A movie website that fetches trending movies, all available movies in TMDB and e
    - Add to Watchlist
 4. Watchlist
    - Listing of movies in your watchlist
+
+## Other information
+
+- Make sure to include the tmdb api url which should be in the format: https://api.themoviedb.org/3/, your v3 api key and v4 access token in src/.env.local
