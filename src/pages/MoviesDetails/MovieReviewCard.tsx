@@ -3,6 +3,7 @@ import { GET_MOVIE_REVIEWS } from "../../restapi";
 import { AiFillStar } from "react-icons/ai";
 import styled from "styled-components";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import rehypeRaw from "rehype-raw";
 
 const SInitialAvatarCircleSpan = styled.span`
   display: flex;
@@ -190,6 +191,7 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
               </div>
               <SReviewContentDiv className="reviewContentBox">
                 <ReactMarkdown
+                  rehypePlugins={[rehypeRaw]}
                   components={{
                     p: ({ node, ...props }) => (
                       <p
