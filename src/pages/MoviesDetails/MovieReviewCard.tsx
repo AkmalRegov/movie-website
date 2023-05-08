@@ -80,15 +80,6 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
       ? `${avatar_path?.replace("/", "")}?s=128`
       : `https://image.tmdb.org/t/p/w64_and_h64_face${avatar_path}`;
   }
-  const markdownParser = (text: string) => {
-    const toHTML = text
-      .replace(/^### (.*$)/gim, "<h3>$1</h3>") // h3 tag
-      .replace(/^## (.*$)/gim, "<h2>$1</h2>") // h2 tag
-      .replace(/^# (.*$)/gim, "<h1>$1</h1>") // h1 tag
-      .replace(/\*\*(.*)\*\*/gim, "<strong>$1</strong>") // bold text
-      .replace(/\*(.*)\*/gim, "<em>$1</em>"); // italic text
-    return toHTML.trim(); // using trim method to remove whitespace
-  };
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", width: "99vw" }}>
       {fetchedMovieReviews.results.map((item, index) => {
