@@ -38,10 +38,11 @@ const SMenubarDiv = styled.div`
   padding-bottom: 4px;
   font-size: 1.5rem;
   line-height: 2rem;
-  position: absolute;
-  left: 47vw;
   text-align: center;
   margin: auto;
+  gap: 1rem;
+  position: relative;
+  bottom: 4px;
 `;
 
 const SClickableMenubarDiv = styled.div`
@@ -98,23 +99,31 @@ const Navbar: React.FC<{
               />
             </div>
           </LogoDiv> */}
-          <LoginAccountDiv />
-          <SMenubarDiv>
-            {/* <SClickableMenubarDiv
+          {/* <LoginAccountDiv /> */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <SLanguageDiv>
+              English
+              <IoIosArrowDown />
+            </SLanguageDiv>
+            <SMenubarDiv>
+              {/* <SClickableMenubarDiv
               onClick={() => {
                 navigate(menuRoute ?? "/");
               }}
             >
               {menu ?? "Home"}
             </SClickableMenubarDiv> */}
-            <SLink to={"/"} className={currentURL.pathname}>
-              Home
-            </SLink>
-          </SMenubarDiv>
-          <SLanguageDiv>
-            English
-            <IoIosArrowDown />
-          </SLanguageDiv>
+              <SLink to={"/"} className={currentURL.pathname}>
+                Home
+              </SLink>
+              <SLink to={"#"} className={currentURL.pathname}>
+                Watchlist
+              </SLink>
+            </SMenubarDiv>
+          </div>
+          <div style={{ display: "flex", position: "relative", bottom: "4px" }}>
+            <LoginAccountDiv />
+          </div>
         </SNavbarDiv>
       </div>
     </>
