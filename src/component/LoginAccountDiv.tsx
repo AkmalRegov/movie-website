@@ -134,7 +134,7 @@ const LoginAccountDiv: React.FC = () => {
             <button
               onClick={() => {
                 userAccessDispatch({ type: "initialize requestToken", requestToken: "" });
-                alert("Please try again!");
+                alert("Please try authorize the request again!");
               }}
             >
               No

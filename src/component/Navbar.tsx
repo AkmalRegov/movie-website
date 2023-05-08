@@ -38,7 +38,10 @@ const SMenubarDiv = styled.div`
   padding-bottom: 4px;
   font-size: 1.5rem;
   line-height: 2rem;
-  position: relative;
+  position: absolute;
+  left: 47vw;
+  text-align: center;
+  margin: auto;
 `;
 
 const SClickableMenubarDiv = styled.div`
