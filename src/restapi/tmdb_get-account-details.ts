@@ -14,6 +14,9 @@ type avatar = {
   gravatar: {
     hash: string;
   };
+  tmdb: {
+    avatar_path: string | null | undefined;
+  };
 };
 
 export const tmdb_getAccountDetails = async (session_id: string): Promise<apiResponse> => {
