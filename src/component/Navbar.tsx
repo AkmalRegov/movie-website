@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 // import { SiStyledcomponents as StyledComponentsLogo } from "react-icons/si";
 import { IoIosArrowDown } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserAccessContext } from "../context/UserAccess/UserAccessContext";
 import LoginAccountDiv from "./LoginAccountDiv";
 // import StyledComponentsPng from "../../src/nav-logo.png";
@@ -68,11 +68,22 @@ const SLoginButton = styled.button`
   margin-bottom: 0.5rem;
 `;
 
+const SLink = styled(Link)`
+  text-decoration: none;
+  color: ${(props) => (props.to !== props.className ? "black" : "blue")};
+
+  &:hover {
+    color: blue;
+  }
+`;
+
 const Navbar: React.FC<{
   menu?: string;
   menuRoute?: string;
 }> = ({ menu, menuRoute }) => {
   const navigate = useNavigate();
+  const currentURL = useLocation();
+  //   console.log("currentURL.pathname is: ", currentURL.pathname);
   //   const { state: userAccessState, dispatch: userAccessDispatch } = useContext(UserAccessContext);
   return (
     <>
@@ -89,13 +100,16 @@ const Navbar: React.FC<{
           </LogoDiv> */}
           <LoginAccountDiv />
           <SMenubarDiv>
-            <SClickableMenubarDiv
+            {/* <SClickableMenubarDiv
               onClick={() => {
                 navigate(menuRoute ?? "/");
               }}
             >
               {menu ?? "Home"}
-            </SClickableMenubarDiv>
+            </SClickableMenubarDiv> */}
+            <SLink to={"/"} className={currentURL.pathname}>
+              Home
+            </SLink>
           </SMenubarDiv>
           <SLanguageDiv>
             English
