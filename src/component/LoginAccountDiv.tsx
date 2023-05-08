@@ -169,7 +169,13 @@ const LoginAccountDiv: React.FC = () => {
               <InitialAvatarCircleSpan username={accountDetails.username} />
             )}
             <p style={{ color: "black" }}>{accountDetails.username}</p>
-            <button>Log Out</button>
+            <button
+              onClick={() => {
+                userAccessDispatch({ type: "delete current session" });
+              }}
+            >
+              Log Out
+            </button>
           </>
         );
       default:
