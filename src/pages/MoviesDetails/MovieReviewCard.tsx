@@ -32,8 +32,6 @@ const SReviewUrlStrong = styled.strong`
   }
 `;
 
-const blackText = "color: black";
-
 export const InitialAvatarCircleSpan: React.FC<{ username: string }> = ({ username }) => {
   return (
     <a
@@ -56,6 +54,85 @@ const SReviewContentDiv = styled.div`
   text-overflow: ellipsis;
   box-sizing: border-box;
   max-height: 194px;
+`;
+
+const SFullReviewBoxDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 94vw;
+  height: fit-content;
+  max-height: 20rem;
+  padding-bottom: 4px;
+  border: 1px solid black;
+  border-radius: 12px;
+  box-shadow: 5px 10px #888;
+`;
+
+const SReviewDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const SAuthorDiv = styled.div`
+  display: flex;
+  gap: 1rem;
+  height: fit-content;
+  align-items: center;
+  padding: 16px;
+`;
+
+const SAuthorAnchor = styled.a`
+  text-decoration: none;
+  height: fit-content;
+`;
+
+const SAuthorProfileImg = styled.img`
+  display: block;
+  width: 64px;
+  height: 64px;
+  box-sizing: border-box;
+  border-radius: 50%;
+`;
+
+const SReviewRatingTimeStampDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+`;
+
+const SReviewRatingDiv = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
+
+const SReviewRatingBoxDiv = styled.div`
+  display: flex;
+  background-color: black;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  width: 50px;
+  padding: 2px;
+  border-radius: 8px;
+`;
+
+const SReviewWrittenByDiv = styled.div`
+  display: flex;
+  gap: 0.2rem;
+`;
+
+const SReviewWrittenByAnchor = styled.a`
+  color: black;
+  font-weight: 400;
+  text-decoration: none;
+`;
+
+const SMarkdownP = styled.p`
+  color: black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
 `;
 
 const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieReview }> = ({
@@ -85,116 +162,57 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
       {fetchedMovieReviews.results.map((item, index) => {
         // console.log("username is: ", item.author_details.username);
         return (
-          <div
-            key={index}
-            className="fullReviewBox"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "94vw",
-              height: "fit-content",
-              maxHeight: "20rem",
-              paddingBottom: "4px",
-              border: "1px solid black",
-              borderRadius: "12px",
-              boxShadow: "5px 10px #888",
-            }}
-          >
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "1rem",
-                  height: "fit-content",
-                  alignItems: "center",
-                  padding: "16px",
-                }}
-              >
+          <SFullReviewBoxDiv key={index}>
+            <SReviewDiv style={{ display: "flex", flexDirection: "column" }}>
+              <SAuthorDiv>
                 {item.author_details.avatar_path ? (
-                  <a
+                  <SAuthorAnchor
                     href={`https://www.themoviedb.org/u/${item.author_details.username}`}
                     target="_blank"
-                    style={{ textDecoration: "none", height: "fit-content" }}
                   >
-                    <img
+                    <SAuthorProfileImg
                       loading="lazy"
                       src={fetchAvatarImage(item.author_details.avatar_path as string)}
                       alt={`A picture of user ${item.author}`}
-                      style={{
-                        display: "block",
-                        width: "64px",
-                        height: "64px",
-                        boxSizing: "border-box",
-                        borderRadius: "50%",
-                      }}
                     />
-                  </a>
+                  </SAuthorAnchor>
                 ) : (
                   <InitialAvatarCircleSpan username={item.author_details.username} />
                 )}
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "fit-content",
-                  }}
-                >
-                  <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+                <SReviewRatingTimeStampDiv>
+                  <SReviewRatingDiv>
                     <SReviewUrlAnchor href={`${item.url}`} target="_blank">
                       <SReviewUrlStrong>A review by {item.author}</SReviewUrlStrong>
                     </SReviewUrlAnchor>
                     {item.author_details.rating && (
                       // <em style={{ color: "black" }}>Rating given is {item.author_details.rating}</em>
-                      <div
-                        className="blackboxRating"
-                        style={{
-                          display: "flex",
-                          backgroundColor: "black",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "0.3rem",
-                          width: "50px",
-                          padding: "2px",
-                          borderRadius: "8px",
-                        }}
-                      >
+                      <SReviewRatingBoxDiv>
                         <AiFillStar
                           size={12}
                           color="white"
                           style={{ position: "relative", top: "1.4px" }}
                         />
                         <p style={{ fontSize: "14px" }}>{item.author_details.rating}.0</p>
-                      </div>
+                      </SReviewRatingBoxDiv>
                     )}
-                  </div>
-                  <div style={{ display: "flex", gap: "0.2rem" }}>
+                  </SReviewRatingDiv>
+                  <SReviewWrittenByDiv>
                     <p style={{ color: "gray" }}>Written by</p>
-                    <a
+                    <SReviewWrittenByAnchor
                       href={`https://www.themoviedb.org/u/${item.author_details.username}`}
-                      style={{ color: "black", fontWeight: 400, textDecoration: "none" }}
                     >
                       {" "}
                       {item.author}
-                    </a>
+                    </SReviewWrittenByAnchor>
                     <p style={{ color: "gray" }}>on {parseDate(item.created_at)}</p>
-                  </div>
-                </div>
-              </div>
+                  </SReviewWrittenByDiv>
+                </SReviewRatingTimeStampDiv>
+              </SAuthorDiv>
               <SReviewContentDiv className="reviewContentBox">
                 <ReactMarkdown
                   rehypePlugins={[rehypeRaw]}
                   components={{
-                    p: ({ node, ...props }) => (
-                      <p
-                        style={{
-                          color: "black",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "pre-wrap",
-                        }}
-                        {...props}
-                      />
-                    ),
+                    p: ({ node, ...props }) => <SMarkdownP {...props} />,
                     strong: ({ node, ...props }) => (
                       <strong style={{ color: "black" }} {...props} />
                     ),
@@ -205,63 +223,12 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
                 </ReactMarkdown>
                 {/* {item.content && markdownParser(item.content)} */}
               </SReviewContentDiv>
-            </div>
-          </div>
+            </SReviewDiv>
+          </SFullReviewBoxDiv>
         );
       })}
     </div>
   );
 };
 
-const MovieReviewSection: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieReview }> = ({
-  fetchedMovieReviews,
-}) => {
-  return (
-    <>
-      <section>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            marginTop: "20px",
-            marginBottom: "100px",
-            marginLeft: "20px",
-          }}
-        >
-          <div style={{ display: "flex" }}>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ display: "flex" }}>
-                <h3>Reviews</h3>
-                <p
-                  style={{
-                    color: "gray",
-                    position: "relative",
-                    fontWeight: 500,
-                    top: 2.5,
-                    left: 3,
-                  }}
-                >
-                  {fetchedMovieReviews.total_results}
-                </p>
-              </div>
-              <hr
-                style={{
-                  height: "3px",
-                  width: "90px",
-                  color: "black",
-                  backgroundColor: "black",
-                  margin: 0,
-                }}
-              />
-            </div>
-          </div>
-          <div style={{ marginTop: "2rem" }}>
-            <MovieReviewCard fetchedMovieReviews={fetchedMovieReviews} />
-          </div>
-        </div>
-      </section>
-    </>
-  );
-};
-
-export default MovieReviewSection;
+export default MovieReviewCard;

@@ -8,7 +8,7 @@ import MovieRuntimeP from "./MovieRuntimeP";
 import MovieReleaseDateP from "./MovieReleaseDateP";
 import BgMovie from "./BgMovie";
 import IconDiv from "./IconDiv";
-import MovieReviewSection from "./MovieReviewCard";
+import MovieReviewSection from "./MovieReviewSection";
 import { UserAccessContext } from "../../context/UserAccess/UserAccessContext";
 
 //route params always give strings
