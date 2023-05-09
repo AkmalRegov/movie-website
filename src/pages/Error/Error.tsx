@@ -1,42 +1,43 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useRouteError } from "react-router-dom";
+import styled from "styled-components";
 
 export type RouterError = {
   statusText: string;
   message: string;
 };
 
-export function ErrorPage() {
+const SErrorMainDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const SErrorDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+export const ErrorPage: React.FC = () => {
   const error = useRouteError() as RouterError;
   console.error(error);
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <div
-          id="error-page"
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
-            height: "100%",
-          }}
-        >
+      <SErrorMainDiv>
+        <SErrorDiv id="error-page">
           <h1>Oops!</h1>
-          <p>Sorry, an unexpected error has occurred.</p>
-          <p>
+          <p style={{ color: "black" }}>Sorry, an unexpected error has occurred.</p>
+          <p style={{ color: "black" }}>
             <i>{error.statusText || error.message}</i>
           </p>
-        </div>
-      </div>
+        </SErrorDiv>
+      </SErrorMainDiv>
     </>
   );
-}
+};
