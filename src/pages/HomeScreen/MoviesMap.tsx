@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   BsChevronLeft as LeftWideArrow,
   BsChevronRight as RightWideArrow,
@@ -41,13 +41,9 @@ const SMovieCardDiv = styled.div`
 `;
 
 const SMovieTitleStrong = styled.strong`
-  color: black;
+  color: ${(props) => (props.className === "hovered" ? "blue" : "black")};
   margin-top: 8px;
   width: 155px;
-
-  &:hover {
-    color: blue;
-  }
 `;
 
 const SMovieReleaseDate = styled.p`
@@ -118,6 +114,7 @@ const MoviesMap: React.FC<{
   maxSectionCount?: number;
 }> = ({ movies, sectionType, sectionCount, maxSectionCount }) => {
   const { dispatch: HomePageDispatch } = useContext(HomePageContext);
+  const [linkHovered, setLinkHovered] = useState({ flag: false, index: -1 });
 
   function handlePrevious() {
     if (sectionCount === 1) return;
@@ -178,7 +175,13 @@ const MoviesMap: React.FC<{
             {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
               return (
                 <SMovieCardDiv key={index}>
-                  <SMovieLink to={`movie/${data.id}`}>
+                  <SMovieLink
+                    to={`movie/${data.id}`}
+                    onMouseOver={() => setLinkHovered({ flag: true, index: index })}
+                    onMouseOut={() => {
+                      setLinkHovered({ flag: false, index: index });
+                    }}
+                  >
                     <img
                       src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`}
                       alt={`A movie poster for the movie titled: ${data.title}`}
@@ -186,7 +189,13 @@ const MoviesMap: React.FC<{
                       width={155}
                       height={225}
                     />
-                    <SMovieTitleStrong>{data.title}</SMovieTitleStrong>
+                    <SMovieTitleStrong
+                      className={
+                        linkHovered.flag && linkHovered.index === index ? "hovered" : "notHovered"
+                      }
+                    >
+                      {data.title}
+                    </SMovieTitleStrong>
                   </SMovieLink>
                   <SMovieReleaseDate>{parseDate(data.release_date)}</SMovieReleaseDate>
                 </SMovieCardDiv>

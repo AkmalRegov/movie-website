@@ -23,7 +23,7 @@ const BgMovie: React.FC<{
       {movieData?.backdrop_path ? (
         <SBackdropDiv
           style={{
-            backgroundImage: movieData?.backdrop_path,
+            backgroundImage: movieData.backdrop_path,
           }}
         >
           {children}
