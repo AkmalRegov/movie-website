@@ -21,6 +21,10 @@ const SEmptyBoxDiv = styled.div`
   margin-top: 8rem;
 `;
 
+const SPageButton = styled.button`
+  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
+`;
+
 const SearchedMovies: React.FC = ({}) => {
   const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
   const searchedMoviesH2Section = useRef() as React.MutableRefObject<HTMLHeadingElement>;
@@ -67,11 +71,23 @@ const SearchedMovies: React.FC = ({}) => {
         maxSectionCount={HomePageState.maxSearchedSectionCount}
       />
       <SButtonWrapperDiv>
-        <button onClick={handlePrevious}>Previous Page</button>
+        <SPageButton
+          onClick={handlePrevious}
+          disabled={HomePageState.currentPage === 1 ? true : false}
+        >
+          Previous Page
+        </SPageButton>
         <p style={{ color: "black" }}>
           {HomePageState.currentPage}/{HomePageState.totalPageForMovieSearched}
         </p>
-        <button onClick={handleNext}>Next Page</button>
+        <SPageButton
+          onClick={handleNext}
+          disabled={
+            HomePageState.currentPage === HomePageState.totalPageForMovieSearched ? true : false
+          }
+        >
+          Next Page
+        </SPageButton>
       </SButtonWrapperDiv>
       <SEmptyBoxDiv></SEmptyBoxDiv>
     </>

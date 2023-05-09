@@ -18,20 +18,22 @@ const SMainDiv = styled.div`
 `;
 
 const SLeftWideArrow = styled(LeftWideArrow)`
-  cursor: pointer;
+  cursor: ${(props) => (props.className === "enabled" ? "pointer" : "default")};
   user-select: none;
   margin-top: 6rem;
+  color: ${(props) => (props.className === "enabled" ? "black" : "gray")};
 `;
 
 const SRightWideArrow = styled(RightWideArrow)`
-  cursor: pointer;
+  cursor: ${(props) => (props.className === "enabled" ? "pointer" : "default")};
   user-select: none;
   margin-top: 6rem;
+  color: ${(props) => (props.className === "enabled" ? "black" : "gray")};
 `;
 
 const SMovieCardDiv = styled.div`
   display: flex;
-  width: "155px";
+  width: 155px;
   flex-direction: column;
   text-align: center;
   word-wrap: break-word;
@@ -167,7 +169,11 @@ const MoviesMap: React.FC<{
     <>
       <SMainDiv>
         <SMainContentDiv>
-          <SLeftWideArrow size={40} onClick={handlePrevious} />
+          <SLeftWideArrow
+            size={40}
+            onClick={handlePrevious}
+            className={sectionCount === 1 ? "disabled" : "enabled"}
+          />
           <SMoviesDiv>
             {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
               return (
@@ -187,7 +193,15 @@ const MoviesMap: React.FC<{
               );
             })}
           </SMoviesDiv>
-          <SRightWideArrow size={40} onClick={handleNext} />
+          <SRightWideArrow
+            size={40}
+            onClick={handleNext}
+            className={
+              sectionCount === (maxSectionCount !== undefined ? maxSectionCount : 5)
+                ? "disabled"
+                : "enabled"
+            }
+          />
         </SMainContentDiv>
         <SBsDotMapDiv>
           <BsDotMap sectionCount={sectionCount} maxSectionCount={maxSectionCount} />
