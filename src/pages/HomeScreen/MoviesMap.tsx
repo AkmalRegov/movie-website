@@ -70,6 +70,18 @@ const SMovieLink = styled(Link)`
   }
 `;
 
+const SMainContentDiv = styled.div`
+  display: flex;
+  height: 380px;
+  gap: 0.5rem;
+  margin-top: 2rem;
+`;
+
+const SMoviesDiv = styled.div`
+  display: flex;
+  gap: 1.5rem;
+`;
+
 //Simplifications
 type movieData = SEARCH_MOVIES.movieData;
 
@@ -154,9 +166,9 @@ const MoviesMap: React.FC<{
   return (
     <>
       <SMainDiv>
-        <div style={{ display: "flex", height: "380px", gap: "0.5rem", marginTop: "2rem" }}>
+        <SMainContentDiv>
           <SLeftWideArrow size={40} onClick={handlePrevious} />
-          <div style={{ display: "flex", gap: "1.5rem" }}>
+          <SMoviesDiv>
             {movies.slice((sectionCount - 1) * 4, sectionCount * 4).map((data, index) => {
               return (
                 <SMovieCardDiv key={index}>
@@ -174,9 +186,9 @@ const MoviesMap: React.FC<{
                 </SMovieCardDiv>
               );
             })}
-          </div>
+          </SMoviesDiv>
           <SRightWideArrow size={40} onClick={handleNext} />
-        </div>
+        </SMainContentDiv>
         <SBsDotMapDiv>
           <BsDotMap sectionCount={sectionCount} maxSectionCount={maxSectionCount} />
         </SBsDotMapDiv>
