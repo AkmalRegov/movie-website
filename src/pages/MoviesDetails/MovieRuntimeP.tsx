@@ -1,5 +1,11 @@
 import React from "react";
 import { GoPrimitiveDot } from "react-icons/go";
+import styled from "styled-components";
+
+const SGoPrimitiveDot = styled(GoPrimitiveDot)`
+  margin-top: 1px;
+  color: whitesmoke;
+`;
 
 const MovieRuntimeP: React.FC<{ runtime: number }> = ({ runtime }) => {
   function parseMovieRuntime(runtime: number) {
@@ -11,7 +17,7 @@ const MovieRuntimeP: React.FC<{ runtime: number }> = ({ runtime }) => {
     <>
       {runtime && (
         <>
-          <GoPrimitiveDot style={{ marginTop: "1px", color: "whitesmoke" }} size={12} />
+          <SGoPrimitiveDot style={{ marginTop: "1px", color: "whitesmoke" }} size={12} />
           <p style={{ color: "whitesmoke" }}>{parseMovieRuntime(runtime as number)}</p>
         </>
       )}

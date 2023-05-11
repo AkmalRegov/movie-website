@@ -1,24 +1,21 @@
 import React from "react";
+import styled from "styled-components";
+
+const SMovieCertificationP = styled.p`
+  width: fit-content;
+  color: gray;
+  padding: 2px;
+  font-size: 18px;
+  font-weight: 600;
+  border: 2px solid gray;
+`;
 
 const MovieCertificationP: React.FC<{ movieUSCertification: string }> = ({
   movieUSCertification,
 }) => {
   return (
     <>
-      {movieUSCertification && (
-        <p
-          style={{
-            fontSize: "18px",
-            fontWeight: "600",
-            padding: "2px",
-            color: "gray",
-            border: "2px solid gray",
-            width: "fit-content",
-          }}
-        >
-          {movieUSCertification}
-        </p>
-      )}
+      {movieUSCertification && <SMovieCertificationP>{movieUSCertification}</SMovieCertificationP>}
     </>
   );
 };

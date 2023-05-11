@@ -1,6 +1,12 @@
 import React from "react";
 import { GoPrimitiveDot } from "react-icons/go";
 import { SEARCH_ONE_MOVIE } from "../../restapi";
+import styled from "styled-components";
+
+const SGoPrimitiveDot = styled(GoPrimitiveDot)`
+  margin-top: 1px;
+  color: whitesmoke;
+`;
 
 const MovieReleaseDateP: React.FC<{ movieData: SEARCH_ONE_MOVIE.oneMovieData }> = ({
   movieData,
@@ -16,7 +22,7 @@ const MovieReleaseDateP: React.FC<{ movieData: SEARCH_ONE_MOVIE.oneMovieData }> 
       {movieData?.release_date && (
         <>
           <p style={{ color: "whitesmoke" }}>{parseDate(movieData?.release_date as string)}</p>
-          <GoPrimitiveDot style={{ marginTop: "1px", color: "whitesmoke" }} size={12} />
+          <SGoPrimitiveDot size={12} />
         </>
       )}
     </>

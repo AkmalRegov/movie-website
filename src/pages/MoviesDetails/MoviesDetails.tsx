@@ -14,7 +14,7 @@ import { UserAccessContext } from "../../context/UserAccess/UserAccessContext";
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
 
-type oneMovieData = API.SEARCH_ONE_MOVIE.oneMovieData;
+export type oneMovieData = API.SEARCH_ONE_MOVIE.oneMovieData;
 type movieReleaseDates = API.MOVIE_CERTIFICATION.movieReleaseDates;
 type movieCastCrewType = API.GET_MOVIE_CAST_CREW.movieCastCrewType;
 type crewInterface = API.GET_MOVIE_CAST_CREW.crewInterface;
@@ -58,6 +58,65 @@ const SGenreA = styled.a`
 `;
 
 const SCrewA = styled(SGenreA)``;
+
+const SMoviesDetailsDiv = styled.div`
+  text-align: center;
+  margin: 20px 0;
+`;
+
+const SMoviesDetailsSection = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: center;
+  box-sizing: border-box;
+`;
+
+const SMoviesDetailsBoxDiv = styled.div`
+  width: 100vw;
+  height: 500px;
+  border: 1px solid black;
+`;
+
+const SFlexColDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const SMoviesDetailsContentDiv = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  gap: 4px;
+`;
+
+const SMovieTextDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const SMovieTaglineEm = styled.em`
+  color: gray;
+  font-weight: 500;
+`;
+
+const SMovieOverviewDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const SMovieOverviewH3 = styled.h3`
+  font-size: 20px;
+  color: white;
+`;
+
+const SMovieCrewDiv = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+`;
 
 export const MoviesDetails: React.FC = () => {
   const { movieId } = useParams<RouteParams>(); //cannot use interface for useParams generic
@@ -122,17 +181,9 @@ export const MoviesDetails: React.FC = () => {
   }, []);
   return (
     <>
-      <div style={{ textAlign: "center", margin: "20px 0" }}>MoviesDetails {movieId}</div>
-      <section
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "flex-start",
-          alignContent: "center",
-          boxSizing: "border-box",
-        }}
-      >
-        <div style={{ width: "100vw", height: "500px", border: "1px solid black" }}>
+      <SMoviesDetailsDiv>MoviesDetails {movieId}</SMoviesDetailsDiv>
+      <SMoviesDetailsSection>
+        <SMoviesDetailsBoxDiv>
           {movieData && (
             <>
               {" "}
@@ -142,17 +193,9 @@ export const MoviesDetails: React.FC = () => {
                   alt={`A poster for the movie ${movieData?.title}`}
                 />
                 <SPosterRightSideContentDiv>
-                  <div style={{ display: "flex", flexDirection: "column" }}>
+                  <SFlexColDiv>
                     <MovieTitleReleaseYearContent movieData={movieData} />
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: "8px",
-                        gap: "4px",
-                      }}
-                    >
+                    <SMoviesDetailsContentDiv>
                       <MovieCertificationP movieUSCertification={movieUSCertification} />
                       <MovieReleaseDateP movieData={movieData} />
                       {movieData.genres.map((ele, index) => (
@@ -167,19 +210,19 @@ export const MoviesDetails: React.FC = () => {
                         </SGenreA>
                       ))}
                       <MovieRuntimeP runtime={movieData.runtime as number} />
-                    </div>
+                    </SMoviesDetailsContentDiv>
                     <IconDiv movieData={movieData} />
-                    <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                      <em style={{ color: "gray", fontWeight: 500 }}>{movieData.tagline}</em>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                        <h3 style={{ fontSize: "20px", color: "white" }}>Overview</h3>
+                    <SMovieTextDiv>
+                      <SMovieTaglineEm>{movieData.tagline}</SMovieTaglineEm>
+                      <SMovieOverviewDiv>
+                        <SMovieOverviewH3>Overview</SMovieOverviewH3>
                         <p style={{ color: "white" }}>{movieData.overview}</p>
-                      </div>
-                      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+                      </SMovieOverviewDiv>
+                      <SMovieCrewDiv>
                         {top5Crew &&
                           top5Crew.map((item, index) => {
                             return (
-                              <div key={index} style={{ display: "flex", flexDirection: "column" }}>
+                              <SFlexColDiv key={index}>
                                 <SCrewA
                                   style={{ textDecoration: "none" }}
                                   href={`https://www.themoviedb.org/person/${item.id}-${item.name
@@ -190,18 +233,18 @@ export const MoviesDetails: React.FC = () => {
                                   <strong>{item.name}</strong>
                                 </SCrewA>
                                 <em>{item.known_for_department}</em>
-                              </div>
+                              </SFlexColDiv>
                             );
                           })}
-                      </div>
-                    </div>
-                  </div>
+                      </SMovieCrewDiv>
+                    </SMovieTextDiv>
+                  </SFlexColDiv>
                 </SPosterRightSideContentDiv>
               </BgMovie>
             </>
           )}
-        </div>
-      </section>
+        </SMoviesDetailsBoxDiv>
+      </SMoviesDetailsSection>
       <MovieReviewSection fetchedMovieReviews={fetchedMovieReviews} />
     </>
   );

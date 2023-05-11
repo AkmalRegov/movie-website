@@ -135,28 +135,34 @@ const SMarkdownP = styled.p`
   white-space: pre-wrap;
 `;
 
+const SAiFillStar = styled(AiFillStar)`
+  position: relative;
+  top: 1.4px;
+`;
+
+function parseDate(dateString: string) {
+  var parts = dateString.split("-") as string[];
+  // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
+  // January - 0, February - 1, etc.
+  var mydate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+  var longMonthName = mydate.toLocaleString("default", { month: "long" });
+  var res = mydate.toDateString().split(" ");
+  var unknownDate = res.filter((ele) => {
+    if (ele === "Invalid") return true;
+  });
+  if (unknownDate.length > 0) return "";
+  var resString = `${longMonthName} ${res[2]}, ${res[3]}`;
+  return resString;
+}
+function fetchAvatarImage(avatar_path: string) {
+  return RegExp("https://secure.gravatar.com/avatar").test(`${avatar_path}` as string)
+    ? `${avatar_path?.replace("/", "")}?s=128`
+    : `https://image.tmdb.org/t/p/w64_and_h64_face${avatar_path}`;
+}
+
 const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieReview }> = ({
   fetchedMovieReviews,
 }) => {
-  function parseDate(dateString: string) {
-    var parts = dateString.split("-") as string[];
-    // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
-    // January - 0, February - 1, etc.
-    var mydate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-    var longMonthName = mydate.toLocaleString("default", { month: "long" });
-    var res = mydate.toDateString().split(" ");
-    var unknownDate = res.filter((ele) => {
-      if (ele === "Invalid") return true;
-    });
-    if (unknownDate.length > 0) return "";
-    var resString = `${longMonthName} ${res[2]}, ${res[3]}`;
-    return resString;
-  }
-  function fetchAvatarImage(avatar_path: string) {
-    return RegExp("https://secure.gravatar.com/avatar").test(`${avatar_path}` as string)
-      ? `${avatar_path?.replace("/", "")}?s=128`
-      : `https://image.tmdb.org/t/p/w64_and_h64_face${avatar_path}`;
-  }
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", width: "99vw" }}>
       {fetchedMovieReviews.results.map((item, index) => {
@@ -185,13 +191,8 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
                       <SReviewUrlStrong>A review by {item.author}</SReviewUrlStrong>
                     </SReviewUrlAnchor>
                     {item.author_details.rating && (
-                      // <em style={{ color: "black" }}>Rating given is {item.author_details.rating}</em>
                       <SReviewRatingBoxDiv>
-                        <AiFillStar
-                          size={12}
-                          color="white"
-                          style={{ position: "relative", top: "1.4px" }}
-                        />
+                        <SAiFillStar size={12} color="white" />
                         <p style={{ fontSize: "14px" }}>{item.author_details.rating}.0</p>
                       </SReviewRatingBoxDiv>
                     )}
@@ -221,7 +222,6 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
                 >
                   {item.content}
                 </ReactMarkdown>
-                {/* {item.content && markdownParser(item.content)} */}
               </SReviewContentDiv>
             </SReviewDiv>
           </SFullReviewBoxDiv>
