@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
-import { UserAccessContext } from "../context/UserAccess/UserAccessContext";
+import React, { useCallback, useContext, useState } from "react";
+import { UserAccessContext } from "../../context/UserAccess/UserAccessContext";
 import styled from "styled-components";
 import {
   CREATE_ACCESS_TOKEN,
   CREATE_REQUEST_TOKEN,
   CREATE_SESSION_WITH_ACCESS_TOKEN,
   GET_ACCOUNT_DETAILS,
-} from "../restapi";
+} from "../../restapi";
 
 const SLoginDiv = styled.div`
   display: flex;
@@ -54,7 +54,7 @@ export const InitialAvatarCircleSpan: React.FC<{ username: string }> = ({ userna
   );
 };
 
-const LoginAccountDiv: React.FC = () => {
+export const LoginAccountDiv: React.FC = () => {
   const { state: userAccessState, dispatch: userAccessDispatch } = useContext(UserAccessContext);
   //   const [accountDetails, setAccountDetails] = useState({} as GET_ACCOUNT_DETAILS.apiResponse);
   const [accountDetails, setAccountDetails] = useState<GET_ACCOUNT_DETAILS.apiResponse>({
@@ -129,7 +129,7 @@ const LoginAccountDiv: React.FC = () => {
     }
   }
 
-  function resolveRenderConditionals() {
+  const resolveRenderConditionals = useCallback(() => {
     switch (true) {
       case userAccessState.requestToken === "" && userAccessState.accessToken === "":
         return (
@@ -197,7 +197,7 @@ const LoginAccountDiv: React.FC = () => {
       default:
         return <></>;
     }
-  }
+  }, [userAccessState.requestToken, userAccessState.accessToken]);
 
   return (
     <>
@@ -205,5 +205,3 @@ const LoginAccountDiv: React.FC = () => {
     </>
   );
 };
-
-export default LoginAccountDiv;

@@ -3,13 +3,11 @@ import { useParams, useLoaderData } from "react-router-dom";
 import * as API from "../../restapi";
 import styled from "styled-components";
 import MovieTitleReleaseYearContent from "./MovieTitleReleaseYearContent";
-import MovieCertificationP from "./MovieCertificationP";
-import MovieRuntimeP from "./MovieRuntimeP";
-import MovieReleaseDateP from "./MovieReleaseDateP";
 import BgMovie from "./BgMovie";
 import IconDiv from "./IconDiv";
 import MovieReviewSection from "./MovieReviewSection";
 import { UserAccessContext } from "../../context/UserAccess/UserAccessContext";
+import { GoPrimitiveDot } from "react-icons/go";
 
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
@@ -118,6 +116,40 @@ const SMovieCrewDiv = styled.div`
   margin-top: 1rem;
 `;
 
+const SMovieCertificationP = styled.p`
+  width: fit-content;
+  color: gray;
+  padding: 2px;
+  font-size: 18px;
+  font-weight: 600;
+  border: 2px solid gray;
+`;
+
+const SGoPrimitiveDot = styled(GoPrimitiveDot)`
+  margin-top: 1px;
+  color: whitesmoke;
+`;
+
+function parseDate(dateString: string) {
+  var parts = dateString.split("-") as string[];
+  var resString = `${parts[2]}/${parts[1]}/${parts[0]}`;
+  return resString;
+}
+
+function parseGenreURL(genreId: number, genreName: string) {
+  return encodeURI(
+    `https://www.themoviedb.org/genre/${genreId}-${genreName
+      .toLowerCase()
+      .replace(" ", "-")}/movie`,
+  );
+}
+
+function parseMovieRuntime(runtime: number) {
+  var hours = Math.floor(runtime / 60);
+  var mins = runtime % 60;
+  return `${hours}h ${mins}min`;
+}
+
 export const MoviesDetails: React.FC = () => {
   const { movieId } = useParams<RouteParams>(); //cannot use interface for useParams generic
   const {
@@ -131,14 +163,6 @@ export const MoviesDetails: React.FC = () => {
   const [movieUSCertification, setMovieUSCertification] = useState("");
   const callOnce = useRef<boolean>(false);
   const { state: userAccess } = useContext(UserAccessContext);
-
-  function parseGenreURL(genreId: number, genreName: string) {
-    return encodeURI(
-      `https://www.themoviedb.org/genre/${genreId}-${genreName
-        .toLowerCase()
-        .replace(" ", "-")}/movie`,
-    );
-  }
 
   function handleRouteLoaderData() {
     console.log("fetchedOneMovieData is: ", fetchedOneMovieData);
@@ -196,8 +220,17 @@ export const MoviesDetails: React.FC = () => {
                   <SFlexColDiv>
                     <MovieTitleReleaseYearContent movieData={movieData} />
                     <SMoviesDetailsContentDiv>
-                      <MovieCertificationP movieUSCertification={movieUSCertification} />
-                      <MovieReleaseDateP movieData={movieData} />
+                      {movieUSCertification && (
+                        <SMovieCertificationP>{movieUSCertification}</SMovieCertificationP>
+                      )}
+                      {movieData?.release_date && (
+                        <>
+                          <p style={{ color: "whitesmoke" }}>
+                            {parseDate(movieData?.release_date as string)}
+                          </p>
+                          <SGoPrimitiveDot size={12} />
+                        </>
+                      )}
                       {movieData.genres.map((ele, index) => (
                         <SGenreA
                           key={index}
@@ -209,7 +242,17 @@ export const MoviesDetails: React.FC = () => {
                           {index !== movieData.genres.length - 1 ? "," : ""}
                         </SGenreA>
                       ))}
-                      <MovieRuntimeP runtime={movieData.runtime as number} />
+                      {movieData.runtime && (
+                        <>
+                          <SGoPrimitiveDot
+                            style={{ marginTop: "1px", color: "whitesmoke" }}
+                            size={12}
+                          />
+                          <p style={{ color: "whitesmoke" }}>
+                            {parseMovieRuntime(movieData.runtime as number)}
+                          </p>
+                        </>
+                      )}
                     </SMoviesDetailsContentDiv>
                     <IconDiv movieData={movieData} />
                     <SMovieTextDiv>

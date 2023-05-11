@@ -6,8 +6,8 @@ import {
 } from "react-icons/bs";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { HomePageContext } from "../../context/HomePage/HomePageContext";
-import { SEARCH_MOVIES } from "../../restapi";
+import { HomePageContext } from "../context/HomePage/HomePageContext";
+import { SEARCH_MOVIES } from "../restapi";
 
 const SMainDiv = styled.div`
   display: flex;

@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 // import { SiStyledcomponents as StyledComponentsLogo } from "react-icons/si";
 import { IoIosArrowDown } from "react-icons/io";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { UserAccessContext } from "../context/UserAccess/UserAccessContext";
-import LoginAccountDiv from "./LoginAccountDiv";
+import { LoginAccountDiv } from "./LoginAccountDiv";
 // import StyledComponentsPng from "../../src/nav-logo.png";
 
 const SNavbarDiv = styled.div`
@@ -78,7 +77,7 @@ const SLink = styled(Link)`
   }
 `;
 
-const Navbar: React.FC<{
+export const Navbar: React.FC<{
   menu?: string;
   menuRoute?: string;
 }> = ({ menu, menuRoute }) => {
@@ -129,5 +128,3 @@ const Navbar: React.FC<{
     </>
   );
 };
-
-export default Navbar;

@@ -160,31 +160,60 @@ function fetchAvatarImage(avatar_path: string) {
     : `https://image.tmdb.org/t/p/w64_and_h64_face${avatar_path}`;
 }
 
+const UserAvatar: React.FC<{ avatar_path: string | null; author: string; username: string }> = ({
+  avatar_path,
+  author,
+  username,
+}) => {
+  return (
+    <>
+      {avatar_path ? (
+        <SAuthorAnchor href={`https://www.themoviedb.org/u/${username}`} target="_blank">
+          <SAuthorProfileImg
+            loading="lazy"
+            src={fetchAvatarImage(avatar_path as string)}
+            alt={`A picture of user ${author}`}
+          />
+        </SAuthorAnchor>
+      ) : (
+        <InitialAvatarCircleSpan username={username} />
+      )}
+    </>
+  );
+};
+
+const MyReactMarkdown: React.FC<{ content: string }> = ({ content }) => {
+  return (
+    <>
+      <ReactMarkdown
+        rehypePlugins={[rehypeRaw]}
+        components={{
+          p: ({ node, ...props }) => <SMarkdownP {...props} />,
+          strong: ({ node, ...props }) => <strong style={{ color: "black" }} {...props} />,
+          em: ({ node, ...props }) => <em style={{ color: "black" }} {...props} />,
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </>
+  );
+};
+
 const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieReview }> = ({
   fetchedMovieReviews,
 }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", width: "99vw" }}>
       {fetchedMovieReviews.results.map((item, index) => {
-        // console.log("username is: ", item.author_details.username);
         return (
           <SFullReviewBoxDiv key={index}>
             <SReviewDiv style={{ display: "flex", flexDirection: "column" }}>
               <SAuthorDiv>
-                {item.author_details.avatar_path ? (
-                  <SAuthorAnchor
-                    href={`https://www.themoviedb.org/u/${item.author_details.username}`}
-                    target="_blank"
-                  >
-                    <SAuthorProfileImg
-                      loading="lazy"
-                      src={fetchAvatarImage(item.author_details.avatar_path as string)}
-                      alt={`A picture of user ${item.author}`}
-                    />
-                  </SAuthorAnchor>
-                ) : (
-                  <InitialAvatarCircleSpan username={item.author_details.username} />
-                )}
+                <UserAvatar
+                  avatar_path={item.author_details.avatar_path}
+                  author={item.author}
+                  username={item.author_details.username}
+                />
                 <SReviewRatingTimeStampDiv>
                   <SReviewRatingDiv>
                     <SReviewUrlAnchor href={`${item.url}`} target="_blank">
@@ -210,18 +239,7 @@ const MovieReviewCard: React.FC<{ fetchedMovieReviews: GET_MOVIE_REVIEWS.movieRe
                 </SReviewRatingTimeStampDiv>
               </SAuthorDiv>
               <SReviewContentDiv className="reviewContentBox">
-                <ReactMarkdown
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    p: ({ node, ...props }) => <SMarkdownP {...props} />,
-                    strong: ({ node, ...props }) => (
-                      <strong style={{ color: "black" }} {...props} />
-                    ),
-                    em: ({ node, ...props }) => <em style={{ color: "black" }} {...props} />,
-                  }}
-                >
-                  {item.content}
-                </ReactMarkdown>
+                <MyReactMarkdown content={item.content} />
               </SReviewContentDiv>
             </SReviewDiv>
           </SFullReviewBoxDiv>

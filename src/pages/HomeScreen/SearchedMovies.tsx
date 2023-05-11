@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useContext } from "react";
-import MoviesMap from "./MoviesMap";
+import MoviesMap from "../../component/MoviesMap";
 import styled from "styled-components";
 import { HomePageContext } from "../../context/HomePage/HomePageContext";
 

@@ -33,33 +33,33 @@ const SSubmitButtonPara = styled.p`
 
 const SearchBar: React.FC<{}> = ({}) => {
   const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    HomePageDispatch({
+      type: "set submittedSearch string",
+      submittedSearch: HomePageState.searchText,
+    });
+    if (HomePageState.prevSubmittedSearch !== HomePageState.submittedSearch) {
+      HomePageDispatch({ type: "set currentPage number", currentPage: 1 });
+      HomePageDispatch({ type: "set searchedSectionCount number", searchedSectionCount: 1 });
+      HomePageDispatch({
+        type: "set prevSubmittedSearch string",
+        prevSubmittedSearch: HomePageState.submittedSearch,
+      });
+    }
+    HomePageDispatch({ type: "change submitSearch bool", submitSearch: true });
+  }
+
+  function handleChange(e: React.BaseSyntheticEvent) {
+    HomePageDispatch({ type: "set searchText string", searchText: e.currentTarget.value });
+    console.log(`HomePageState.searchText is ${HomePageState.searchText}`);
+  }
+
   return (
     <>
-      <SForm
-        onSubmit={(e) => {
-          e.preventDefault();
-          HomePageDispatch({
-            type: "set submittedSearch string",
-            submittedSearch: HomePageState.searchText,
-          });
-          if (HomePageState.prevSubmittedSearch !== HomePageState.submittedSearch) {
-            HomePageDispatch({ type: "set currentPage number", currentPage: 1 });
-            HomePageDispatch({ type: "set searchedSectionCount number", searchedSectionCount: 1 });
-            HomePageDispatch({
-              type: "set prevSubmittedSearch string",
-              prevSubmittedSearch: HomePageState.submittedSearch,
-            });
-          }
-          HomePageDispatch({ type: "change submitSearch bool", submitSearch: true });
-        }}
-      >
-        <SInput
-          placeholder="Search movies"
-          onChange={(e) => {
-            HomePageDispatch({ type: "set searchText string", searchText: e.currentTarget.value });
-            console.log(`HomePageState.searchText is ${HomePageState.searchText}`);
-          }}
-        />
+      <SForm onSubmit={handleSubmit}>
+        <SInput placeholder="Search movies" onChange={handleChange} />
         <SSubmitButton type="submit">
           <SSubmitButtonPara>Search</SSubmitButtonPara>
         </SSubmitButton>

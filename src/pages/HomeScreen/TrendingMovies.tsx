@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useContext } from "react";
-import MoviesMap from "./MoviesMap";
+import MoviesMap from "../../component/MoviesMap";
 import SearchedMovies from "./SearchedMovies";
 import SearchBar from "./SearchBar";
 import { SEARCH_MOVIES } from "../../restapi";
