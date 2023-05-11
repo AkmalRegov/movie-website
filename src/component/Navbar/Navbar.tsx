@@ -115,7 +115,7 @@ export const Navbar: React.FC<{
               <SLink to={"/"} className={currentURL.pathname}>
                 Home
               </SLink>
-              <SLink to={"#"} className={currentURL.pathname}>
+              <SLink to={"/watchlist"} className={currentURL.pathname}>
                 Watchlist
               </SLink>
             </SMenubarDiv>

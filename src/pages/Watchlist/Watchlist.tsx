@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function Watchlist() {
+export const Watchlist: React.FC = () => {
   return (
     <>
       <div>Watchlist</div>
     </>
   );
-}
+};

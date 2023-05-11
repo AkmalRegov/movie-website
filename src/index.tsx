@@ -69,11 +69,11 @@ const router = createBrowserRouter([
         element: <PAGES.UserAuthentication />,
         errorElement: <PAGES.ErrorPage />,
       },
+      {
+        path: ROUTES.watchlist,
+        element: <PAGES.Watchlist />,
+      },
     ],
-  },
-  {
-    path: ROUTES.watchlist,
-    // element: <PAGES.TodoList />,
   },
 ]);
 
