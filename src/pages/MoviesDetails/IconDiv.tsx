@@ -46,24 +46,36 @@ const SInnerBlackCircleSpan = styled.span`
 
 const IconStyle = { backgroundColor: "white", borderRadius: "100%", cursor: "pointer" };
 
-const IconDiv: React.FC<{ movieData: SEARCH_ONE_MOVIE.oneMovieData }> = ({ movieData }) => {
+const IconDiv: React.FC<{
+  movieData: object & { vote_average: number };
+  res?: string;
+  textColor?: string;
+}> = ({ movieData, res, textColor }) => {
   return (
     <>
-      <SWrapperDiv>
-        <div>
-          <UserScoreFC movieData={movieData} />
-        </div>
-        <SIconWrapperDiv>
-          <IoListCircleSharp size={40} color="black" style={IconStyle} />
-          <IoHeartCircle size={40} color="black" style={IconStyle} />
-          <SOuterWhiteCircleSpan>
-            <SInnerBlackCircleSpan>
-              <BsFillBookmarkFill size={16} color="white" />
-            </SInnerBlackCircleSpan>
-          </SOuterWhiteCircleSpan>
-          <MdStars size={38} color="black" style={IconStyle} />
-        </SIconWrapperDiv>
-      </SWrapperDiv>
+      {res === "justScore" ? (
+        <SWrapperDiv>
+          <div>
+            <UserScoreFC movieData={movieData} textColor={textColor} />
+          </div>
+        </SWrapperDiv>
+      ) : (
+        <SWrapperDiv>
+          <div>
+            <UserScoreFC movieData={movieData} />
+          </div>
+          <SIconWrapperDiv>
+            <IoListCircleSharp size={40} color="black" style={IconStyle} />
+            <IoHeartCircle size={40} color="black" style={IconStyle} />
+            <SOuterWhiteCircleSpan>
+              <SInnerBlackCircleSpan>
+                <BsFillBookmarkFill size={16} color="white" />
+              </SInnerBlackCircleSpan>
+            </SOuterWhiteCircleSpan>
+            <MdStars size={38} color="black" style={IconStyle} />
+          </SIconWrapperDiv>
+        </SWrapperDiv>
+      )}
     </>
   );
 };
