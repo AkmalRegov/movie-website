@@ -316,6 +316,7 @@ const WatchlistCard: React.FC<{
                 whiteSpace: "pre-wrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
+                maxHeight: "64px",
               }}
             >
               {movieData.overview}
