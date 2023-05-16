@@ -11,10 +11,10 @@ export type UserDetailsActionTypes =
       type: "reset account details";
     };
 
-export function UserDetailsReducer(
+export const UserDetailsReducer = (
   state: UserDetailsState,
   action: UserDetailsActionTypes,
-): UserDetailsState {
+): UserDetailsState => {
   switch (action.type) {
     case "get account details":
       return action.value;
@@ -32,4 +32,4 @@ export function UserDetailsReducer(
     default:
       return state;
   }
-}
+};

@@ -116,7 +116,7 @@ const MoviesMap: React.FC<{
   const { dispatch: HomePageDispatch } = useContext(HomePageContext);
   const [linkHovered, setLinkHovered] = useState({ flag: false, index: -1 });
 
-  function handlePrevious() {
+  const handlePrevious = () => {
     if (sectionCount === 1) return;
     switch (sectionType) {
       case "trending":
@@ -130,9 +130,9 @@ const MoviesMap: React.FC<{
           searchedSectionCount: sectionCount - 1,
         });
     }
-  }
+  };
 
-  function handleNext() {
+  const handleNext = () => {
     if (sectionCount === (maxSectionCount !== undefined ? maxSectionCount : 5)) return;
     switch (sectionType) {
       case "trending":
@@ -146,9 +146,9 @@ const MoviesMap: React.FC<{
           searchedSectionCount: sectionCount + 1,
         });
     }
-  }
+  };
 
-  function parseDate(dateString: string) {
+  const parseDate = (dateString: string) => {
     var parts = dateString.split("-") as string[];
     // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
     // January - 0, February - 1, etc.
@@ -160,7 +160,7 @@ const MoviesMap: React.FC<{
     if (unknownDate.length > 0) return "";
     var resString = `${res[1]} ${res[2]}, ${res[3]}`;
     return resString;
-  }
+  };
 
   return (
     <>

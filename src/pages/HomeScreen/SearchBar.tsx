@@ -34,7 +34,7 @@ const SSubmitButtonPara = styled.p`
 const SearchBar: React.FC<{}> = ({}) => {
   const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
 
-  function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     HomePageDispatch({
       type: "set submittedSearch string",
@@ -49,12 +49,12 @@ const SearchBar: React.FC<{}> = ({}) => {
       });
     }
     HomePageDispatch({ type: "change submitSearch bool", submitSearch: true });
-  }
+  };
 
-  function handleChange(e: React.BaseSyntheticEvent) {
+  const handleChange = (e: React.BaseSyntheticEvent) => {
     HomePageDispatch({ type: "set searchText string", searchText: e.currentTarget.value });
     console.log(`HomePageState.searchText is ${HomePageState.searchText}`);
-  }
+  };
 
   return (
     <>

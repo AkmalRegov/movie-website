@@ -275,14 +275,14 @@ const WatchlistCard: React.FC<{
   session_id: string;
   setReturnWatchlist: Function;
 }> = ({ movieData, account_id, session_id, setReturnWatchlist }) => {
-  function handleDeleteFromWatchlist() {
+  const handleDeleteFromWatchlist = () => {
     POST_ADD_TO_WATCHLIST.tmdb_postAddToWatchlist(account_id, session_id, movieData.id, false).then(
       (data) => {
         console.log("data from post add to watchlist is: ", data);
         setReturnWatchlist();
       },
     );
-  }
+  };
 
   return (
     <>
@@ -398,16 +398,16 @@ export const Watchlist: React.FC = () => {
     vote_count: 6792,
   };
 
-  async function returnWatchlist(page: number): Promise<GET_WATCHLIST.Watchlist> {
+  const returnWatchlist = async (page: number): Promise<GET_WATCHLIST.Watchlist> => {
     return tmdb_getWatchlist(userDetails?.id, userAccessState?.sessionString, page)
       .then((res) => res.json())
       .then((data) => {
         // console.log("watchlist data is: ", data);
         return data;
       });
-  }
+  };
 
-  async function loopReturnWatchlist(): Promise<GET_WATCHLIST.Watchlist> {
+  const loopReturnWatchlist = async (): Promise<GET_WATCHLIST.Watchlist> => {
     var data: GET_WATCHLIST.Watchlist = {} as GET_WATCHLIST.Watchlist;
     var page = 1;
     var temp_res = await returnWatchlist(page);
@@ -420,14 +420,14 @@ export const Watchlist: React.FC = () => {
       });
     }
     return data;
-  }
+  };
 
-  async function setReturnWatchlist() {
+  const setReturnWatchlist = async () => {
     loopReturnWatchlist().then((data) => {
       console.log("wathclist data is: ", data);
       setUserWatchlist(data);
     });
-  }
+  };
 
   useEffect(() => {
     if (userDetails?.username != "" && !callOnce.current) {

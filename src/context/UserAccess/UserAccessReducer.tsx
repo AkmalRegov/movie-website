@@ -19,10 +19,10 @@ export type UserAccessActionTypes =
       type: "delete current session";
     };
 
-export function UserAccessReducer(
+export const UserAccessReducer = (
   state: UserAccessState,
   action: UserAccessActionTypes,
-): UserAccessState {
+): UserAccessState => {
   switch (action.type) {
     case "initialize uniqueKey":
       return { ...state, uniqueKey: action.uniqueKey };
@@ -53,4 +53,4 @@ export function UserAccessReducer(
     default:
       return state;
   }
-}
+};

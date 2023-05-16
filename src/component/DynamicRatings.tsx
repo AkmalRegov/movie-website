@@ -22,20 +22,20 @@ export const DynamicRatings: React.FC = () => {
     return Number(nearestNumber.toFixed(precision.toString().split(".")[1]?.length || 0));
   }
 
-  function handleClick(e: React.MouseEvent) {
+  const handleClick = (e: React.MouseEvent) => {
     setIsHovered(false);
     setActiveItems(calculateRating(e));
-  }
+  };
 
-  function handleMouseMove(e: React.MouseEvent) {
+  const handleMouseMove = (e: React.MouseEvent) => {
     setIsHovered(true);
     setHoverActiveItems(calculateRating(e));
-  }
+  };
 
-  function handleMouseLeave(e: React.MouseEvent) {
+  const handleMouseLeave = (e: React.MouseEvent) => {
     setHoverActiveItems(-1);
     setIsHovered(false);
-  }
+  };
 
   return (
     <>

@@ -33,11 +33,11 @@ export const DynamicUserScore: React.FC<{
   const [circleDashOffset, setCircleDashOffset] = useState(0);
   const callOnce = useRef(false);
 
-  function getCircleTrackAndIndicatorSize(
+  const getCircleTrackAndIndicatorSize = (
     size: number,
     strokeWidth: number,
     progress: number | undefined,
-  ) {
+  ) => {
     var center = size / 2;
     var radius = center - strokeWidth;
     setCircleCenter(center);
@@ -50,7 +50,7 @@ export const DynamicUserScore: React.FC<{
     console.log(arcOffsetForDashOffset);
     setCircleDashArray(arcLengthForDashArray);
     setCircleDashOffset(arcOffsetForDashOffset);
-  }
+  };
 
   useEffect(() => {
     if (callOnce.current) return;

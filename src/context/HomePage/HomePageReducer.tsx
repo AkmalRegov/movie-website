@@ -34,7 +34,10 @@ export type HomePageActionTypes =
   | { type: "go to previous searched section"; searchedSectionCount: number }
   | { type: "go to next searched section"; searchedSectionCount: number };
 
-export function HomePageReducer(state: HomePageState, action: HomePageActionTypes): HomePageState {
+export const HomePageReducer = (
+  state: HomePageState,
+  action: HomePageActionTypes,
+): HomePageState => {
   switch (action.type) {
     case "get trending movies":
       return { ...state, trendingMovies: action.trendingMovies };
@@ -68,4 +71,4 @@ export function HomePageReducer(state: HomePageState, action: HomePageActionType
     default:
       return state;
   }
-}
+};

@@ -140,7 +140,7 @@ const SAiFillStar = styled(AiFillStar)`
   top: 1.4px;
 `;
 
-function parseDate(dateString: string) {
+const parseDate = (dateString: string) => {
   var parts = dateString.split("-") as string[];
   // Please pay attention to the month (parts[1]); JavaScript counts months from 0:
   // January - 0, February - 1, etc.
@@ -153,12 +153,12 @@ function parseDate(dateString: string) {
   if (unknownDate.length > 0) return "";
   var resString = `${longMonthName} ${res[2]}, ${res[3]}`;
   return resString;
-}
-function fetchAvatarImage(avatar_path: string) {
+};
+const fetchAvatarImage = (avatar_path: string) => {
   return RegExp("https://secure.gravatar.com/avatar").test(`${avatar_path}` as string)
     ? `${avatar_path?.replace("/", "")}?s=128`
     : `https://image.tmdb.org/t/p/w64_and_h64_face${avatar_path}`;
-}
+};
 
 const UserAvatar: React.FC<{ avatar_path: string | null; author: string; username: string }> = ({
   avatar_path,

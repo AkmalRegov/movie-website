@@ -77,7 +77,7 @@ export const LoginAccountDiv: React.FC = () => {
   //   username: "AkmalAnuar",
   // });
 
-  async function handleCreateRequestTokenV4(uniqueString: string) {
+  const handleCreateRequestTokenV4 = async (uniqueString: string) => {
     CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4(uniqueString).then(
       (data: CREATE_REQUEST_TOKEN.apiResponse) => {
         console.log("data from node request here is: ", data);
@@ -91,9 +91,9 @@ export const LoginAccountDiv: React.FC = () => {
         return data;
       },
     );
-  }
+  };
 
-  async function handleCreateUserAccessTokenV4(uniqueString: string, request_token: string) {
+  const handleCreateUserAccessTokenV4 = async (uniqueString: string, request_token: string) => {
     var accessTokenResponseWithData = {} as CREATE_ACCESS_TOKEN.apiResponse;
     var accountDetailsArgs = {} as CREATE_SESSION_WITH_ACCESS_TOKEN.apiResponse;
 
@@ -131,7 +131,7 @@ export const LoginAccountDiv: React.FC = () => {
         accountDetailsDispatch({ type: "get account details", value: data });
       });
     }
-  }
+  };
 
   const resolveRenderConditionals = useCallback(() => {
     switch (true) {

@@ -28,27 +28,27 @@ const SPageButton = styled.button`
 const SearchedMovies: React.FC = ({}) => {
   const { state: HomePageState, dispatch: HomePageDispatch } = useContext(HomePageContext);
   const searchedMoviesH2Section = useRef() as React.MutableRefObject<HTMLHeadingElement>;
-  function sectionChangeHandler() {
+  const sectionChangeHandler = () => {
     HomePageDispatch({ type: "set searchedSectionCount number", searchedSectionCount: 1 });
     HomePageDispatch({ type: "change submitSearch bool", submitSearch: true });
-  }
-  function handlePrevious() {
+  };
+  const handlePrevious = () => {
     if (HomePageState.currentPage === 1) return;
     HomePageDispatch({
       type: "set currentPage number",
       currentPage: HomePageState.currentPage - 1,
     });
     sectionChangeHandler();
-  }
+  };
 
-  function handleNext() {
+  const handleNext = () => {
     if (HomePageState.currentPage === HomePageState.totalPageForMovieSearched) return;
     HomePageDispatch({
       type: "set currentPage number",
       currentPage: HomePageState.currentPage + 1,
     });
     sectionChangeHandler();
-  }
+  };
 
   useEffect(() => {
     if (HomePageState.searchedMovies.length != 0) {

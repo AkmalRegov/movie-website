@@ -92,52 +92,7 @@ const IconDiv: React.FC<{
   session_id,
   setReturnWatchlist,
 }) => {
-  // const { state: userDetailsState } = useContext(UserDetailsContext);
-  // const { state: userAccessState } = useContext(UserAccessContext);
-  // const [userWatchlist, setUserWatchlist] = useState({} as GET_WATCHLIST.Watchlist);
-
-  // async function returnWatchlist(page: number): Promise<GET_WATCHLIST.Watchlist> {
-  //   return GET_WATCHLIST.tmdb_getWatchlist(
-  //     userDetailsState?.id,
-  //     userAccessState?.sessionString,
-  //     page,
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       // console.log("watchlist data is: ", data);
-  //       return data;
-  //     });
-  // }
-
-  // async function loopReturnWatchlist(): Promise<GET_WATCHLIST.Watchlist> {
-  //   var data: GET_WATCHLIST.Watchlist = {} as GET_WATCHLIST.Watchlist;
-  //   var page = 1;
-  //   var temp_res = await returnWatchlist(page);
-  //   data = temp_res;
-  //   while (temp_res.total_pages > page) {
-  //     page += 1;
-  //     temp_res = await returnWatchlist(page);
-  //     temp_res.results.forEach((ele) => {
-  //       data.results.push(ele);
-  //     });
-  //   }
-  //   return data;
-  // }
-
-  // async function setReturnWatchlist() {
-  //   loopReturnWatchlist().then((data) => {
-  //     console.log("watchlist data is: ", data);
-  //     setUserWatchlist(data);
-  //   });
-  // }
-
-  // useEffect(() => {
-  //   if (userDetailsState?.username != "") {
-  //     setReturnWatchlist();
-  //   }
-  // }, []);
-
-  function handleAddtoWatchlist() {
+  const handleAddtoWatchlist = () => {
     console.log("movieInWatchlist is: ", movieInWatchlist);
     console.log("account_id is: ", account_id);
     console.log("session_id is: ", session_id);
@@ -167,7 +122,7 @@ const IconDiv: React.FC<{
         },
       );
     }
-  }
+  };
 
   return (
     <>

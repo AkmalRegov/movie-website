@@ -131,25 +131,25 @@ const SGoPrimitiveDot = styled(GoPrimitiveDot)`
   color: whitesmoke;
 `;
 
-function parseDate(dateString: string) {
+const parseDate = (dateString: string) => {
   var parts = dateString.split("-") as string[];
   var resString = `${parts[2]}/${parts[1]}/${parts[0]}`;
   return resString;
-}
+};
 
-function parseGenreURL(genreId: number, genreName: string) {
+const parseGenreURL = (genreId: number, genreName: string) => {
   return encodeURI(
     `https://www.themoviedb.org/genre/${genreId}-${genreName
       .toLowerCase()
       .replace(" ", "-")}/movie`,
   );
-}
+};
 
-function parseMovieRuntime(runtime: number) {
+const parseMovieRuntime = (runtime: number) => {
   var hours = Math.floor(runtime / 60);
   var mins = runtime % 60;
   return `${hours}h ${mins}min`;
-}
+};
 
 export const MoviesDetails: React.FC = () => {
   const { movieId } = useParams<RouteParams>(); //cannot use interface for useParams generic
@@ -167,7 +167,7 @@ export const MoviesDetails: React.FC = () => {
   const { state: userDetailsState } = useContext(UserDetailsContext);
   const [userWatchlist, setUserWatchlist] = useState({} as API.GET_WATCHLIST.Watchlist);
 
-  async function returnWatchlist(page: number): Promise<API.GET_WATCHLIST.Watchlist> {
+  const returnWatchlist = async (page: number): Promise<API.GET_WATCHLIST.Watchlist> => {
     return API.GET_WATCHLIST.tmdb_getWatchlist(
       userDetailsState?.id,
       userAccessState?.sessionString,
@@ -178,9 +178,9 @@ export const MoviesDetails: React.FC = () => {
         // console.log("watchlist data is: ", data);
         return data;
       });
-  }
+  };
 
-  async function loopReturnWatchlist(): Promise<API.GET_WATCHLIST.Watchlist> {
+  const loopReturnWatchlist = async (): Promise<API.GET_WATCHLIST.Watchlist> => {
     var data: API.GET_WATCHLIST.Watchlist = {} as API.GET_WATCHLIST.Watchlist;
     var page = 1;
     var temp_res = await returnWatchlist(page);
@@ -193,14 +193,14 @@ export const MoviesDetails: React.FC = () => {
       });
     }
     return data;
-  }
+  };
 
-  async function setReturnWatchlist() {
+  const setReturnWatchlist = async () => {
     loopReturnWatchlist().then((data) => {
       console.log("watchlist data is: ", data);
       setUserWatchlist(data);
     });
-  }
+  };
 
   useEffect(() => {
     if (userDetailsState?.username != "") {
