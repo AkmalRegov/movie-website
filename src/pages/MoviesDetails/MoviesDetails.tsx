@@ -8,6 +8,7 @@ import IconDiv from "./IconDiv";
 import MovieReviewSection from "./MovieReviewSection";
 import { UserAccessContext } from "../../context/UserAccess/UserAccessContext";
 import { GoPrimitiveDot } from "react-icons/go";
+import { UserDetailsContext } from "../../context/UserDetails/UserDetailsContext";
 
 //route params always give strings
 //link: https://dev.to/javila35/react-router-hook-useparam-now-w-typescript-m93
@@ -162,9 +163,52 @@ export const MoviesDetails: React.FC = () => {
   const [top5Crew, setTop5Crew] = useState<crewInterface[]>();
   const [movieUSCertification, setMovieUSCertification] = useState("");
   const callOnce = useRef<boolean>(false);
-  const { state: userAccess } = useContext(UserAccessContext);
+  const { state: userAccessState } = useContext(UserAccessContext);
+  const { state: userDetailsState } = useContext(UserDetailsContext);
+  const [userWatchlist, setUserWatchlist] = useState({} as API.GET_WATCHLIST.Watchlist);
 
-  function handleRouteLoaderData() {
+  async function returnWatchlist(page: number): Promise<API.GET_WATCHLIST.Watchlist> {
+    return API.GET_WATCHLIST.tmdb_getWatchlist(
+      userDetailsState?.id,
+      userAccessState?.sessionString,
+      page,
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log("watchlist data is: ", data);
+        return data;
+      });
+  }
+
+  async function loopReturnWatchlist(): Promise<API.GET_WATCHLIST.Watchlist> {
+    var data: API.GET_WATCHLIST.Watchlist = {} as API.GET_WATCHLIST.Watchlist;
+    var page = 1;
+    var temp_res = await returnWatchlist(page);
+    data = temp_res;
+    while (temp_res.total_pages > page) {
+      page += 1;
+      temp_res = await returnWatchlist(page);
+      temp_res.results.forEach((ele) => {
+        data.results.push(ele);
+      });
+    }
+    return data;
+  }
+
+  async function setReturnWatchlist() {
+    loopReturnWatchlist().then((data) => {
+      console.log("watchlist data is: ", data);
+      setUserWatchlist(data);
+    });
+  }
+
+  useEffect(() => {
+    if (userDetailsState?.username != "") {
+      setReturnWatchlist();
+    }
+  }, []);
+
+  const handleRouteLoaderData = () => {
     console.log("fetchedOneMovieData is: ", fetchedOneMovieData);
     setMovieData(fetchedOneMovieData);
     console.log(
@@ -191,11 +235,14 @@ export const MoviesDetails: React.FC = () => {
         sorted = filtered.sort((a, b) => b.popularity - a.popularity);
       }
       console.log("top 5 crew based on popularity is: ", res);
-      console.log("userAccess.requestTokenApproved is: ", userAccess.requestTokenApproved);
+      console.log(
+        "userAccessState.requestTokenApproved is: ",
+        userAccessState.requestTokenApproved,
+      );
       return res;
     });
     console.log("fetchedMovieReviews is: ", fetchedMovieReviews);
-  }
+  };
 
   useEffect(() => {
     if (callOnce.current) return;
@@ -254,7 +301,17 @@ export const MoviesDetails: React.FC = () => {
                         </>
                       )}
                     </SMoviesDetailsContentDiv>
-                    <IconDiv movieData={movieData} />
+                    <IconDiv
+                      movieData={movieData}
+                      movieInWatchlist={
+                        userWatchlist?.results?.filter((ele) => ele.id === movieData.id).length > 0
+                          ? true
+                          : false
+                      }
+                      account_id={userDetailsState?.id}
+                      session_id={userAccessState?.sessionString}
+                      setReturnWatchlist={setReturnWatchlist}
+                    />
                     <SMovieTextDiv>
                       <SMovieTaglineEm>{movieData.tagline}</SMovieTaglineEm>
                       <SMovieOverviewDiv>

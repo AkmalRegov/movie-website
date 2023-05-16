@@ -7,6 +7,7 @@ import IconDiv from "../MoviesDetails/IconDiv";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { IoListCircleSharp, IoHeartCircle } from "react-icons/io5";
 import { MdStars } from "react-icons/md";
+import { POST_ADD_TO_WATCHLIST } from "../../restapi";
 
 const SIconWrapperDiv = styled.div`
   display: flex;
@@ -139,9 +140,38 @@ const SFullReviewBoxDiv = styled.div`
   text-overflow: "ellipsis"; */
 `;
 
+const STooltip = styled.div`
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+`;
+
+const STooltipText = styled.span`
+  visibility: hidden;
+  width: 120px;
+  background-color: white;
+  color: black;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 34px;
+`;
+
+const STooltipWatchlist = styled(STooltip)``;
+const STooltipWatchlistText = styled(STooltipText)`
+  ${STooltipWatchlist}:hover & {
+    visibility: visible;
+  }
+`;
+
 const IconStyle = { backgroundColor: "white", borderRadius: "100%", cursor: "pointer" };
 
-const DummyCard: React.FC<{ movieData: object & { vote_average: number } }> = ({ movieData }) => {
+const DummyCard: React.FC<{ movieData: object & { vote_average: number; id: number } }> = ({
+  movieData,
+}) => {
   return (
     <>
       <SFullReviewBoxDiv>
@@ -234,13 +264,26 @@ const DummyCard: React.FC<{ movieData: object & { vote_average: number } }> = ({
 
 const WatchlistCard: React.FC<{
   movieData: object & {
+    id: number;
     vote_average: number;
     backdrop_path: string;
     title: string;
     release_date: string;
     overview: string;
   };
-}> = ({ movieData }) => {
+  account_id: number;
+  session_id: string;
+  setReturnWatchlist: Function;
+}> = ({ movieData, account_id, session_id, setReturnWatchlist }) => {
+  function handleDeleteFromWatchlist() {
+    POST_ADD_TO_WATCHLIST.tmdb_postAddToWatchlist(account_id, session_id, movieData.id, false).then(
+      (data) => {
+        console.log("data from post add to watchlist is: ", data);
+        setReturnWatchlist();
+      },
+    );
+  }
+
   return (
     <>
       <SFullReviewBoxDiv>
@@ -293,9 +336,12 @@ const WatchlistCard: React.FC<{
             <SIconWrapperDiv style={{ position: "relative", bottom: "20px", right: "10px" }}>
               <IoListCircleSharp size={40} color="black" style={IconStyle} />
               <IoHeartCircle size={40} color="black" style={IconStyle} />
-              <SOuterWhiteCircleSpan>
+              <SOuterWhiteCircleSpan onClick={handleDeleteFromWatchlist}>
                 <SInnerBlackCircleSpan>
-                  <BsFillBookmarkFill size={16} color="white" />
+                  <STooltipWatchlist>
+                    <BsFillBookmarkFill size={16} color="blue" />
+                    <STooltipWatchlistText>Remove from your watchlist</STooltipWatchlistText>
+                  </STooltipWatchlist>
                 </SInnerBlackCircleSpan>
               </SOuterWhiteCircleSpan>
               <MdStars size={38} color="black" style={IconStyle} />
@@ -342,7 +388,7 @@ export const Watchlist: React.FC = () => {
     original_language: "en",
     original_title: "Top Gun: Maverick",
     overview:
-      "After more than thirty years of service as one of the Navy’s top aviators, and dodging the advancement in rank that would ground him, Pete “Maverick” Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.",
+      "After more than thirty years of service as one of the Navy's top aviators, and dodging the advancement in rank that would ground him, Pete “Maverick” Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.",
     popularity: 274.488,
     poster_path: "/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
     release_date: "2022-05-24",
@@ -376,15 +422,19 @@ export const Watchlist: React.FC = () => {
     return data;
   }
 
+  async function setReturnWatchlist() {
+    loopReturnWatchlist().then((data) => {
+      console.log("wathclist data is: ", data);
+      setUserWatchlist(data);
+    });
+  }
+
   useEffect(() => {
     if (userDetails?.username != "" && !callOnce.current) {
-      loopReturnWatchlist().then((data) => {
-        console.log("wathclist data is: ", data);
-        setUserWatchlist(data);
-      });
+      setReturnWatchlist();
       callOnce.current = true;
     }
-  }, []);
+  }, [userWatchlist]);
 
   return (
     <>
@@ -394,7 +444,7 @@ export const Watchlist: React.FC = () => {
             <SFlexColDiv>
               <SFlexDiv>
                 <h3>Watchlist</h3>
-                <SMovieReviewNumberP>4</SMovieReviewNumberP>
+                <SMovieReviewNumberP>{userWatchlist?.results?.length}</SMovieReviewNumberP>
               </SFlexDiv>
               <SMovieReviewNumberTextHr />
             </SFlexColDiv>
@@ -403,7 +453,15 @@ export const Watchlist: React.FC = () => {
           <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
             {userWatchlist?.results?.length > 0 &&
               userWatchlist.results.map((ele, index) => {
-                return <WatchlistCard key={index} movieData={ele} />;
+                return (
+                  <WatchlistCard
+                    key={index}
+                    movieData={ele}
+                    account_id={userDetails?.id}
+                    session_id={userAccessState?.sessionString}
+                    setReturnWatchlist={setReturnWatchlist}
+                  />
+                );
               })}
             {/* <DummyCard movieData={movieData} /> */}
           </div>

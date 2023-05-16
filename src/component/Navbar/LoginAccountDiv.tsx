@@ -7,6 +7,7 @@ import {
   CREATE_SESSION_WITH_ACCESS_TOKEN,
   GET_ACCOUNT_DETAILS,
 } from "../../restapi";
+import { UserDetailsContext } from "../../context/UserDetails/UserDetailsContext";
 
 const SLoginDiv = styled.div`
   display: flex;
@@ -56,23 +57,25 @@ export const InitialAvatarCircleSpan: React.FC<{ username: string }> = ({ userna
 
 export const LoginAccountDiv: React.FC = () => {
   const { state: userAccessState, dispatch: userAccessDispatch } = useContext(UserAccessContext);
-  //   const [accountDetails, setAccountDetails] = useState({} as GET_ACCOUNT_DETAILS.apiResponse);
-  const [accountDetails, setAccountDetails] = useState<GET_ACCOUNT_DETAILS.apiResponse>({
-    avatar: {
-      gravatar: {
-        hash: "35e84f36cd0a1c2818fa6cf8019f91a7",
-      },
-      tmdb: {
-        avatar_path: null,
-      },
-    },
-    id: 18689211,
-    iso_639_1: "en",
-    iso_3166_1: "MY",
-    name: "",
-    include_adult: false,
-    username: "AkmalAnuar",
-  });
+  const { state: accountDetails, dispatch: accountDetailsDispatch } =
+    useContext(UserDetailsContext);
+  // const [accountDetails, setAccountDetails] = useState({} as GET_ACCOUNT_DETAILS.apiResponse);
+  // const [accountDetails, setAccountDetails] = useState<GET_ACCOUNT_DETAILS.apiResponse>({
+  //   avatar: {
+  //     gravatar: {
+  //       hash: "35e84f36cd0a1c2818fa6cf8019f91a7",
+  //     },
+  //     tmdb: {
+  //       avatar_path: null,
+  //     },
+  //   },
+  //   id: 18689211,
+  //   iso_639_1: "en",
+  //   iso_3166_1: "MY",
+  //   name: "",
+  //   include_adult: false,
+  //   username: "AkmalAnuar",
+  // });
 
   async function handleCreateRequestTokenV4(uniqueString: string) {
     CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4(uniqueString).then(
@@ -124,7 +127,8 @@ export const LoginAccountDiv: React.FC = () => {
     if (accountDetailsArgs) {
       GET_ACCOUNT_DETAILS.tmdb_getAccountDetails(accountDetailsArgs.session_id).then((data) => {
         console.log("account details retrieved are:\n", data);
-        setAccountDetails(data);
+        // setAccountDetails(data);
+        accountDetailsDispatch({ type: "get account details", value: data });
       });
     }
   }
