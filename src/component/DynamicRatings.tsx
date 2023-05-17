@@ -8,6 +8,9 @@ export const DynamicRatings: React.FC = () => {
   const ratingContainerRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const totalCount = [1, 2, 3, 4, 5];
   const precision = 1;
+  const [nearestNumber, setNearestNumber] = useState(0);
+  const [roundedNumber, setRoundedNumber] = useState(0);
+  const [percentage, setPercentage] = useState(0);
 
   //   const handleClick = (index: number) => {
   //     setActiveItems(index);
@@ -16,9 +19,22 @@ export const DynamicRatings: React.FC = () => {
 
   function calculateRating(e: React.MouseEvent) {
     const { width, left } = ratingContainerRef.current.getBoundingClientRect();
+    // console.log("width is: ", width);
     let percent = (e.clientX - left) / width;
+    setPercentage(percent);
+    // console.log("percent is: ", percent);
     const numberInItems = percent * totalCount.length;
-    const nearestNumber = Math.round((numberInItems + precision / 2) / precision) * precision;
+    // const nearestNumber = Math.round((numberInItems + precision / 2) / precision) * precision;
+    var nearestNumber = ((numberInItems + precision / 2) / precision) * precision;
+    var roundedNumber = Math.round((numberInItems + precision / 2) / precision) * precision;
+    // console.log("nearest number is: ", nearestNumber);
+    // console.log("rounded number is: ", roundedNumber);
+    setNearestNumber(nearestNumber);
+    setRoundedNumber(roundedNumber);
+    console.log(
+      "rounded number subtract nearest number, answer: ",
+      Math.abs(roundedNumber - nearestNumber),
+    );
     return Number(nearestNumber.toFixed(precision.toString().split(".")[1]?.length || 0));
   }
 
@@ -97,6 +113,9 @@ export const DynamicRatings: React.FC = () => {
           })}
         </div>
         <button onClick={() => setActiveItems(-1)}>Reset</button>
+        <p style={{ color: "black" }}>Nearest number is: {nearestNumber}</p>
+        <p style={{ color: "black" }}>Rounded number is: {roundedNumber}</p>
+        <p style={{ color: "black" }}>Percentage is: {percentage}</p>
       </div>
     </>
   );

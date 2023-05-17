@@ -11,6 +11,8 @@ export * as GET_ACCOUNT_DETAILS from "./tmdb_get-account-details";
 export * as GET_WATCHLIST from "./tmdb_get-watchlist";
 export * as POST_ADD_TO_WATCHLIST from "./tmdb_post-add-to-watchlist";
 export * as GET_ACCOUNT_STATE from "./tmdb_get-account-states";
+export * as POST_MOVIE_RATING from "./tmdb_post-movie-rating";
+export * as DELETE_MOVIE_RATING from "./tmdb_delete-movie-rating";
 
 export const apiURL = process.env.API_V3_URL;
 export const myV3APIKey = process.env.MY_API_KEY;
