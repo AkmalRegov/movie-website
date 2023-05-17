@@ -165,50 +165,26 @@ export const MoviesDetails: React.FC = () => {
   const callOnce = useRef<boolean>(false);
   const { state: userAccessState } = useContext(UserAccessContext);
   const { state: userDetailsState } = useContext(UserDetailsContext);
-  const [userWatchlist, setUserWatchlist] = useState({} as API.GET_WATCHLIST.Watchlist);
+  const [userMovieState, setUserMovieState] = useState({} as API.GET_ACCOUNT_STATE.apiResponse);
 
-  const returnWatchlist = async (page: number): Promise<API.GET_WATCHLIST.Watchlist> => {
-    return API.GET_WATCHLIST.tmdb_getWatchlist(
-      userDetailsState?.id,
-      userAccessState?.sessionString,
-      page,
+  const fetchUserMovieState = async () => {
+    API.GET_ACCOUNT_STATE.tmdb_getAccountStates(
+      fetchedOneMovieData.id,
+      userAccessState.sessionString,
     )
       .then((res) => res.json())
-      .then((data) => {
-        // console.log("watchlist data is: ", data);
-        return data;
+      .then((data: API.GET_ACCOUNT_STATE.apiResponse) => {
+        setUserMovieState(data);
       });
-  };
-
-  const loopReturnWatchlist = async (): Promise<API.GET_WATCHLIST.Watchlist> => {
-    var data: API.GET_WATCHLIST.Watchlist = {} as API.GET_WATCHLIST.Watchlist;
-    var page = 1;
-    var temp_res = await returnWatchlist(page);
-    data = temp_res;
-    while (temp_res.total_pages > page) {
-      page += 1;
-      temp_res = await returnWatchlist(page);
-      temp_res.results.forEach((ele) => {
-        data.results.push(ele);
-      });
-    }
-    return data;
-  };
-
-  const setReturnWatchlist = async () => {
-    loopReturnWatchlist().then((data) => {
-      console.log("watchlist data is: ", data);
-      setUserWatchlist(data);
-    });
   };
 
   useEffect(() => {
-    if (userDetailsState?.username != "") {
-      setReturnWatchlist();
+    if (userDetailsState?.username != "" && fetchedOneMovieData.id) {
+      fetchUserMovieState();
     }
   }, []);
 
-  const handleRouteLoaderData = () => {
+  const handleRouteLoaderData = async () => {
     console.log("fetchedOneMovieData is: ", fetchedOneMovieData);
     setMovieData(fetchedOneMovieData);
     console.log(
@@ -303,14 +279,12 @@ export const MoviesDetails: React.FC = () => {
                     </SMoviesDetailsContentDiv>
                     <IconDiv
                       movieData={movieData}
-                      movieInWatchlist={
-                        userWatchlist?.results?.filter((ele) => ele.id === movieData.id).length > 0
-                          ? true
-                          : false
-                      }
-                      account_id={userDetailsState?.id}
-                      session_id={userAccessState?.sessionString}
-                      setReturnWatchlist={setReturnWatchlist}
+                      IconDivHandlerProps={{
+                        userMovieState: userMovieState,
+                        account_id: userDetailsState?.id,
+                        session_id: userAccessState.sessionString,
+                        fetchUserMovieState: fetchUserMovieState,
+                      }}
                     />
                     <SMovieTextDiv>
                       <SMovieTaglineEm>{movieData.tagline}</SMovieTaglineEm>
