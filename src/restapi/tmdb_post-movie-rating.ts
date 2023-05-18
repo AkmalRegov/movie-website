@@ -17,5 +17,5 @@ export const tmdb_postMovieRatings = async (
     }),
   };
 
-  return fetch(encodeURI(`${apiURL}movie/${movie_id}?session_id=${session_id}`), options);
+  return fetch(encodeURI(`${apiURL}movie/${movie_id}/rating?session_id=${session_id}`), options);
 };

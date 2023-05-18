@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { GET_ACCOUNT_STATE, POST_ADD_TO_WATCHLIST } from "../../restapi";
 import UserScoreFC from "./UserScoreFC";
 import { IoHeartCircle, IoListCircleSharp } from "react-icons/io5";
@@ -6,7 +6,7 @@ import { BsFillBookmarkFill } from "react-icons/bs";
 import { MdStars } from "react-icons/md";
 import styled from "styled-components";
 import RatingModal from "../../component/RatingModal";
-import { useOutsideClick } from "../../customHooks/useOutisdeClick";
+import { useOutsideClick } from "../../customHooks/useOutsideClick";
 
 const SWrapperDiv = styled.div`
   display: flex;
@@ -104,12 +104,14 @@ const STooltipRateStarText = styled(SToolTipReactIconsText)`
 const IconStyle = { backgroundColor: "white", borderRadius: "100%", cursor: "pointer" };
 
 const RateStarIcon: React.FC<{
-  IconDivHandlerProps: IconDivHandlerProps | undefined;
   movie_id: number;
+  IconDivHandlerProps?: IconDivHandlerProps;
 }> = ({ IconDivHandlerProps, movie_id }) => {
   const [showModal, setShowModal] = useState(false);
+  const ratingModalRef = useRef<any>();
 
   const showRatingModal = (e: React.MouseEvent) => {
+    if (ratingModalRef.current && ratingModalRef.current.contains(e.target)) return;
     setShowModal(!showModal);
     e?.stopPropagation();
   };
@@ -130,9 +132,25 @@ const RateStarIcon: React.FC<{
         </STooltipRateStar>
       ) : (
         <STooltipRateStar>
-          <MdStars size={38} color="black" style={IconStyle} />
+          <MdStars
+            size={38}
+            color="black"
+            style={{
+              ...IconStyle,
+              backgroundColor: IconDivHandlerProps?.userMovieState?.rated?.value
+                ? "#fadb14"
+                : "white",
+            }}
+          />
           <STooltipRateStarText>Rate the movie</STooltipRateStarText>
-          <RatingModal showModal={showModal} />
+          <div ref={ratingModalRef}>
+            <RatingModal
+              showModal={showModal}
+              fetchedUserRating={IconDivHandlerProps?.userMovieState?.rated?.value ?? 0}
+              IconDivHandlerProps={IconDivHandlerProps}
+              movie_id={movie_id}
+            />
+          </div>
         </STooltipRateStar>
       )}
     </div>
@@ -140,8 +158,8 @@ const RateStarIcon: React.FC<{
 };
 
 const AddToListIcon: React.FC<{
-  IconDivHandlerProps: IconDivHandlerProps | undefined;
   movie_id: number;
+  IconDivHandlerProps?: IconDivHandlerProps;
 }> = ({ IconDivHandlerProps, movie_id }) => {
   return (
     <div onClick={() => console.log("Should add to user's movie list")}>
@@ -161,8 +179,8 @@ const AddToListIcon: React.FC<{
 };
 
 const AddToFavouriteIcon: React.FC<{
-  IconDivHandlerProps: IconDivHandlerProps | undefined;
   movie_id: number;
+  IconDivHandlerProps?: IconDivHandlerProps;
 }> = ({ IconDivHandlerProps, movie_id }) => {
   return (
     <div onClick={() => console.log("Should add to user's favourites")}>
@@ -182,8 +200,8 @@ const AddToFavouriteIcon: React.FC<{
 };
 
 const WatchlistIcon: React.FC<{
-  IconDivHandlerProps: IconDivHandlerProps | undefined;
   movie_id: number;
+  IconDivHandlerProps?: IconDivHandlerProps;
 }> = ({ IconDivHandlerProps, movie_id }) => {
   const handleAddtoWatchlist = () => {
     if (IconDivHandlerProps === undefined) return;
@@ -215,9 +233,23 @@ const WatchlistIcon: React.FC<{
     }
   };
 
+  const returnWatchlistColor = () => {
+    return IconDivHandlerProps?.userMovieState?.watchlist ? "blue" : "white";
+  };
+
   return (
-    <SOuterWhiteCircleSpan onClick={handleAddtoWatchlist}>
-      <SInnerBlackCircleSpan>
+    <SOuterWhiteCircleSpan
+      onClick={handleAddtoWatchlist}
+      style={{
+        backgroundColor: returnWatchlistColor(),
+        border: `1px solid ${returnWatchlistColor()}`,
+      }}
+    >
+      <SInnerBlackCircleSpan
+        style={{
+          border: `1px solid ${returnWatchlistColor()}`,
+        }}
+      >
         {IconDivHandlerProps?.userMovieState?.watchlist !== undefined &&
         IconDivHandlerProps?.userMovieState?.watchlist ? (
           <STooltipWatchlist>
@@ -239,7 +271,7 @@ const WatchlistIcon: React.FC<{
   );
 };
 
-interface IconDivHandlerProps {
+export interface IconDivHandlerProps {
   userMovieState?: GET_ACCOUNT_STATE.apiResponse;
   account_id?: number;
   session_id?: string;

@@ -13,5 +13,5 @@ export const tmdb_deleteMovieRatings = async (
     },
   };
 
-  return fetch(encodeURI(`${apiURL}movie/${movie_id}?session_id=${session_id}`), options);
+  return fetch(encodeURI(`${apiURL}movie/${movie_id}/rating?session_id=${session_id}`), options);
 };
