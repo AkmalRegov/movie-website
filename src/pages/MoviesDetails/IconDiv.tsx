@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { GET_ACCOUNT_STATE, POST_ADD_TO_WATCHLIST } from "../../restapi";
 import UserScoreFC from "./UserScoreFC";
 import { IoHeartCircle, IoListCircleSharp } from "react-icons/io5";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { MdStars } from "react-icons/md";
 import styled from "styled-components";
+import RatingModal from "../../component/RatingModal";
+import { useOutsideClick } from "../../customHooks/useOutisdeClick";
 
 const SWrapperDiv = styled.div`
   display: flex;
@@ -86,13 +88,14 @@ const STooltipAddToListText = styled(SToolTipReactIconsText)`
 
 const STooltipWatchlist = styled(STooltip)``;
 const STooltipWatchlistText = styled(STooltipText)`
+  top: -24px;
   ${STooltipWatchlist}:hover & {
     visibility: visible;
   }
 `;
 
 const STooltipRateStar = styled(STooltip)``;
-const STooltipRateStarText = styled(STooltipText)`
+const STooltipRateStarText = styled(SToolTipReactIconsText)`
   ${STooltipRateStar}:hover & {
     visibility: visible;
   }
@@ -104,18 +107,33 @@ const RateStarIcon: React.FC<{
   IconDivHandlerProps: IconDivHandlerProps | undefined;
   movie_id: number;
 }> = ({ IconDivHandlerProps, movie_id }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const showRatingModal = (e: React.MouseEvent) => {
+    setShowModal(!showModal);
+    e?.stopPropagation();
+  };
+
+  const closeRatingModal = (e: React.MouseEvent) => {
+    setShowModal(false);
+    e?.stopPropagation();
+  };
+
+  const ref = useOutsideClick(closeRatingModal);
+
   return (
-    <div onClick={() => console.log("Should post user's ratings")}>
+    <div ref={ref} onClick={showRatingModal}>
       {IconDivHandlerProps === undefined ? (
-        <STooltipAddToList>
+        <STooltipRateStar>
           <MdStars size={38} color="black" style={IconStyle} />
-          <STooltipAddToListText>Login your account to rate movie</STooltipAddToListText>
-        </STooltipAddToList>
+          <STooltipRateStarText>Login your account to rate movie</STooltipRateStarText>
+        </STooltipRateStar>
       ) : (
-        <STooltipAddToList>
+        <STooltipRateStar>
           <MdStars size={38} color="black" style={IconStyle} />
-          <STooltipAddToListText>Rate the movie</STooltipAddToListText>
-        </STooltipAddToList>
+          <STooltipRateStarText>Rate the movie</STooltipRateStarText>
+          <RatingModal showModal={showModal} />
+        </STooltipRateStar>
       )}
     </div>
   );

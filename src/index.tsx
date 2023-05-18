@@ -9,6 +9,7 @@ import * as PAGES from "./pages";
 import * as API from "./restapi";
 import UserAccessProvider from "./context/UserAccess/UserAccessProvider";
 import HomeScreen from "./pages/HomeScreen/HomeScreen";
+// import "antd/dist/reset.css";
 
 async function loaderTrendingMovies() {
   const data = await API.TRENDING_MOVIES.tmdb_trendingMovies().then((res) => res.json());
