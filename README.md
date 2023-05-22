@@ -9,8 +9,7 @@ A movie website that fetches trending movies, all available movies in TMDB and e
 1. Login
 
    - Using username and password (created in www.themoviedb.org)
-     //This one, I did using the v4 API, directs user to tmdb website,
-     // they need to login there and then authenticate their tokens.
+     - This one, I did using the v4 API, directs user to tmdb website, they need to login there and then authenticate their tokens.
 
 2. Home
    - Listing of Trending Movies

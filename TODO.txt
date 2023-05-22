@@ -1,8 +1,0 @@
-What I want to do now:
-
-1) Figure out a way if it is possible to create request token, access token then create session with the v4 tmdb api, because that is more natural for user login.
-
-ELSE:
-1) User need to click a button to create request token, wait for User to approve it and then the User will click the authenticate login with a button.
-2) If request token is invalid when trying to authenticate login, User need to create request token again. If no issue, then it should follow the expected successful scenario.
-
