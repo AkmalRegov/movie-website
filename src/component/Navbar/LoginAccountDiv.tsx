@@ -173,7 +173,7 @@ export const LoginAccountDiv: React.FC = () => {
             <p style={{ color: "black" }}>{accountDetails?.username}</p>
             <button
               onClick={() => {
-                // userAccessDispatch({ type: "delete current session" });
+                userAccessDispatch({ type: "delete current session" });
               }}
             >
               Log Out
