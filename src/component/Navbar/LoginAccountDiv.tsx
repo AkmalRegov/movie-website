@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { UserAccessContext } from "../../context/UserAccess/UserAccessContext";
 import styled from "styled-components";
 import {
@@ -59,23 +59,6 @@ export const LoginAccountDiv: React.FC = () => {
   const { state: userAccessState, dispatch: userAccessDispatch } = useContext(UserAccessContext);
   const { state: accountDetails, dispatch: accountDetailsDispatch } =
     useContext(UserDetailsContext);
-  // const [accountDetails, setAccountDetails] = useState({} as GET_ACCOUNT_DETAILS.apiResponse);
-  // const [accountDetails, setAccountDetails] = useState<GET_ACCOUNT_DETAILS.apiResponse>({
-  //   avatar: {
-  //     gravatar: {
-  //       hash: "35e84f36cd0a1c2818fa6cf8019f91a7",
-  //     },
-  //     tmdb: {
-  //       avatar_path: null,
-  //     },
-  //   },
-  //   id: 18689211,
-  //   iso_639_1: "en",
-  //   iso_3166_1: "MY",
-  //   name: "",
-  //   include_adult: false,
-  //   username: "AkmalAnuar",
-  // });
 
   const handleCreateRequestTokenV4 = async (uniqueString: string) => {
     CREATE_REQUEST_TOKEN.tmdb_postCreateRequestTokenV4(uniqueString).then(
@@ -127,13 +110,12 @@ export const LoginAccountDiv: React.FC = () => {
     if (accountDetailsArgs) {
       GET_ACCOUNT_DETAILS.tmdb_getAccountDetails(accountDetailsArgs.session_id).then((data) => {
         console.log("account details retrieved are:\n", data);
-        // setAccountDetails(data);
         accountDetailsDispatch({ type: "get account details", value: data });
       });
     }
   };
 
-  const resolveRenderConditionals = useCallback(() => {
+  const Details: React.FC = () => {
     switch (true) {
       case userAccessState.requestToken === "" && userAccessState.accessToken === "":
         return (
@@ -166,14 +148,14 @@ export const LoginAccountDiv: React.FC = () => {
           <>
             {accountDetails?.avatar?.tmdb?.avatar_path !== null ? (
               <a
-                href={`https://www.themoviedb.org/u/${accountDetails.username}`}
+                href={`https://www.themoviedb.org/u/${accountDetails?.username}`}
                 target="_blank"
                 style={{ textDecoration: "none", height: "fit-content" }}
               >
                 <img
                   loading="lazy"
                   src={`https://image.tmdb.org/t/p/w32_and_h32_face${accountDetails?.avatar?.tmdb?.avatar_path}`}
-                  alt={`A picture of user ${accountDetails.username}`}
+                  alt={`A picture of user ${accountDetails?.username}`}
                   style={{
                     display: "block",
                     width: "32px",
@@ -186,9 +168,9 @@ export const LoginAccountDiv: React.FC = () => {
                 />
               </a>
             ) : (
-              <InitialAvatarCircleSpan username={accountDetails.username} />
+              <InitialAvatarCircleSpan username={accountDetails?.username} />
             )}
-            <p style={{ color: "black" }}>{accountDetails.username}</p>
+            <p style={{ color: "black" }}>{accountDetails?.username}</p>
             <button
               onClick={() => {
                 // userAccessDispatch({ type: "delete current session" });
@@ -201,11 +183,13 @@ export const LoginAccountDiv: React.FC = () => {
       default:
         return <></>;
     }
-  }, [userAccessState.requestToken, userAccessState.accessToken]);
+  };
 
   return (
     <>
-      <SLoginDiv>{resolveRenderConditionals()}</SLoginDiv>
+      <SLoginDiv>
+        <Details />
+      </SLoginDiv>
     </>
   );
 };

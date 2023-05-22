@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { LegacyRef, useRef, useState } from "react";
 import { GET_ACCOUNT_STATE, POST_ADD_TO_WATCHLIST } from "../../restapi";
 import UserScoreFC from "./UserScoreFC";
 import { IoHeartCircle, IoListCircleSharp } from "react-icons/io5";
@@ -109,6 +109,9 @@ const RateStarIcon: React.FC<{
 }> = ({ IconDivHandlerProps, movie_id }) => {
   const [showModal, setShowModal] = useState(false);
   const ratingModalRef = useRef<any>();
+  const [tempRating, setTempRating] = useState(
+    IconDivHandlerProps?.userMovieState?.rated?.value ?? 0,
+  );
 
   const showRatingModal = (e: React.MouseEvent) => {
     if (ratingModalRef.current && ratingModalRef.current.contains(e.target)) return;
@@ -124,7 +127,7 @@ const RateStarIcon: React.FC<{
   const ref = useOutsideClick(closeRatingModal);
 
   return (
-    <div ref={ref} onClick={showRatingModal}>
+    <div ref={ref as LegacyRef<HTMLDivElement>} onClick={showRatingModal}>
       {IconDivHandlerProps === undefined ? (
         <STooltipRateStar>
           <MdStars size={38} color="black" style={IconStyle} />
@@ -137,9 +140,8 @@ const RateStarIcon: React.FC<{
             color="black"
             style={{
               ...IconStyle,
-              backgroundColor: IconDivHandlerProps?.userMovieState?.rated?.value
-                ? "#fadb14"
-                : "white",
+              backgroundColor:
+                IconDivHandlerProps?.userMovieState?.rated?.value ?? 0 > 0 ? "#fadb14" : "white",
             }}
           />
           <STooltipRateStarText>Rate the movie</STooltipRateStarText>
@@ -147,6 +149,7 @@ const RateStarIcon: React.FC<{
             <RatingModal
               showModal={showModal}
               fetchedUserRating={IconDivHandlerProps?.userMovieState?.rated?.value ?? 0}
+              setTempRating={setTempRating}
               IconDivHandlerProps={IconDivHandlerProps}
               movie_id={movie_id}
             />
@@ -284,44 +287,6 @@ const IconDiv: React.FC<{
   textColor?: string;
   IconDivHandlerProps?: IconDivHandlerProps;
 }> = ({ movieData, res, textColor, IconDivHandlerProps }) => {
-  const handleAddtoWatchlist = () => {
-    if (IconDivHandlerProps === undefined) return;
-    const { userMovieState, account_id, session_id, fetchUserMovieState } = IconDivHandlerProps;
-    console.log("userMovieState is: ", userMovieState);
-    console.log("account_id is: ", account_id);
-    console.log("session_id is: ", session_id);
-    console.log("fetchUserMovieState is: ", fetchUserMovieState);
-    console.log(
-      "does userMovieState.rated.value exists?, answer: ",
-      userMovieState?.rated.value ?? false,
-    );
-    if (
-      userMovieState?.watchlist === undefined ||
-      account_id === undefined ||
-      session_id === undefined ||
-      fetchUserMovieState === undefined
-    )
-      return;
-    if (userMovieState.watchlist) {
-      POST_ADD_TO_WATCHLIST.tmdb_postAddToWatchlist(
-        account_id,
-        session_id,
-        movieData.id,
-        false, //delete from watchlist
-      ).then((data) => {
-        console.log("data from post add to watchlist is: ", data);
-        fetchUserMovieState();
-      });
-    } else {
-      POST_ADD_TO_WATCHLIST.tmdb_postAddToWatchlist(account_id, session_id, movieData.id).then(
-        (data) => {
-          console.log("data from post add to watchlist is: ", data);
-          fetchUserMovieState();
-        },
-      );
-    }
-  };
-
   return (
     <>
       {res === "justScore" ? (

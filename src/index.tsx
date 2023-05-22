@@ -12,7 +12,7 @@ import HomeScreen from "./pages/HomeScreen/HomeScreen";
 // import "antd/dist/reset.css";
 
 async function loaderTrendingMovies() {
-  const data = await API.TRENDING_MOVIES.tmdb_trendingMovies().then((res) => res.json());
+  const data = await API.TRENDING_MOVIES.tmdb_trendingMovies();
   return defer({ data });
 }
 
@@ -26,19 +26,19 @@ async function loaderSearchOneMovie(params: Params<string>) {
   }
   const fetchedOneMovieData = await API.SEARCH_ONE_MOVIE.tmdb_searchOneMovie(
     parseInt(params.movieId as string),
-  ).then((res) => res.json());
+  );
 
   const fetchedMovieReleaseDatesData = await API.MOVIE_CERTIFICATION.tmdb_movieReleaseDatesData(
     parseInt(params.movieId as string),
-  ).then((res) => res.json());
+  );
 
   const fetchedMovieCastCrew = await API.GET_MOVIE_CAST_CREW.tmdb_getMovieCastCrew(
     parseInt(params.movieId as string),
-  ).then((res) => res.json());
+  );
 
   const fetchedMovieReviews = await API.GET_MOVIE_REVIEWS.tmdb_getMovieReviews(
     parseInt(params.movieId as string),
-  ).then((res) => res.json());
+  );
 
   return defer({
     fetchedOneMovieData,

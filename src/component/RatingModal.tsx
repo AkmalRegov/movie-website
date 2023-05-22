@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, LegacyRef } from "react";
 import { Rate } from "antd";
 import styled from "styled-components";
 import { IconDivHandlerProps } from "../pages/MoviesDetails/IconDiv";
@@ -23,6 +23,7 @@ const SRatingModalDiv = styled.div<RatingModalProps>`
 interface RatingModalProps {
   showModal?: boolean;
   fetchedUserRating?: number;
+  setTempRating?: React.Dispatch<React.SetStateAction<number>>;
   IconDivHandlerProps?: IconDivHandlerProps;
   movie_id?: number;
 }
@@ -30,6 +31,7 @@ interface RatingModalProps {
 const RatingModal: React.FC<RatingModalProps> = ({
   showModal = true,
   fetchedUserRating,
+  setTempRating,
   IconDivHandlerProps,
   movie_id,
 }) => {
@@ -37,6 +39,7 @@ const RatingModal: React.FC<RatingModalProps> = ({
   const [submittedRating, setSubmittedRating] = useState(0);
   const [onChangeRating, setOnChangeRating] = useState(0);
   const tempClosedRating = 0;
+  const starRef = useRef<HTMLDivElement>();
 
   const handleChangeRating = (rating: number) => {
     console.log("rating value is: ", rating);
@@ -50,14 +53,16 @@ const RatingModal: React.FC<RatingModalProps> = ({
   }, [fetchedUserRating]);
 
   useEffect(() => {
+    console.log("fetchedUserRating is: ", fetchedUserRating);
     if (submitRating) {
       setSubmitRating(false);
-      setSubmittedRating(onChangeRating);
+      setSubmittedRating(onChangeRating > 0 ? onChangeRating : submittedRating);
     }
     if (submittedRating > 0 && fetchedUserRating !== submittedRating) {
       if (IconDivHandlerProps && movie_id) {
         if (!IconDivHandlerProps.session_id) return;
         if (!IconDivHandlerProps.fetchUserMovieState) return;
+        if (setTempRating === undefined) return;
         const { userMovieState, fetchUserMovieState, account_id, session_id } = IconDivHandlerProps;
         console.log("submittedRating is: ", submittedRating);
         console.log("movie_id is: ", movie_id);
@@ -66,7 +71,8 @@ const RatingModal: React.FC<RatingModalProps> = ({
           .then((res) => res.json())
           .then((data) => {
             console.log("Post movie rating data: ", data);
-            setTimeout(() => fetchUserMovieState(), 500);
+            setTimeout(() => fetchUserMovieState(), 800);
+            setTempRating(submittedRating * 2);
           });
       }
     }
@@ -80,34 +86,35 @@ const RatingModal: React.FC<RatingModalProps> = ({
     if (IconDivHandlerProps !== undefined && movie_id) {
       if (!IconDivHandlerProps.session_id) return;
       if (!IconDivHandlerProps.fetchUserMovieState) return;
+      if (setTempRating === undefined) return;
       const { userMovieState, fetchUserMovieState, account_id, session_id } = IconDivHandlerProps;
       setSubmittedRating(0);
       DELETE_MOVIE_RATING.tmdb_deleteMovieRatings(movie_id, session_id)
         .then((res) => res.json())
         .then((data) => {
           console.log("Delete movie rating data: ", data);
-          setTimeout(() => fetchUserMovieState(), 500);
+          setTimeout(() => fetchUserMovieState(), 800);
+          setTempRating(0);
         });
     }
   };
 
   return (
     <SRatingModalDiv
-      onClick={() => {
-        setSubmitRating(true);
+      onClick={(e) => {
+        if (starRef.current && starRef.current.contains(e.target as HTMLElement)) {
+          setSubmitRating(true);
+        }
       }}
       showModal={showModal}
     >
-      <div style={{ margin: "0" }}>
+      <div style={{ margin: "0" }} ref={starRef as LegacyRef<HTMLDivElement>}>
         <Rate
           allowHalf
           value={showModal ? submittedRating : tempClosedRating}
           onChange={handleChangeRating}
         />
       </div>
-      {/* <p style={{ color: "black" }}>onChangeRating is now: {onChangeRating}</p>
-      <p style={{ color: "black" }}>submittedRating is now: {submittedRating}</p>
-      <p style={{ color: "black" }}>Actual calculated score is now: {submittedRating * 2}</p> */}
       <button style={{ width: "max-content" }} onClick={handleButtonClick}>
         Reset rating
       </button>

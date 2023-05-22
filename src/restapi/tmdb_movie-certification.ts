@@ -1,7 +1,9 @@
 import { myV3APIKey, apiURL } from "./index";
 
-export const tmdb_movieReleaseDatesData = async (movieId: number): Promise<Response> => {
-  return fetch(encodeURI(`${apiURL}movie/${movieId}/release_dates?api_key=${myV3APIKey}`));
+export const tmdb_movieReleaseDatesData = async (movieId: number): Promise<movieReleaseDates> => {
+  return fetch(encodeURI(`${apiURL}movie/${movieId}/release_dates?api_key=${myV3APIKey}`)).then(
+    (res) => res.json(),
+  );
 };
 
 export type movieReleaseDates = {

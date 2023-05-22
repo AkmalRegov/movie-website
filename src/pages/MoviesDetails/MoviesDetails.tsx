@@ -171,11 +171,9 @@ export const MoviesDetails: React.FC = () => {
     API.GET_ACCOUNT_STATE.tmdb_getAccountStates(
       fetchedOneMovieData.id,
       userAccessState.sessionString,
-    )
-      .then((res) => res.json())
-      .then((data: API.GET_ACCOUNT_STATE.apiResponse) => {
-        setUserMovieState(data);
-      });
+    ).then((data: API.GET_ACCOUNT_STATE.apiResponse) => {
+      setUserMovieState(data);
+    });
   };
 
   useEffect(() => {

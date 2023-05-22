@@ -4,12 +4,12 @@ export const tmdb_getWatchlist = async (
   account_id: number,
   session_id: string,
   page: number = 1,
-): Promise<Response> => {
+): Promise<Watchlist> => {
   return fetch(
     encodeURI(
       `${apiURL}account/${account_id}/watchlist/movies?api_key=${myV3APIKey}&language=en-US&session_id=${session_id}&sort_by=created_at.asc&page=${page}`,
     ),
-  );
+  ).then((res) => res.json());
 };
 
 export interface Watchlist {

@@ -20,6 +20,7 @@ type avatar = {
 };
 
 export const tmdb_getAccountDetails = async (session_id: string): Promise<apiResponse> => {
-  const res = await fetch(`${apiURL}account?api_key=${myV3APIKey}&session_id=${session_id}`);
-  return await res.json();
+  return fetch(`${apiURL}account?api_key=${myV3APIKey}&session_id=${session_id}`).then((res) =>
+    res.json(),
+  );
 };

@@ -287,13 +287,15 @@ const WatchlistCard: React.FC<{
   return (
     <>
       <SFullReviewBoxDiv>
-        <img
-          src={`https://www.themoviedb.org/t/p/w300_and_h450_bestv2${movieData.backdrop_path}`}
-          alt="Poster image of Top Gun Maverick"
-          style={{ borderRadius: "8px 0px 0px 8px", zIndex: 10 }}
-          width={133}
-          height={200}
-        />
+        <a href={`https://www.themoviedb.org/movie/${movieData.id}`} target="_blank">
+          <img
+            src={`https://www.themoviedb.org/t/p/w300_and_h450_bestv2${movieData.backdrop_path}`}
+            alt={`Poster image of ${movieData.title}`}
+            style={{ borderRadius: "8px 0px 0px 8px", zIndex: 10, cursor: "pointer" }}
+            width={133}
+            height={200}
+          />
+        </a>
         <div
           style={{
             borderRadius: "0px 8px 8px 0px",
@@ -321,7 +323,7 @@ const WatchlistCard: React.FC<{
               <SReviewRatingTimeStampDiv>
                 <SReviewRatingDiv>
                   <SReviewUrlAnchor
-                    href={`https://www.themoviedb.org/movie/361743`}
+                    href={`https://www.themoviedb.org/movie/${movieData.id}`}
                     target="_blank"
                     style={{ fontSize: "20px" }}
                   >
@@ -380,31 +382,29 @@ export const Watchlist: React.FC = () => {
   const { tmdb_getWatchlist } = GET_WATCHLIST;
   const [userWatchlist, setUserWatchlist] = useState({} as GET_WATCHLIST.Watchlist);
   const callOnce = useRef(false);
-  const movieData = {
-    adult: false,
-    backdrop_path: "/AaV1YIdWKnjAIAOe8UUKBFm327v.jpg",
-    genre_ids: [28, 18],
-    id: 361743,
-    original_language: "en",
-    original_title: "Top Gun: Maverick",
-    overview:
-      "After more than thirty years of service as one of the Navy's top aviators, and dodging the advancement in rank that would ground him, Pete “Maverick” Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.",
-    popularity: 274.488,
-    poster_path: "/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
-    release_date: "2022-05-24",
-    title: "Top Gun: Maverick",
-    video: false,
-    vote_average: 8.29,
-    vote_count: 6792,
-  };
+  // const movieData = {
+  //   adult: false,
+  //   backdrop_path: "/AaV1YIdWKnjAIAOe8UUKBFm327v.jpg",
+  //   genre_ids: [28, 18],
+  //   id: 361743,
+  //   original_language: "en",
+  //   original_title: "Top Gun: Maverick",
+  //   overview:
+  //     "After more than thirty years of service as one of the Navy's top aviators, and dodging the advancement in rank that would ground him, Pete “Maverick” Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.",
+  //   popularity: 274.488,
+  //   poster_path: "/62HCnUTziyWcpDaBO2i1DX17ljH.jpg",
+  //   release_date: "2022-05-24",
+  //   title: "Top Gun: Maverick",
+  //   video: false,
+  //   vote_average: 8.29,
+  //   vote_count: 6792,
+  // };
 
   const returnWatchlist = async (page: number): Promise<GET_WATCHLIST.Watchlist> => {
-    return tmdb_getWatchlist(userDetails?.id, userAccessState?.sessionString, page)
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log("watchlist data is: ", data);
-        return data;
-      });
+    return tmdb_getWatchlist(userDetails?.id, userAccessState?.sessionString, page).then((data) => {
+      // console.log("watchlist data is: ", data);
+      return data;
+    });
   };
 
   const loopReturnWatchlist = async (): Promise<GET_WATCHLIST.Watchlist> => {
@@ -424,7 +424,7 @@ export const Watchlist: React.FC = () => {
 
   const setReturnWatchlist = async () => {
     loopReturnWatchlist().then((data) => {
-      console.log("wathclist data is: ", data);
+      console.log("watchlist data is: ", data);
       setUserWatchlist(data);
     });
   };

@@ -56,7 +56,6 @@ export const TrendingMovies: React.FC = () => {
     if (!HomePageState.submitSearch) return;
     else HomePageDispatch({ type: "change submitSearch bool", submitSearch: false });
     tmdb_searchMovies(HomePageState.submittedSearch, HomePageState.currentPage)
-      .then((res) => res.json())
       .then((data: apiResponse) => {
         HomePageDispatch({
           type: "get searched movies",
