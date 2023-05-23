@@ -8,6 +8,7 @@ import { BsFillBookmarkFill } from "react-icons/bs";
 import { IoListCircleSharp, IoHeartCircle } from "react-icons/io5";
 import { MdStars } from "react-icons/md";
 import { POST_ADD_TO_WATCHLIST } from "../../restapi";
+import { Link } from "react-router-dom";
 
 const SIconWrapperDiv = styled.div`
   display: flex;
@@ -39,7 +40,7 @@ const SInnerBlackCircleSpan = styled.span`
   border-radius: 50%;
 `;
 
-const SReviewUrlAnchor = styled.a`
+const SReviewUrlAnchor = styled(Link)`
   text-decoration: none;
   color: black;
   font-weight: bold;
@@ -209,11 +210,7 @@ const DummyCard: React.FC<{ movieData: object & { vote_average: number; id: numb
               <IconDiv movieData={movieData} res="justScore" textColor="black" />
               <SReviewRatingTimeStampDiv>
                 <SReviewRatingDiv>
-                  <SReviewUrlAnchor
-                    href={`https://www.themoviedb.org/movie/361743`}
-                    target="_blank"
-                    style={{ fontSize: "20px" }}
-                  >
+                  <SReviewUrlAnchor to={`/movie/361743`} style={{ fontSize: "20px" }}>
                     Top Gun: Maverick
                   </SReviewUrlAnchor>
                 </SReviewRatingDiv>
@@ -287,7 +284,7 @@ const WatchlistCard: React.FC<{
   return (
     <>
       <SFullReviewBoxDiv>
-        <a href={`https://www.themoviedb.org/movie/${movieData.id}`} target="_blank">
+        <Link to={`/movie/${movieData.id}`}>
           <img
             src={`https://www.themoviedb.org/t/p/w300_and_h450_bestv2${movieData.backdrop_path}`}
             alt={`Poster image of ${movieData.title}`}
@@ -295,7 +292,7 @@ const WatchlistCard: React.FC<{
             width={133}
             height={200}
           />
-        </a>
+        </Link>
         <div
           style={{
             borderRadius: "0px 8px 8px 0px",
@@ -322,11 +319,7 @@ const WatchlistCard: React.FC<{
               <IconDiv movieData={movieData} res="justScore" textColor="black" />
               <SReviewRatingTimeStampDiv>
                 <SReviewRatingDiv>
-                  <SReviewUrlAnchor
-                    href={`https://www.themoviedb.org/movie/${movieData.id}`}
-                    target="_blank"
-                    style={{ fontSize: "20px" }}
-                  >
+                  <SReviewUrlAnchor to={`/movie/${movieData.id}`} style={{ fontSize: "20px" }}>
                     {movieData.title}
                   </SReviewUrlAnchor>
                 </SReviewRatingDiv>
